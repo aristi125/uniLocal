@@ -6,10 +6,7 @@ plugins {
 
 group = 'co.org.uniquindio'
 version = '0.0.1-SNAPSHOT'
-
-java {
-    sourceCompatibility = '17'
-}
+description 'Unilocal es una opción amigable con el cliente, donde puedes ver un gran número de lugares y opciones para ti'
 
 configurations {
     compileOnly {
@@ -22,15 +19,13 @@ repositories {
 }
 
 dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
     implementation 'org.springframework.boot:spring-boot-starter-data-mongodb'
-    implementation 'org.springframework.boot:spring-boot-starter-data-mongodb-reactive'
     implementation 'org.springframework.boot:spring-boot-starter-web'
     compileOnly 'org.projectlombok:lombok'
-    developmentOnly 'org.springframework.boot:spring-boot-devtools'
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    testImplementation 'io.projectreactor:reactor-test'
-}
+    }
 
 tasks.named('test') {
     useJUnitPlatform()
