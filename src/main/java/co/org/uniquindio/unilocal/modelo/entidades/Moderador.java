@@ -1,4 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.entidades;
 
-public class Usuarios {
+public class Moderador {
+
+    private String codigo;
 }
