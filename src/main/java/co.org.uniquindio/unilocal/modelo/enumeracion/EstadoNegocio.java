@@ -1,7 +1,14 @@
 package co.org.uniquindio.unilocal.modelo.enumeracion;
 
 public enum EstadoNegocio {
-    APROBADO,
-    RECHAZADO,
-    PENDIENTE
+    APROBADO("Aprobado"),
+    RECHAZADO("Rechazado"),
+    PENDIENTE("Pendiente");
+
+
+    private String estadoNegocio;
+
+    EstadoNegocio(String estadoNegocio){
+        this.estadoNegocio = estadoNegocio;
+    }
 }

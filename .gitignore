@@ -10,6 +10,7 @@ build/
 /*/bin/
 /*/build/
 /build/
+.idea*
 
 ### STS ###
 .apt_generated

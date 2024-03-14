@@ -4,9 +4,9 @@ import lombok.Getter;
 
 @Getter
 public enum Categoria {
-    RESTAURANTE ("restaurante"),
-    CAFETERIA ("Cafeteria"),
-    COMIDA_RAPIDA ("Comida Rapida"),
+    RESTAURANTE ("Restaurante"),
+    CAFETERIA ("Cafetería"),
+    COMIDA_RAPIDA ("Comida Rápida"),
     MUSEO ("Museo"),
     HOTEL ("Hotel");
 
