@@ -1,10 +1,8 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
-import co.org.uniquindio.unilocal.modelo.entidades.Calificacion;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-
 import java.io.Serializable;
 import java.time.LocalDateTime;
 
@@ -18,11 +16,12 @@ import java.time.LocalDateTime;
 public class Comentario implements Serializable {
 
     @Id
+    @EqualsAndHashCode.Include
     private String codigoComemtario;
 
     private LocalDateTime fecha;
 
-    private Calificacion calificacion;
+    private int calificacion;
 
     private String codigoCliente;
 

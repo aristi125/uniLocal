@@ -1,6 +1,5 @@
 package co.org.uniquindio.unilocal.modelo.entidades;
 
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -11,16 +10,13 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class HistorialRevision {
+public class Reporte {
 
-    private String descripcion;
+    private  String codigoNegocio;
 
-    private EstadoNegocio estado;
+    private String nombreNegocio;
 
     private LocalDateTime fecha;
 
-    private String codigoModerador;
-
-
-
+    private int numReservas;
 }

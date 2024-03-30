@@ -1,10 +1,11 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
-import co.org.uniquindio.unilocal.modelo.entidades.Calificacion;
+
 import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -22,23 +23,18 @@ import java.util.List;
 public class Negocio implements Serializable {
 
     @Id
+    @EqualsAndHashCode.Include
     private String codigo;
-    //atributos
     private String nombre;
     private String descripcion;
     private Categoria categoriaNegocio;
-    //listas
+    private Ubicacion ubicacion;
     private List<String> imagenes;
     private List<Horario> horarios;
     private List<String> telefonos;
     private List<Comentario> comentarios;
-    private List<Calificacion> calificaciones;
+    private int calificaciones;
     private List<HistorialRevision> historialRevisiones;
     private String codigoCliente;
-    private Categoria categoriaLugar;
-
-
-
-    private EstadoCuenta estado;
-
+    private EstadoNegocio estadoNegocio;
 }
