@@ -1,4 +1,4 @@
-package repositorios;
+package co.org.uniquindio.unilocal.repositorios;
 
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import org.springframework.data.mongodb.repository.MongoRepository;
