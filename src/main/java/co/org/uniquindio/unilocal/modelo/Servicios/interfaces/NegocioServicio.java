@@ -1,19 +1,22 @@
 package co.org.uniquindio.unilocal.modelo.Servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.NegocioDTO.ActualizarNegocioDTO;
+import co.org.uniquindio.unilocal.dto.NegocioDTO.RegistroNegocioDTO;
+
 public interface NegocioServicio {
-    void crearNegocio();
+    String crearNegocio(RegistroNegocioDTO registroNegocioDTO, String id) throws Exception;
 
-    void actualizarNegocio();
+    void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO, String id) throws Exception;
 
-    void eliminarNegocio(String idNegocio);
+    void eliminarNegocio(String idNegocio) throws Exception;
 
-    void buscarNegocios();
+    void buscarNegocios() throws Exception;
 
-    void filtrarPorEstado();
+    void filtrarPorEstado() throws Exception;
 
-    void listarNegociosPropietario();
+    void listarNegociosPropietario() throws Exception;
 
-    void cambiarEstado();
+    void cambiarEstado() throws Exception;
 
-    void registrarRevision();
+    void registrarRevision() throws Exception;
 }

@@ -18,6 +18,7 @@ import java.io.Serializable;
 public class Usuario extends Cuenta implements Serializable {
 
     @Id
+    @EqualsAndHashCode.Include
     private String codigo;
 
     private String fotoPerfil= "URL/...";

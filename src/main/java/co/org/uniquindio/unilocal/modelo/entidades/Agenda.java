@@ -8,10 +8,13 @@ import lombok.*;
 @AllArgsConstructor
 @ToString
 @EqualsAndHashCode
-public class Ubicacion {
+public class Agenda {
 
-    private double longitud;
+    private  String codigoNegocio;
 
-    private double latitud;
+    private String nombreNegocio;
 
+    private String tematica;
+
+    private String descripcion;
 }

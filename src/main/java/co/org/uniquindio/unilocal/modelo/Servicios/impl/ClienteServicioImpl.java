@@ -2,15 +2,15 @@ package co.org.uniquindio.unilocal.modelo.Servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.CuentaDTO.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.CuentaDTO.SesionDTO;
-import co.org.uniquindio.unilocal.dto.clienteDTO.ActualizarClienteDTO;
-import co.org.uniquindio.unilocal.dto.clienteDTO.DetalleClienteDTO;
-import co.org.uniquindio.unilocal.dto.clienteDTO.ItemClienteDTO;
-import co.org.uniquindio.unilocal.dto.clienteDTO.RegistroClienteDTO;
+import co.org.uniquindio.unilocal.dto.clienteDTO.*;
 import co.org.uniquindio.unilocal.modelo.Servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -24,14 +24,17 @@ import java.util.Optional;
 public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepo clienteRepo;
+    private final NegocioRepo negocioRepo;
+    //@Autowired
+    //private PasswordEncoder passwordEncoder;
 
     @Override
     public String registrarCliente(RegistroClienteDTO registroClienteDTO) throws Exception {
-        if( existeEmail(RegistroClienteDTO.email())){
+        if( existeEmail(registroClienteDTO.email())){
             throw new Exception("El correo ya se encuentra registrado");
         }
 
-        if( existeNickname(RegistroClienteDTO.nickname()) ){
+        if( existeNickname(registroClienteDTO.nickname()) ){
             throw new Exception("El nickname ya se encuentra registrado por otro usuario");
         }
         //Se crea el objeto Cliente
@@ -49,7 +52,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         //Retornamos el id (código) del cliente registrado
         return clienteGuardado.getCodigo();
     }
-
+    //VALIDACIONES
     private boolean existeEmail(String email){
         return clienteRepo.findByEmail(email).isPresent();
     }
@@ -58,6 +61,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         return clienteRepo.findByNickname(nickname).isPresent();
     }
 
+    //PORQUE NO RETORNA NADA
     @Override
     public void actualizarCliente(ActualizarClienteDTO actualizarClienteDTO) throws Exception {
         //Buscamos el cliente que se quiere actualizar
@@ -72,7 +76,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.setFotoPerfil( actualizarClienteDTO.fotoPerfil() );
         cliente.setCiudad( actualizarClienteDTO.ciudadResidencia() );
         //miramos que no exte utilizado el email nuevo
-        if(existeEmail(ActualizarClienteDTO.email())){
+        if(existeEmail(actualizarClienteDTO.email())){
             throw new Exception("El correo ya se encuentra registrado");
         }
         cliente.setEmail( actualizarClienteDTO.email() );
@@ -105,13 +109,13 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         //Obtenemos el cliente que se quiere eliminar y le asignamos el estado inactivo
         Cliente cliente = optionalCliente.get();
-        cliente.setEstado(EstadoCuenta.ACTIVO);
+        cliente.setEstado(EstadoCuenta.INACTIVO);
         //Como el objeto cliente ya tiene un id, el save() no crea un nuevo registro sino queactualiza el que ya existe
         clienteRepo.save(cliente);
     }
 
     @Override
-    public List<ItemClienteDTO> listarClientes() {
+    public List<ItemClienteDTO> listarClientes( ) {
         //Obtenemos todos los clientes de la base de datos
         List<Cliente> clientes = clienteRepo.findAll();
         //Creamos una lista de DTOs de clientes
@@ -126,7 +130,27 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public void iniciarSesion(SesionDTO sesionDTO) throws Exception {
+        Optional<Cliente> optional = clienteRepo.findByEmail(sesionDTO.email());
 
+        if (optional.isEmpty()) {
+            throw new Exception("El correo electrónico "+ sesionDTO.email()+" no está registrado");
+        }
+
+        Cliente cliente = optional.get();
+
+        // Aquí puedes verificar la contraseña utilizando PasswordEncoder o simplemente comparando la contraseña en texto plano
+        // Por ejemplo, si usas PasswordEncoder:
+        // if (!passwordEncoder.matches(sesionDTO.password(), cliente.getPassword())) {
+        //     throw new Exception("La contraseña es incorrecta");
+        // }
+
+        // Si solo quieres verificar la contraseña en texto plano
+        if (!sesionDTO.password().equals(cliente.getPassword())) {
+            throw new Exception("La contraseña es incorrecta");
+        }
+
+        // Aquí puedes realizar cualquier lógica adicional que necesites para la sesión
+        // Por ejemplo, generar un token de sesión, configurar la sesión del usuario, etc.
     }
 
     @Override
@@ -134,6 +158,7 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     }
 
+    //falta
     @Override
     public void enviarLinkRecuperacion(String email) throws Exception {
 
@@ -141,6 +166,83 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
+        Optional<Cliente> optional =clienteRepo.findById(cambioPasswordDTO.id());
 
+        if(optional.isEmpty()){
+            throw new Exception("No existe el paciente con el codigo "+ cambioPasswordDTO.id());
+        }
+
+        //BUSCAMOS AL CLIENTE CON EL GET
+        Cliente buscado = optional.get();
+
+        // Encriptar la nueva contraseña
+        String nuevaPasswordEncriptada = "";//passwordEncoder.encode(cambioPasswordDTO.passwordNueva());
+
+        // Asignar la nueva contraseña encriptada al cliente
+        buscado.setPassword(nuevaPasswordEncriptada);
+
+        // Guardar el cliente actualizado en la base de datos
+        clienteRepo.save(buscado);
+    }
+
+    @Override
+   public void favoritos(String idNegocio, String idCliente) throws Exception{
+        Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio );
+        if(optionalNegocio.isEmpty()){
+            throw new Exception("No existe el negocio con el id "+idNegocio);
+        }
+
+        Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
+        if (optionalCliente.isEmpty()) {
+            throw new Exception("No existe el cliente con el ID " + idCliente);
+        }
+        Cliente cliente = optionalCliente.get();
+
+        cliente.getAgregarFavoritos().add(idNegocio);
+
+        clienteRepo.save(cliente);
+    }
+
+    @Override
+    public List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception{
+        Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
+        if (optionalCliente.isEmpty()) {
+            throw new Exception("No existe el cliente con el ID " + idCliente);
+        }
+        Cliente cliente = optionalCliente.get();
+        List<String> favoritoCliente = cliente.getAgregarFavoritos();
+        List<FavoritoDTO> favoritos = new ArrayList<>();
+        Negocio negocio = null;
+        FavoritoDTO favoritoDTO = null;
+        for (String favorito : favoritoCliente) {
+            negocio = negocioRepo.findByCodigo(favorito);
+            favoritoDTO = new FavoritoDTO(
+                    negocio.getCodigo(),
+                    negocio.getUrlfoto().get(0),
+                    negocio.getNombre(),
+                    negocio.getUbicacion()
+            );
+            favoritos.add(favoritoDTO);
+        }
+        return favoritos;
+    }
+
+
+    @Override
+    public void removerFavoritos(String idNegocio, String idCliente) throws Exception{
+        Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio );
+        if(optionalNegocio.isEmpty()){
+            throw new Exception("No existe el negocio con el id "+idNegocio);
+        }
+
+        Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
+        if (optionalCliente.isEmpty()) {
+            throw new Exception("No existe el cliente con el ID " + idCliente);
+        }
+        Cliente cliente = optionalCliente.get();
+
+        cliente.getAgregarFavoritos().remove(idNegocio);
+
+        clienteRepo.save(cliente);
     }
 }

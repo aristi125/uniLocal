@@ -1,6 +1,9 @@
 package co.org.uniquindio.unilocal.modelo.enumeracion;
 
-public enum EstadoNegocio {
+import lombok.Getter;
+
+@Getter
+public enum EstadoNegocioModerador {
     APROBADO("Aprobado"),
     RECHAZADO("Rechazado"),
     PENDIENTE("Pendiente");
@@ -8,7 +11,7 @@ public enum EstadoNegocio {
 
     private String estadoNegocio;
 
-    EstadoNegocio(String estadoNegocio){
+    EstadoNegocioModerador(String estadoNegocio){
         this.estadoNegocio = estadoNegocio;
     }
 }

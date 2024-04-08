@@ -33,6 +33,9 @@ public class Cliente implements Serializable {
     private List<String> telefono;
     private EstadoCuenta estado;
 
+    //AGREGAR A FAVORITOS
+    private List<String> agregarFavoritos;
+
     //ESTO ES PARA EL TEST
     @Builder
     public Cliente(String cedula, String nombre, String email, List<String> telefono) {
