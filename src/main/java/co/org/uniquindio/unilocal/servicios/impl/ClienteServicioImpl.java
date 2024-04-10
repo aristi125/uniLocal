@@ -1,14 +1,15 @@
-package co.org.uniquindio.unilocal.modelo.Servicios.impl;
+package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.CuentaDTO.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.CuentaDTO.SesionDTO;
-import co.org.uniquindio.unilocal.dto.clienteDTO.*;
-import co.org.uniquindio.unilocal.modelo.Servicios.interfaces.ClienteServicio;
+
+import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
+import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
+import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -153,6 +154,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         // Por ejemplo, generar un token de sesión, configurar la sesión del usuario, etc.
     }
 
+
     @Override
     public void eliminarCuenta(String idCuenta) throws Exception {
 
@@ -244,5 +246,30 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.getAgregarFavoritos().remove(idNegocio);
 
         clienteRepo.save(cliente);
+    }
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception{
+        Optional<Cliente> clientes = clienteRepo.findById(idCliente);
+        List<Negocio> historialNegocio = negocioRepo.findAllByCodigo(idNegocio);
+        List<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
+
+        if (clientes.isEmpty()) {
+            throw new Exception("No ha creado una cuenta");
+        }
+        if (historialNegocio.isEmpty()){
+            throw new Exception("No ha creado ningun negocio");
+        }
+        for(Negocio n: historialNegocio){
+            respuesta.add( new ItemListaLugaresCreadosDTO(
+                            n.getCodigo(),
+                            n.getNombre(),
+                            n.getTelefonos(),
+                            n.getCategoriaNegocio(),
+                            n.getUrlfoto()
+                    )
+            );
+        }
+        return respuesta;
     }
 }

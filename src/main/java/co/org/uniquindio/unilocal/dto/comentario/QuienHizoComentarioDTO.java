@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto;
+package co.org.uniquindio.unilocal.dto.comentario;
 
 public record QuienHizoComentarioDTO(
         String idCliente,
