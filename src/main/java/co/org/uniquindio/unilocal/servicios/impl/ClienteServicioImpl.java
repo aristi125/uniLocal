@@ -1,14 +1,15 @@
-package co.org.uniquindio.unilocal.modelo.Servicios.impl;
+package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.CuentaDTO.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.CuentaDTO.SesionDTO;
-import co.org.uniquindio.unilocal.dto.clienteDTO.*;
-import co.org.uniquindio.unilocal.modelo.Servicios.interfaces.ClienteServicio;
+
+import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
+import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
+import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
