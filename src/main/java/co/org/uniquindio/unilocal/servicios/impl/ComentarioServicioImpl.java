@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
+
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.QuienHizoComentarioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
@@ -25,6 +26,11 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
+
+
+import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
+
+public class ComentarioServicioImpl implements ComentarioServicio {
 
     @Override
     public void crearComentario() {
@@ -61,6 +67,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
             ));
         }
         return respuesta;
+    public void listarComentariosNegocio() {
+
     }
 
     @Override

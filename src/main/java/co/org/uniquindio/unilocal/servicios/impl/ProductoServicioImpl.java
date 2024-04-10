@@ -1,4 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-public class ProductoServicioImpl {
+import co.org.uniquindio.unilocal.servicios.interfaces.ProductoServicio;
+
+public class ProductoServicioImpl implements ProductoServicio {
 }
