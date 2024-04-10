@@ -154,6 +154,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         // Por ejemplo, generar un token de sesión, configurar la sesión del usuario, etc.
     }
 
+
     @Override
     public void eliminarCuenta(String idCuenta) throws Exception {
 
@@ -245,5 +246,30 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.getAgregarFavoritos().remove(idNegocio);
 
         clienteRepo.save(cliente);
+    }
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception{
+        Optional<Cliente> clientes = clienteRepo.findById(idCliente);
+        List<Negocio> historialNegocio = negocioRepo.findAllByCodigo(idNegocio);
+        List<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
+
+        if (clientes.isEmpty()) {
+            throw new Exception("No ha creado una cuenta");
+        }
+        if (historialNegocio.isEmpty()){
+            throw new Exception("No ha creado ningun negocio");
+        }
+        for(Negocio n: historialNegocio){
+            respuesta.add( new ItemListaLugaresCreadosDTO(
+                            n.getCodigo(),
+                            n.getNombre(),
+                            n.getTelefonos(),
+                            n.getCategoriaNegocio(),
+                            n.getUrlfoto()
+                    )
+            );
+        }
+        return respuesta;
     }
 }
