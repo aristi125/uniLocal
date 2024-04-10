@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
+import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -24,7 +25,7 @@ public class Cliente implements Serializable {
     private String cedula;
     private String nombre;
     private String nickname;
-    private String ciudad;
+    private Ciudades ciudad;
     private String fotoPerfil;
 
     private String password;

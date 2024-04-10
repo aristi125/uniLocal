@@ -1,7 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
 
-import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
