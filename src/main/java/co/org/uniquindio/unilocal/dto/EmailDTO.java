@@ -1,49 +1,13 @@
 package co.org.uniquindio.unilocal.dto;
 
-public class EmailDTO {
-    /*
-     * atributos de la clase EmailDTO
-     */
-    String asunto;
-    String cuerpo;
-    String destinatario;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import org.hibernate.validator.constraints.Length;
 
-
-    /*
-     * Constructor de la clase EmailDTO
-     */
-    public EmailDTO(String asunto, String cuerpo, String destinatario) {
-        this.asunto = asunto;
-        this.cuerpo = cuerpo;
-        this.destinatario = destinatario;
-    }
-
-    /*
-     * Getters y Setters de la clase EmailDTO
-     */
-    public String getAsunto() {
-        return asunto;
-    }
-
-    public void setAsunto(String asunto) {
-        this.asunto = asunto;
-    }
-
-    public String getCuerpo() {
-        return cuerpo;
-    }
-
-    public void setCuerpo(String cuerpo) {
-        this.cuerpo = cuerpo;
-    }
-
-    public String getDestinatario() {
-        return destinatario;
-    }
-
-    public void setDestinatario(String destinatario) {
-        this.destinatario = destinatario;
-    }
-
+public record EmailDTO (
+        @NotBlank @Length(max = 40) String asunto,
+        @NotBlank @Length(max = 100) String cuerpo,
+        @NotBlank @Email @Length(max = 100) String destinatario
+) {
 
 }
