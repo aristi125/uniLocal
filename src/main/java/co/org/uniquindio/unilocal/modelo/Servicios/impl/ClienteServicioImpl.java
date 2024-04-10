@@ -2,15 +2,18 @@ package co.org.uniquindio.unilocal.modelo.Servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.CuentaDTO.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.CuentaDTO.SesionDTO;
+import co.org.uniquindio.unilocal.dto.ItemListaComentariosDTO;
+import co.org.uniquindio.unilocal.dto.QuienHizoComentarioDTO;
 import co.org.uniquindio.unilocal.dto.clienteDTO.*;
 import co.org.uniquindio.unilocal.modelo.Servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,6 +28,7 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
+    private final ComentarioRepo comentarioRepo;
     //@Autowired
     //private PasswordEncoder passwordEncoder;
 
@@ -244,5 +248,57 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.getAgregarFavoritos().remove(idNegocio);
 
         clienteRepo.save(cliente);
+    }
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception{
+        Optional<Cliente> clientes = clienteRepo.findById(idCliente);
+        List<Negocio> historialNegocio = negocioRepo.findAllByCodigo(idNegocio);
+        List<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
+
+        if (clientes.isEmpty()) {
+            throw new Exception("No ha creado una cuenta");
+        }
+        if (historialNegocio.isEmpty()){
+            throw new Exception("No ha creado ningun negocio");
+        }
+        for(Negocio n: historialNegocio){
+            respuesta.add( new ItemListaLugaresCreadosDTO(
+                    n.getCodigo(),
+                    n.getNombre(),
+                    n.getTelefonos(),
+                    n.getCategoriaNegocio(),
+                    n.getUrlfoto()
+                    )
+            );
+        }
+        return respuesta;
+    }
+
+    @Override
+    public List<ItemListaComentariosDTO> ListaComentarios(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception{
+        Optional<Cliente> cliente = clienteRepo.findById(hizoComentarioDTO.idCliente());
+
+        if (cliente.isEmpty()) {
+            throw new Exception("No exsite cliente");
+        }
+        Optional<Negocio> negocio = negocioRepo.findById(hizoComentarioDTO.idNegocio());
+        if (negocio.isEmpty()) {
+            throw new Exception("No exsite negocio");
+        }
+        List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(hizoComentarioDTO.idNegocio());
+        List<ItemListaComentariosDTO> respuesta = new ArrayList<>();
+        if (historialComentario.isEmpty()){
+            throw new Exception("No hay comentarios");
+        }
+
+        for (Comentario c: historialComentario){
+            respuesta.add( new ItemListaComentariosDTO(
+                    c.getCodigoComemtario(),
+                    c.getFecha(),
+                    c.getMensaje()
+            ));
+        }
+        return respuesta;
     }
 }

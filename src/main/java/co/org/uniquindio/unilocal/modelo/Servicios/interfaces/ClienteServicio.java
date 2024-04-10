@@ -1,5 +1,7 @@
 package co.org.uniquindio.unilocal.modelo.Servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.ItemListaComentariosDTO;
+import co.org.uniquindio.unilocal.dto.QuienHizoComentarioDTO;
 import co.org.uniquindio.unilocal.dto.clienteDTO.*;
 
 import java.util.List;
@@ -20,5 +22,9 @@ public interface ClienteServicio extends CuentaServicio {
     List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception;
 
     void removerFavoritos(String idNegocio, String idCliente) throws Exception;
+
+    List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
+
+    List<ItemListaComentariosDTO> ListaComentarios(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception;
 
 }
