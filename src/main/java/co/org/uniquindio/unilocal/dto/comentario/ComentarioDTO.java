@@ -1,7 +1,11 @@
 package co.org.uniquindio.unilocal.dto.comentario;
 
-public record ComentarioDTO<T>(
-    boolean error,
-    T respuesta
+import java.time.LocalDate;
+
+public record ComentarioDTO(
+    String mensaje,
+    String codigoNegocio,
+    String codigoCliente,
+    LocalDate horaComentario
 ) {
 }
