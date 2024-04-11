@@ -13,4 +13,6 @@ public interface ComentarioServicio {
     List<ItemListaComentariosDTO> listarComentariosNegocio(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception;
 
     void calcularPromedioCalificaciones();
+
+
 }

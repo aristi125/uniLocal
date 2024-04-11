@@ -47,7 +47,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.setFotoPerfil( registroClienteDTO.fotoPerfil() );
         cliente.setEmail( registroClienteDTO.email() );
         cliente.setPassword( registroClienteDTO.password() );
-        cliente.setEstado(EstadoCuenta.ACTIVO);
+        cliente.setEstadoCuenta(EstadoCuenta.ACTIVO);
         //Se guarda en la base de datos y obtenemos el objeto registrado
         Cliente clienteGuardado = clienteRepo.save(cliente);
         //Retornamos el id (código) del cliente registrado
@@ -110,7 +110,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         //Obtenemos el cliente que se quiere eliminar y le asignamos el estado inactivo
         Cliente cliente = optionalCliente.get();
-        cliente.setEstado(EstadoCuenta.INACTIVO);
+        cliente.setEstadoCuenta(EstadoCuenta.INACTIVO);
         //Como el objeto cliente ya tiene un id, el save() no crea un nuevo registro sino queactualiza el que ya existe
         clienteRepo.save(cliente);
     }

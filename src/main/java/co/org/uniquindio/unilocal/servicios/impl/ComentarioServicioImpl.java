@@ -13,10 +13,10 @@ import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 @Transactional
@@ -26,11 +26,6 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
-
-
-import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
-
-public class ComentarioServicioImpl implements ComentarioServicio {
 
     @Override
     public void crearComentario() {
@@ -43,7 +38,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     }
 
     @Override
-    public List<ItemListaComentariosDTO> listarComentariosNegocio(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception{
+    public List<ItemListaComentariosDTO> listarComentariosNegocio(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception {
         Optional<Cliente> cliente = clienteRepo.findById(hizoComentarioDTO.idCliente());
 
         if (cliente.isEmpty()) {
@@ -55,19 +50,18 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         }
         List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(hizoComentarioDTO.idNegocio());
         List<ItemListaComentariosDTO> respuesta = new ArrayList<>();
-        if (historialComentario.isEmpty()){
+        if (historialComentario.isEmpty()) {
             throw new Exception("No hay comentarios");
         }
 
-        for (Comentario c: historialComentario){
-            respuesta.add( new ItemListaComentariosDTO(
+        for (Comentario c : historialComentario) {
+            respuesta.add(new ItemListaComentariosDTO(
                     c.getCodigoComemtario(),
                     c.getFecha(),
                     c.getMensaje()
             ));
         }
         return respuesta;
-    public void listarComentariosNegocio() {
 
     }
 

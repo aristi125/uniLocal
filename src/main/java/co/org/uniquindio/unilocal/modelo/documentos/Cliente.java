@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Cliente implements Serializable {
+public class Cliente extends Cuenta implements Serializable {
 
     @Id
     @EqualsAndHashCode.Include
@@ -23,16 +23,13 @@ public class Cliente implements Serializable {
 
     //LA CEDULA NO ES NECESARIA
     private String cedula;
-    private String nombre;
     private String nickname;
     private Ciudades ciudad;
     private String fotoPerfil;
 
-    private String password;
-    private String email;
     //LOS TELEFONOS NO SON NECESARIOS
     private List<String> telefono;
-    private EstadoCuenta estado;
+
 
     //AGREGAR A FAVORITOS
     private List<String> agregarFavoritos;
@@ -41,8 +38,8 @@ public class Cliente implements Serializable {
     @Builder
     public Cliente(String cedula, String nombre, String email, List<String> telefono) {
         this.cedula = cedula;
-        this.nombre = nombre;
-        this.email = email;
+        this.setNombre(nombre);
+        this.setEmail(email);
         this.telefono = telefono;
     }
 }
