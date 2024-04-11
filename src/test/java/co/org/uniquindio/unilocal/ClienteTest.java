@@ -1,5 +1,8 @@
 package co.org.uniquindio.unilocal;
 
+import co.org.uniquindio.unilocal.dto.cliente.ActualizarClienteDTO;
+import co.org.uniquindio.unilocal.dto.cliente.DetalleClienteDTO;
+import co.org.uniquindio.unilocal.dto.cliente.ItemClienteDTO;
 import co.org.uniquindio.unilocal.dto.cliente.RegistroClienteDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
@@ -18,13 +21,18 @@ public class ClienteTest {
     @Autowired
     private ClienteServicio clienteServicio;
 
+    /**
+     * Test que prueba el metodo de registrar cliente
+     * @throws Exception
+     */
     @Test
     public void RegistroClienteTest() throws Exception{
         RegistroClienteDTO registroClienteDTO = new RegistroClienteDTO(
-                "12345",
+
+                "sofia",
                 "mifoto",
-                        "pedritoelmejor",
-                "pedrito@gmail.com",
+                        "sofi",
+                "sofia@gmail.com",
                 "contraseña",
                 Ciudades.ARMENIA
         );
@@ -32,6 +40,19 @@ public class ClienteTest {
         String codigo = clienteServicio.registrarCliente(registroClienteDTO);
         Assertions.assertNotNull(codigo);
     }
+
+  /*  public void ActualizarClienteTest() throws Exception {
+        ActualizarClienteDTO actualizarClienteDTO = new ActualizarClienteDTO(
+
+                "sofia",
+                "otraFoto",
+                "sofi",
+                Ciudades.ARMENIA
+        );
+        clienteServicio.actualizarCliente(actualizarClienteDTO);
+
+
+    }*/
 
 
     /*

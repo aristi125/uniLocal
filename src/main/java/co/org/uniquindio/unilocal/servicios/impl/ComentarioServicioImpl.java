@@ -29,10 +29,6 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
 
-<<<<<<< HEAD
-=======
-
->>>>>>> d6446126fca80ffa023d2ee65ed18ff476e528f7
     @Override
     public void crearComentario(ComentarioDTO comentario) {
 
