@@ -32,12 +32,26 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
     @Override
     public void crearComentario(ComentarioDTO comentario) {
+        Negocio negocio = negocioRepo.findByCodigo(comentario.codigoNegocio());
+        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(negocio.getCodigo());
+        Comentario comentarioComentario = new Comentario();
+        comentarioComentario.setFecha(comentario.horaComentario());
+        comentarioComentario.setMensaje(comentario.mensaje());
+        comentarioComentario.setRespuesta("");
+        comentarioComentario.setCodigoNegocio(negocio.getCodigo());
 
+        listaComentarios.add(comentarioComentario);
+        negocio.setComentarios(listaComentarios);
+        negocioRepo.save(negocio);
+        comentarioRepo.save(comentarioComentario);
     }
 
     @Override
-    public void responderComentario() {
-
+    public void responderComentario(ComentarioDTO comentario) {
+        Negocio negocio = negocioRepo.findByCodigo(comentario.codigoNegocio());
+        Comentario aux = comentarioRepo.findByCodigoComentario(comentario.codigoComentario());
+        aux.setRespuesta(comentario.respuesta());
+        comentarioRepo.save(aux);
     }
 
     @Override

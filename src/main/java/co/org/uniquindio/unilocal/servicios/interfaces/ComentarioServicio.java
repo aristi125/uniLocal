@@ -9,7 +9,7 @@ import java.util.List;
 public interface ComentarioServicio {
     void crearComentario(ComentarioDTO comentario);
 
-    void responderComentario();
+    void responderComentario(ComentarioDTO comentario);
 
     List<ItemListaComentariosDTO> listarComentariosNegocio(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception;
 
