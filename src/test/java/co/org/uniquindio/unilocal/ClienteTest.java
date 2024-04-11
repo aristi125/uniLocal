@@ -1,7 +1,10 @@
 package co.org.uniquindio.unilocal;
 
+import co.org.uniquindio.unilocal.dto.cliente.RegistroClienteDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,12 +14,33 @@ import java.util.List;
 
 @SpringBootTest
 public class ClienteTest {
+
+    @Autowired
+    private ClienteServicio clienteServicio;
+
+    @Test
+    public void RegistroClienteTest() throws Exception{
+        RegistroClienteDTO registroClienteDTO = new RegistroClienteDTO(
+                "12345",
+                "mifoto",
+                        "pedritoelmejor",
+                "pedrito@gmail.com",
+                "contraseña",
+                Ciudades.ARMENIA
+        );
+
+        String codigo = clienteServicio.registrarCliente(registroClienteDTO);
+        Assertions.assertNotNull(codigo);
+    }
+
+
+    /*
     @Autowired
     private ClienteRepo clienteRepo;
 
     @Test
     public void registrarClienteTest(){
-//Creamos el cliente con sus propiedades
+    //Creamos el cliente con sus propiedades
         Cliente cliente = Cliente.builder()
                 .cedula("1213444")
                 .nombre("Pepito perez")
@@ -62,5 +86,5 @@ public class ClienteTest {
         Cliente cliente = clienteRepo.findById("XXXXXXX").orElse(null);
 //Verificamos que el cliente no exista
         Assertions.assertNull(cliente);
-    }
+    }*/
 }

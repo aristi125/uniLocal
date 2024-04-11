@@ -1,6 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 
+import co.org.uniquindio.unilocal.dto.comentario.ComentarioDTO;
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.QuienHizoComentarioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
 
 
 @Service
@@ -27,8 +29,12 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> d6446126fca80ffa023d2ee65ed18ff476e528f7
     @Override
-    public void crearComentario() {
+    public void crearComentario(ComentarioDTO comentario) {
 
     }
 
@@ -65,8 +71,11 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
     }
 
+
+
+
     @Override
-    public void calcularPromedioCalificaciones() {
+    public void calcularPromedioCalificaciones () {
 
     }
 }
