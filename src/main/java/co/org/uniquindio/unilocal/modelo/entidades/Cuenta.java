@@ -3,7 +3,6 @@ package co.org.uniquindio.unilocal.modelo.entidades;
 
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import lombok.*;
-import org.springframework.data.mongodb.core.mapping.Document;
 
 @Getter
 @Setter
@@ -19,5 +18,5 @@ public class Cuenta {
 
     private String password;
 
-    private EstadoCuenta estadoCuenta;
+    private EstadoCuenta estado;
 }

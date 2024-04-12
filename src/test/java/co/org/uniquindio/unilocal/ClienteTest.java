@@ -1,8 +1,6 @@
 package co.org.uniquindio.unilocal;
 
 import co.org.uniquindio.unilocal.dto.cliente.ActualizarClienteDTO;
-import co.org.uniquindio.unilocal.dto.cliente.DetalleClienteDTO;
-import co.org.uniquindio.unilocal.dto.cliente.ItemClienteDTO;
 import co.org.uniquindio.unilocal.dto.cliente.RegistroClienteDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
@@ -14,10 +12,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
+import java.util.Scanner;
+
 
 @SpringBootTest
 public class ClienteTest {
 
+    @Autowired
+    ClienteRepo clienteRepo;
     @Autowired
     private ClienteServicio clienteServicio;
 
@@ -25,7 +27,7 @@ public class ClienteTest {
      * Test que prueba el metodo de registrar cliente
      * @throws Exception
      */
-    @Test
+
     public void RegistroClienteTest() throws Exception{
         RegistroClienteDTO registroClienteDTO = new RegistroClienteDTO(
 
@@ -41,53 +43,29 @@ public class ClienteTest {
         Assertions.assertNotNull(codigo);
     }
 
-  /*  public void ActualizarClienteTest() throws Exception {
-        ActualizarClienteDTO actualizarClienteDTO = new ActualizarClienteDTO(
+    /**
+     * Test que prueba el metodo de actualizar cliente
+     * @throws Exception
+     */
 
+    //@Test
+    public void ActualizarClienteTest() throws Exception {
+
+        ActualizarClienteDTO actualizarClienteDTO = new ActualizarClienteDTO(
+                "6618e3e48c3ebb652fc230ab",
                 "sofia",
                 "otraFoto",
                 "sofi",
-                Ciudades.ARMENIA
+                "sofia123@gmail.com",
+                Ciudades.BOGOTA
         );
+
         clienteServicio.actualizarCliente(actualizarClienteDTO);
-
-
-    }*/
-
-
-    /*
-    @Autowired
-    private ClienteRepo clienteRepo;
-
-    @Test
-    public void registrarClienteTest(){
-    //Creamos el cliente con sus propiedades
-        Cliente cliente = Cliente.builder()
-                .cedula("1213444")
-                .nombre("Pepito perez")
-                .email("pepito@email.com")
-                .telefono( List.of("12121", "232323") ).build();
-//Guardamos el cliente
-        Cliente registro = clienteRepo.save( cliente );
-//Verificamos que se haya guardado validando que no sea null
-        Assertions.assertNotNull(registro);
     }
 
-    @Test
-    public void actualizarClienteTest() {
-//Obtenemos el cliente con el id XXXXXXX
-        Cliente cliente = clienteRepo.findById("XXXXXXX").orElseThrow();
-//Modificar el email del cliente
-        cliente.setEmail("nuevoemail@email.com");
-//Guardamos el cliente
-        clienteRepo.save(cliente);
-//Obtenemos el cliente con el id XXXXXXX nuevamente
-        Cliente clienteActualizado = clienteRepo.findById("XXXXXXX").orElseThrow();
-        ;
-//Verificamos que el email se haya actualizado
-        Assertions.assertEquals("nuevoemail@email.com", clienteActualizado.getEmail());
-    }
 
+    //hacer el metodo usando las clases que creamos,
+    //no de manera directa
     @Test
     public void listarClienteTest(){
 //Obtenemos la lista de todos los clientes (por ahora solo tenemos 1)
@@ -98,7 +76,7 @@ public class ClienteTest {
         Assertions.assertEquals(1, clientes.size());
     }
 
-
+/*
     @Test
     public void eliminarClienteTest(){
 //Borramos el cliente con el id XXXXXXX

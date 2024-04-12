@@ -6,12 +6,12 @@ import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
+import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -47,7 +47,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.setFotoPerfil( registroClienteDTO.fotoPerfil() );
         cliente.setEmail( registroClienteDTO.email() );
         cliente.setPassword( registroClienteDTO.password() );
-        cliente.setEstadoCuenta(EstadoCuenta.ACTIVO);
+        cliente.setEstado(EstadoCuenta.ACTIVO);
         //Se guarda en la base de datos y obtenemos el objeto registrado
         Cliente clienteGuardado = clienteRepo.save(cliente);
         //Retornamos el id (código) del cliente registrado
@@ -75,11 +75,24 @@ public class ClienteServicioImpl implements ClienteServicio {
         Cliente cliente = optionalCliente.get();
         cliente.setNombre( actualizarClienteDTO.nombre() );
         cliente.setFotoPerfil( actualizarClienteDTO.fotoPerfil() );
-        cliente.setCiudad( actualizarClienteDTO.ciudadResidencia() );
+
+        Ciudades ciudad = actualizarClienteDTO.ciudadResidencia();
+        cliente.setCiudad( ciudad );
+
+        if (cliente.getNickname().equals(actualizarClienteDTO.nickname())) {
+            cliente.setNickname(actualizarClienteDTO.nickname());
+        }else throw new Exception("El nickname no se puede cambiar");
+
+
         //miramos que no exte utilizado el email nuevo
         if(existeEmail(actualizarClienteDTO.email())){
             throw new Exception("El correo ya se encuentra registrado");
         }
+
+        if (cliente.getEmail().equals(actualizarClienteDTO.email())) {
+            cliente.setEmail(actualizarClienteDTO.email());
+        }
+        //Asignamos el nuevo email
         cliente.setEmail( actualizarClienteDTO.email() );
         //Como el objeto cliente ya tiene un id, el save() no crea un nuevo registro sino que actualiza el que ya existe
         clienteRepo.save(cliente);
@@ -110,21 +123,21 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         //Obtenemos el cliente que se quiere eliminar y le asignamos el estado inactivo
         Cliente cliente = optionalCliente.get();
-        cliente.setEstadoCuenta(EstadoCuenta.INACTIVO);
+        cliente.setEstado(EstadoCuenta.INACTIVO);
         //Como el objeto cliente ya tiene un id, el save() no crea un nuevo registro sino queactualiza el que ya existe
         clienteRepo.save(cliente);
     }
 
     @Override
-    public List<ItemClienteDTO> listarClientes( ) {
+    public List<DetalleClienteDTO> listarClientes( ) {
         //Obtenemos todos los clientes de la base de datos
         List<Cliente> clientes = clienteRepo.findAll();
         //Creamos una lista de DTOs de clientes
-        List<ItemClienteDTO> items = new ArrayList<>();
+        List<DetalleClienteDTO> items = new ArrayList<>();
         //Recorremos la lista de clientes y por cada uno creamos un DTO y lo agregamos a la lista
         for (Cliente cliente : clientes) {
-            items.add(new ItemClienteDTO(cliente.getCodigo(), cliente.getNombre(),
-                    cliente.getFotoPerfil(), cliente.getNickname(), cliente.getCiudad()));
+            items.add(new DetalleClienteDTO(cliente.getCodigo(), cliente.getNombre(),
+                    cliente.getFotoPerfil(), cliente.getNickname(),cliente.getEmail(), cliente.getCiudad()));
         }
         return items;
     }

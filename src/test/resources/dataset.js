@@ -3,7 +3,7 @@ db.clientes.insertMany([
     {
         _id: 'Cliente1',
         nickname: 'juanito',
-        ciudad: 'Armenia',
+        ciudad: 'ARMENIA',
         fotoPerfil: 'mi foto',
         email: 'juan@email.com',
         password: 'mipassword',
@@ -14,7 +14,7 @@ db.clientes.insertMany([
     {
         _id: 'Cliente2',
         nickname: 'maria',
-        ciudad: 'Armenia',
+        ciudad: 'ARMENIA',
         fotoPerfil: 'mi foto',
         email: 'maria@email.com',
         password: 'mipassword',
@@ -25,7 +25,7 @@ db.clientes.insertMany([
     {
         _id: 'Cliente3',
         nickname: 'pedrito',
-        ciudad: 'Armenia',
+        ciudad: 'ARMENIA',
         fotoPerfil: 'mi foto',
         email: 'pedro@email.com',
         password: 'mipassword',
