@@ -110,14 +110,14 @@ public class ClienteServicioImpl implements ClienteServicio {
         Cliente cliente = optionalCliente.get();
         //Retornamos el cliente en formato DTO
         return new DetalleClienteDTO(cliente.getCodigo(), cliente.getNombre(),
-                cliente.getFotoPerfil(), cliente.getNickname(), cliente.getEmail(), cliente.getCiudad());
+                cliente.getFotoPerfil(), cliente.getNickname(), cliente.getPassword(), cliente.getEmail(), cliente.getCiudad());
     }
 
     @Override
     public void eliminarCliente(String idCuenta) throws Exception {
         //Buscamos el cliente que se quiere eliminar
         Optional<Cliente> optionalCliente = clienteRepo.findById( idCuenta );
-//Si no se encontró el cliente, lanzamos una excepción
+        //Si no se encontró el cliente, lanzamos una excepción
         if(optionalCliente.isEmpty()){
             throw new Exception("No se encontró el cliente a eliminar");
         }
@@ -129,15 +129,15 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-    public List<DetalleClienteDTO> listarClientes( ) {
+    public List<ItemDetalleClienteDTO> listarClientes( ) {
         //Obtenemos todos los clientes de la base de datos
         List<Cliente> clientes = clienteRepo.findAll();
         //Creamos una lista de DTOs de clientes
-        List<DetalleClienteDTO> items = new ArrayList<>();
+        List<ItemDetalleClienteDTO> items = new ArrayList<>();
         //Recorremos la lista de clientes y por cada uno creamos un DTO y lo agregamos a la lista
         for (Cliente cliente : clientes) {
-            items.add(new DetalleClienteDTO(cliente.getCodigo(), cliente.getNombre(),
-                    cliente.getFotoPerfil(), cliente.getNickname(),cliente.getEmail(), cliente.getCiudad()));
+            items.add(new ItemDetalleClienteDTO(cliente.getCodigo(), cliente.getNombre(),
+                    cliente.getFotoPerfil(),cliente.getEmail(), cliente.getCiudad()));
         }
         return items;
     }
@@ -165,12 +165,26 @@ public class ClienteServicioImpl implements ClienteServicio {
 
         // Aquí puedes realizar cualquier lógica adicional que necesites para la sesión
         // Por ejemplo, generar un token de sesión, configurar la sesión del usuario, etc.
+
+        System.out.println("!sesion iniciada¡");
+
     }
 
 
     @Override
     public void eliminarCuenta(String idCuenta) throws Exception {
 
+        Optional<Cliente> optional = clienteRepo.findById(idCuenta);
+
+        if (optional.isEmpty()) {
+            throw new Exception("No existe el cliente con el ID " + idCuenta);
+        }
+
+        Cliente cliente = optional.get();
+
+        cliente.setEstado(EstadoCuenta.INACTIVO);
+
+        clienteRepo.save(cliente);
     }
 
     //falta

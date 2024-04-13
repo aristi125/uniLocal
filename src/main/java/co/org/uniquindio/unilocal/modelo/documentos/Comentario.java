@@ -17,7 +17,7 @@ public class Comentario implements Serializable {
 
     @Id
     @EqualsAndHashCode.Include
-    private String codigoComemtario;
+    private String codigoComentario;
 
     private LocalDateTime fecha;
 

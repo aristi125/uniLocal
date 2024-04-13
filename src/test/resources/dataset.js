@@ -32,6 +32,28 @@ db.clientes.insertMany([
         nombre: 'Pedro',
         estado: 'ACTIVO',
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
+    },
+    {
+        _id: 'Cliente4',
+        nickname: 'aleja',
+        ciudad: 'ARMENIA',
+        fotoPerfil: 'mi foto',
+        email: 'aleja@gmail.com',
+        password: 'mipassword',
+        nombre: 'Aleja',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
+    },
+    {
+        _id: 'Cliente5',
+        nickname: 'anita',
+        ciudad: 'ARMENIA',
+        fotoPerfil: 'mi foto',
+        email: 'ana@gmail.com',
+        password: 'mipassword',
+        nombre: 'Ana',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
     }
 ]);
 db.negocios.insertMany([
