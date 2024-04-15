@@ -2,6 +2,7 @@ package co.org.uniquindio.unilocal.servicios.impl;
 
 
 import co.org.uniquindio.unilocal.dto.comentario.ComentarioDTO;
+import co.org.uniquindio.unilocal.dto.comentario.DetalleComentarioDTO;
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.QuienHizoComentarioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
@@ -55,7 +56,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     }
 
     @Override
-    public List<ItemListaComentariosDTO> listarComentariosNegocio(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception {
+    public List<ItemListaComentariosDTO> listarComentariosNegocio(DetalleComentarioDTO detalleComentarioDTO, QuienHizoComentarioDTO hizoComentarioDTO) throws Exception {
         Optional<Cliente> cliente = clienteRepo.findById(hizoComentarioDTO.idCliente());
 
         if (cliente.isEmpty()) {
@@ -73,17 +74,13 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
         for (Comentario c : historialComentario) {
             respuesta.add(new ItemListaComentariosDTO(
-                    c.getCodigoComemtario(),
+                    c.getCodigoComentario(),
                     c.getFecha(),
                     c.getMensaje()
             ));
         }
         return respuesta;
-
     }
-
-
-
 
     @Override
     public void calcularPromedioCalificaciones () {

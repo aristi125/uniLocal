@@ -7,6 +7,7 @@ public record ActualizarClienteDTO(
         String id,
         String nombre,
         String fotoPerfil,
+        String nickname,
         String email,
         Ciudades ciudadResidencia
 ) {

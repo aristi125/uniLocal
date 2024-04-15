@@ -5,12 +5,12 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 
 import java.time.LocalDateTime;
 
-public class DetalleReservaDTO {
-
-    LocalDateTime fecha;
-    int hora;
-    int cantidadPersonas;
-    Cliente cliente;
-    Negocio negocio;
+public record DetalleReservaDTO (
+        LocalDateTime fecha,
+        int hora,
+        int cantidadPersonas,
+        Cliente cliente,
+        Negocio negocio
+) {
 
 }
