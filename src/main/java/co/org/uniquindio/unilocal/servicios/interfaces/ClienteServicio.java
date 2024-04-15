@@ -18,7 +18,7 @@ public interface ClienteServicio  {
 
     List<ItemClienteDTO> listarClientes() throws Exception;
 
-    void iniciarSesion(SesionDTO sesionDTO) throws Exception;
+    //void iniciarSesion(SesionDTO sesionDTO) throws Exception;
 
     void eliminarCuenta(String idCuenta) throws Exception;
 

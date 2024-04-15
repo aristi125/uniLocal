@@ -7,7 +7,6 @@ public record SesionDTO(
         @NotBlank
         @Email
         String email,
-
         @NotBlank
         String password
 ) {

@@ -11,7 +11,7 @@ import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -26,8 +26,6 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
-    //@Autowired
-    //private PasswordEncoder passwordEncoder;
 
     @Override
     public String registrarCliente(RegistroClienteDTO registroClienteDTO) throws Exception {
@@ -48,21 +46,17 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.setEmail( registroClienteDTO.email() );
         cliente.setPassword( registroClienteDTO.password() );
         cliente.setEstadoCuenta(EstadoCuenta.ACTIVO);
+        // Encriptar la password antes de guardar al cliente en la base de datos
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        String passwordEncriptada = passwordEncoder.encode(registroClienteDTO.password());
+        cliente.setPassword(passwordEncriptada);
         //Se guarda en la base de datos y obtenemos el objeto registrado
         Cliente clienteGuardado = clienteRepo.save(cliente);
         //Retornamos el id (código) del cliente registrado
         return clienteGuardado.getCodigo();
     }
     //VALIDACIONES
-    private boolean existeEmail(String email){
-        return clienteRepo.findByEmail(email).isPresent();
-    }
 
-    private boolean existeNickname(String nickname){
-        return clienteRepo.findByNickname(nickname).isPresent();
-    }
-
-    //PORQUE NO RETORNA NADA
     @Override
     public void actualizarCliente(ActualizarClienteDTO actualizarClienteDTO) throws Exception {
         //Buscamos el cliente que se quiere actualizar
@@ -104,7 +98,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     public void eliminarCliente(String idCuenta) throws Exception {
         //Buscamos el cliente que se quiere eliminar
         Optional<Cliente> optionalCliente = clienteRepo.findById( idCuenta );
-//Si no se encontró el cliente, lanzamos una excepción
+        //Si no se encontró el cliente, lanzamos una excepción
         if(optionalCliente.isEmpty()){
             throw new Exception("No se encontró el cliente a eliminar");
         }
@@ -129,6 +123,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         return items;
     }
 
+    /**
     @Override
     public void iniciarSesion(SesionDTO sesionDTO) throws Exception {
         Optional<Cliente> optional = clienteRepo.findByEmail(sesionDTO.email());
@@ -153,7 +148,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         // Aquí puedes realizar cualquier lógica adicional que necesites para la sesión
         // Por ejemplo, generar un token de sesión, configurar la sesión del usuario, etc.
     }
-
+    **/
 
     @Override
     public void eliminarCuenta(String idCuenta) throws Exception {
@@ -188,7 +183,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-   public void favoritos(String idNegocio, String idCliente) throws Exception{
+    public void favoritos(String idNegocio, String idCliente) throws Exception{
         Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio );
         if(optionalNegocio.isEmpty()){
             throw new Exception("No existe el negocio con el id "+idNegocio);
@@ -272,4 +267,14 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         return respuesta;
     }
+
+    // Validaciones
+    private boolean existeEmail(String email){
+        return clienteRepo.findByEmail(email).isPresent();
+    }
+
+    private boolean existeNickname(String nickname){
+        return clienteRepo.findByNickname(nickname).isPresent();
+    }
+
 }
