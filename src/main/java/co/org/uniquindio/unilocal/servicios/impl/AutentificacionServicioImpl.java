@@ -41,6 +41,7 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
         if (!passwordEncoder.matches(sesionDTO.password(), cliente.getPassword())) {
             throw new Exception("La contraseña es incorrecta, inténtelo de nuevo");
         }
+
         Map<String, Object> map = new HashMap<>();
         map.put("rol", "CLIENTE");
         map.put("nombre", cliente.getNombre());

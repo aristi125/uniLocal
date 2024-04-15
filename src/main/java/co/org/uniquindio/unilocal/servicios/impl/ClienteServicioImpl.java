@@ -12,13 +12,9 @@ import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import lombok.RequiredArgsConstructor;
-<<<<<<< HEAD
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-=======
->>>>>>> 889f068e65536428932bd11e34ff1966f8da2aec
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -49,21 +45,17 @@ public class ClienteServicioImpl implements ClienteServicio {
         cliente.setFotoPerfil( registroClienteDTO.fotoPerfil() );
         cliente.setEmail( registroClienteDTO.email() );
         cliente.setPassword( registroClienteDTO.password() );
-<<<<<<< HEAD
-        cliente.setEstadoCuenta(EstadoCuenta.ACTIVO);
         // Encriptar la password antes de guardar al cliente en la base de datos
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String passwordEncriptada = passwordEncoder.encode(registroClienteDTO.password());
         cliente.setPassword(passwordEncriptada);
-=======
         cliente.setEstado(EstadoCuenta.ACTIVO);
->>>>>>> 889f068e65536428932bd11e34ff1966f8da2aec
+
         //Se guarda en la base de datos y obtenemos el objeto registrado
         Cliente clienteGuardado = clienteRepo.save(cliente);
         //Retornamos el id (código) del cliente registrado
         return clienteGuardado.getCodigo();
     }
-    //VALIDACIONES
 
     @Override
     public void actualizarCliente(ActualizarClienteDTO actualizarClienteDTO) throws Exception {

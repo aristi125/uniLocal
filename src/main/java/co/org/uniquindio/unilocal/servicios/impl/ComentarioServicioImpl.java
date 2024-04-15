@@ -16,11 +16,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-<<<<<<< HEAD
-
-=======
->>>>>>> 889f068e65536428932bd11e34ff1966f8da2aec
-
 
 @Service
 @Transactional
@@ -30,11 +25,6 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
-
-<<<<<<< HEAD
-
-=======
->>>>>>> 889f068e65536428932bd11e34ff1966f8da2aec
     @Override
     public void crearComentario(DetalleComentarioDTO comentario) {
 
