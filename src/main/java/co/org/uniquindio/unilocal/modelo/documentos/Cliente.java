@@ -13,33 +13,19 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Cliente extends Cuenta implements Serializable {
 
-    @Id
     @EqualsAndHashCode.Include
+    @Id
     private String codigo;
 
-    //LA CEDULA NO ES NECESARIA
-    private String cedula;
     private String nickname;
     private Ciudades ciudad;
     private String fotoPerfil;
 
-    //LOS TELEFONOS NO SON NECESARIOS
-    private List<String> telefono;
-
-
     //AGREGAR A FAVORITOS
     private List<String> agregarFavoritos;
-
-    //ESTO ES PARA EL TEST
-    @Builder
-    public Cliente(String cedula, String nombre, String email, List<String> telefono) {
-        this.cedula = cedula;
-        this.setNombre(nombre);
-        this.setEmail(email);
-        this.telefono = telefono;
-    }
 }

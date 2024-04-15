@@ -1,9 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 
-import co.org.uniquindio.unilocal.dto.comentario.ComentarioDTO;
+import co.org.uniquindio.unilocal.dto.comentario.DetalleComentarioDTO;
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
-import co.org.uniquindio.unilocal.dto.comentario.QuienHizoComentarioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -17,7 +16,10 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+<<<<<<< HEAD
 
+=======
+>>>>>>> 889f068e65536428932bd11e34ff1966f8da2aec
 
 
 @Service
@@ -29,9 +31,12 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
 
+<<<<<<< HEAD
 
+=======
+>>>>>>> 889f068e65536428932bd11e34ff1966f8da2aec
     @Override
-    public void crearComentario(ComentarioDTO comentario) {
+    public void crearComentario(DetalleComentarioDTO comentario) {
 
     }
 
@@ -41,17 +46,17 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     }
 
     @Override
-    public List<ItemListaComentariosDTO> listarComentariosNegocio(QuienHizoComentarioDTO hizoComentarioDTO) throws Exception {
-        Optional<Cliente> cliente = clienteRepo.findById(hizoComentarioDTO.idCliente());
+    public List<ItemListaComentariosDTO> listarComentariosNegocio(DetalleComentarioDTO detalleComentarioDTO) throws Exception {
+        Optional<Cliente> cliente = clienteRepo.findById(detalleComentarioDTO.codigoCliente());
 
         if (cliente.isEmpty()) {
             throw new Exception("No exsite cliente");
         }
-        Optional<Negocio> negocio = negocioRepo.findById(hizoComentarioDTO.idNegocio());
+        Optional<Negocio> negocio = negocioRepo.findById(detalleComentarioDTO.codigoNegocio());
         if (negocio.isEmpty()) {
             throw new Exception("No exsite negocio");
         }
-        List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(hizoComentarioDTO.idNegocio());
+        List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(detalleComentarioDTO.codigoNegocio());
         List<ItemListaComentariosDTO> respuesta = new ArrayList<>();
         if (historialComentario.isEmpty()) {
             throw new Exception("No hay comentarios");
@@ -59,7 +64,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
         for (Comentario c : historialComentario) {
             respuesta.add(new ItemListaComentariosDTO(
-                    c.getCodigoComemtario(),
+                    c.getCodigoComentario(),
                     c.getFecha(),
                     c.getMensaje()
             ));
