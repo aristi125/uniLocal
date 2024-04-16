@@ -12,7 +12,9 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class ModeradorServicioImpl implements ModeradorServicio {
 
-    // RechazarLugar
+    // RechazarLugar idNegocio, idModerador, motivo, estado.Activo ---
+    // AutorizarzarLugar idNegocio, idModerador, motivo, estado.Activo ---
     // AutorizarzarLugar
-    // VerHistorial
+    // VerHistorial dado el id del negocio hacer un getHistorialRevisiones()
+    // EnviarCorreoRechazo
 }

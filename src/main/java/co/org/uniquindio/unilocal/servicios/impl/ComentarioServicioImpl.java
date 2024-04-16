@@ -22,7 +22,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ComentarioServicioImpl implements ComentarioServicio {
 
-    private final ClienteRepo clienteRepo;
+    private final ClienteRepo clienteRepo; // Validar que el cliente exista
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
 
