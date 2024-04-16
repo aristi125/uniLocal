@@ -1,10 +1,10 @@
 package co.org.uniquindio.unilocal.dto.comentario;
 
-import java.time.LocalDateTime;
 
+//esta clase es para dar respuesta a un comentario
 public record RespuestaComentarioDTO (
         String codigoComentario,
         String codigoNegocio,
         String respuesta
 ) {
-        }
+}
