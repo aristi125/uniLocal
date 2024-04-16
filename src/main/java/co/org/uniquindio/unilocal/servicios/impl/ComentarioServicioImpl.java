@@ -1,11 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 
-import co.org.uniquindio.unilocal.dto.comentario.ComentarioDTO;
-import co.org.uniquindio.unilocal.dto.comentario.DetalleComentarioDTO;
-import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
-import co.org.uniquindio.unilocal.dto.comentario.QuienHizoComentarioDTO;
-import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
@@ -19,7 +15,6 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
 
 
 @Service
@@ -32,14 +27,16 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final ComentarioRepo comentarioRepo;
 
     @Override
-    public void crearComentario(ComentarioDTO comentario) {
+    public void crearComentario(RegistroComentarioDTO comentario) {
         Negocio negocio = negocioRepo.findByCodigo(comentario.codigoNegocio());
         List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(negocio.getCodigo());
         Comentario comentarioComentario = new Comentario();
-        comentarioComentario.setFecha(comentario.horaComentario());
+        comentarioComentario.setFecha(comentario.fecha());
+        comentarioComentario.setCalificacion(comentario.calificacion());
+        comentarioComentario.setCodigoCliente(comentario.codigoCliente());
+        comentarioComentario.setCodigoNegocio(negocio.getCodigo());
         comentarioComentario.setMensaje(comentario.mensaje());
         comentarioComentario.setRespuesta("");
-        comentarioComentario.setCodigoNegocio(negocio.getCodigo());
 
         listaComentarios.add(comentarioComentario);
         negocio.setComentarios(listaComentarios);
@@ -48,7 +45,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     }
 
     @Override
-    public void responderComentario(ComentarioDTO comentario) {
+    public void responderComentario(RespuestaComentarioDTO comentario) {
         Negocio negocio = negocioRepo.findByCodigo(comentario.codigoNegocio());
         Comentario aux = comentarioRepo.findByCodigoComentario(comentario.codigoComentario());
         aux.setRespuesta(comentario.respuesta());
@@ -56,22 +53,18 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     }
 
     @Override
-    public List<ItemListaComentariosDTO> listarComentariosNegocio(DetalleComentarioDTO detalleComentarioDTO, QuienHizoComentarioDTO hizoComentarioDTO) throws Exception {
-        Optional<Cliente> cliente = clienteRepo.findById(hizoComentarioDTO.idCliente());
+    public List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception {
 
-        if (cliente.isEmpty()) {
-            throw new Exception("No exsite cliente");
-        }
-        Optional<Negocio> negocio = negocioRepo.findById(hizoComentarioDTO.idNegocio());
+        Optional<Negocio> negocio = negocioRepo.findById(codigoNegocio);
         if (negocio.isEmpty()) {
-            throw new Exception("No exsite negocio");
+            throw new Exception("No existe negocio");
         }
-        List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(hizoComentarioDTO.idNegocio());
-        List<ItemListaComentariosDTO> respuesta = new ArrayList<>();
+        List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (historialComentario.isEmpty()) {
             throw new Exception("No hay comentarios");
         }
 
+        List<ItemListaComentariosDTO> respuesta = new ArrayList<>();
         for (Comentario c : historialComentario) {
             respuesta.add(new ItemListaComentariosDTO(
                     c.getCodigoComentario(),
@@ -83,7 +76,23 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     }
 
     @Override
-    public void calcularPromedioCalificaciones () {
+    public int calcularPromedioCalificaciones (String codigoNegocio) throws Exception {
+
+        Optional<Negocio> negocio = negocioRepo.findById(codigoNegocio);
+        if (negocio.isEmpty()) {
+            throw new Exception("No existe negocio");
+        }
+
+        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
+        if (listaComentarios.isEmpty()) {
+            throw new Exception("No hay comentarios");
+        }
+
+        int suma = 0;
+        for (Comentario c : listaComentarios) {
+            suma += c.getCalificacion();
+        }
+        return suma / listaComentarios.size();
 
     }
 }

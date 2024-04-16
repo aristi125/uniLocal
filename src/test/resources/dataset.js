@@ -82,11 +82,13 @@ db.negocios.insertMany([
 ]);
 db.comentarios.insertMany([
     {
-        mensaje: "Excelente sitio, muy buena atención",
-        fecha: new Date(),
+        _id: 'Comentario1',
+        fecha: new LocalDateTime.now(),
+        calificacion: 5,
         codigoCliente: 'Cliente1',
         codigoNegocio: 'Negocio1',
-        calificacion: 5,
+        mensaje: "Excelente sitio, muy buena atención",
+        respuesta: "",
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     }
 ]);

@@ -3,6 +3,7 @@ package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
+import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -139,6 +140,25 @@ public class ClienteServicioImpl implements ClienteServicio {
     //falta
     @Override
     public void enviarLinkRecuperacion(String email) throws Exception {
+        //Buscamos el cliente con el email
+        Optional<Cliente> optionalCliente = clienteRepo.findByEmail(email);
+        //Si no se encontró el cliente, lanzamos una excepción
+        if(optionalCliente.isEmpty()){
+            throw new Exception("No se encontró el cliente con el email "+email);
+        }
+        //Obtenemos el cliente
+        Cliente cliente = optionalCliente.get();
+
+        EmailDTO emailDTO = new EmailDTO(
+                email,
+                "Recuperación de contraseña",
+                "Hola "+cliente.getNombre()+"! \n\n"+
+                        "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
+                        "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
+                        "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+
+                        "http://localhost:8081/recuperar-password?codigo="+cliente.getCodigo()+"\n\n"+
+                        "Gracias por confiar en nosotros!"
+        );
 
     }
 
@@ -164,7 +184,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-    public void favoritos(String idNegocio, String idCliente) throws Exception{
+    public void agregarFavoritos(String idNegocio, String idCliente) throws Exception{
         Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio );
         if(optionalNegocio.isEmpty()){
             throw new Exception("No existe el negocio con el id "+idNegocio);

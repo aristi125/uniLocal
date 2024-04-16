@@ -6,11 +6,12 @@ import java.time.LocalDateTime;
 //NOTA: Esta clase es para obtener el comentario con todos sus atributos
 //es para hacer procesos
 public record DetalleComentarioDTO(
+        String codigoComentario,
         LocalDateTime fecha,
-        @NotBlank int calificacion,
-        @NotBlank String codigoCliente,
-        @NotBlank String codigoNegocio,
-       @NotBlank String mensaje,
+        int calificacion,
+        String codigoCliente,
+        String codigoNegocio,
+        String mensaje,
         String respuesta
 ) {
 }

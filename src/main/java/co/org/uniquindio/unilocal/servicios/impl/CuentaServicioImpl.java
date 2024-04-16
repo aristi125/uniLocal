@@ -15,11 +15,7 @@ public class CuentaServicioImpl implements CuentaServicio {
 
     }
 
-    @Override
-    public void eliminarCuenta(String idCuenta) throws Exception {
-
-    }
-
+    //esto si va aqui? o en clienteServicioImpl?
     @Override
     public void enviarLinkRecuperacion(String email) throws Exception {
 

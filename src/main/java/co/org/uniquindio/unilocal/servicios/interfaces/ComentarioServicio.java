@@ -1,20 +1,17 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
-import co.org.uniquindio.unilocal.dto.comentario.ComentarioDTO;
-import co.org.uniquindio.unilocal.dto.comentario.DetalleComentarioDTO;
-import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
-import co.org.uniquindio.unilocal.dto.comentario.QuienHizoComentarioDTO;
+import co.org.uniquindio.unilocal.dto.comentario.*;
 
 import java.util.List;
 
 public interface ComentarioServicio {
-    void crearComentario(ComentarioDTO comentario);
+    void crearComentario(RegistroComentarioDTO comentario);
 
-    void responderComentario(ComentarioDTO comentario);
+    void responderComentario(RespuestaComentarioDTO comentario);
 
-    List<ItemListaComentariosDTO> listarComentariosNegocio(DetalleComentarioDTO detalleComentarioDTO, QuienHizoComentarioDTO hizoComentarioDTO) throws Exception;
+    List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception;
 
-    void calcularPromedioCalificaciones();
+    int calcularPromedioCalificaciones(String codigoNegocio) throws Exception;
 
 
 }

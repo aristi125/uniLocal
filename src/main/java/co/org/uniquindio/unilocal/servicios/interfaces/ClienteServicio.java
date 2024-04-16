@@ -1,9 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.cliente.*;
-import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
 import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
 
 import java.util.List;
 
@@ -22,7 +20,7 @@ public interface ClienteServicio  {
 
     void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception;
 
-    void favoritos(String idNegocio, String idCliente) throws Exception;
+    void agregarFavoritos(String idNegocio, String idCliente) throws Exception;
 
     List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception;
 
