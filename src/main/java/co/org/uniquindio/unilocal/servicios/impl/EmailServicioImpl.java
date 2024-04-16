@@ -32,8 +32,5 @@ public class EmailServicioImpl implements EmailServicio {
         helper.setFrom("no_reply@dominio.com");
 
         javaMailSender.send(mensaje);
-
-
     }
-
 }

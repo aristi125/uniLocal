@@ -18,10 +18,6 @@ public interface ClienteServicio  {
 
     List<ItemDetalleClienteDTO> listarClientes() throws Exception;
 
-    //void iniciarSesion(SesionDTO sesionDTO) throws Exception;
-
-    void eliminarCuenta(String idCuenta) throws Exception;
-
     void enviarLinkRecuperacion(String email) throws Exception;
 
     void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception;
@@ -33,5 +29,4 @@ public interface ClienteServicio  {
     void removerFavoritos(String idNegocio, String idCliente) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
-
 }

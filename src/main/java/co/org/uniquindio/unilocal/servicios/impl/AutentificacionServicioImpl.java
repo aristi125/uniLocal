@@ -4,6 +4,7 @@ import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
 import co.org.uniquindio.unilocal.dto.TokenDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Moderador;
+import co.org.uniquindio.unilocal.modelo.enumeracion.RolUsuario;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.ModeradorRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.AutentificacionServicio;
@@ -43,7 +44,7 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
         }
 
         Map<String, Object> map = new HashMap<>();
-        map.put("rol", "CLIENTE");
+        map.put("rol", RolUsuario.CLIENTE);
         map.put("nombre", cliente.getNombre());
         map.put("codigo", cliente.getCodigo());
 
@@ -65,7 +66,7 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
             throw new Exception("La contraseña es incorrecta, inténtelo de nuevo");
         }
         Map<String, Object> map = new HashMap<>();
-        map.put("rol", "CLIENTE");
+        map.put("rol", RolUsuario.MODERADOR);
         map.put("nombre", moderador.getNombre());
         map.put("codigo", moderador.getCodigo());
 

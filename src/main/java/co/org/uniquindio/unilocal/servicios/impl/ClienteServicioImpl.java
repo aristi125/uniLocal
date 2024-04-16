@@ -136,52 +136,6 @@ public class ClienteServicioImpl implements ClienteServicio {
         return items;
     }
 
-    /**
-    @Override
-    public void iniciarSesion(SesionDTO sesionDTO) throws Exception {
-        Optional<Cliente> optional = clienteRepo.findByEmail(sesionDTO.email());
-
-        if (optional.isEmpty()) {
-            throw new Exception("El correo electrónico "+ sesionDTO.email()+" no está registrado");
-        }
-
-        Cliente cliente = optional.get();
-
-        // Aquí puedes verificar la contraseña utilizando PasswordEncoder o simplemente comparando la contraseña en texto plano
-        // Por ejemplo, si usas PasswordEncoder:
-        // if (!passwordEncoder.matches(sesionDTO.password(), cliente.getPassword())) {
-        //     throw new Exception("La contraseña es incorrecta");
-        // }
-
-        // Si solo quieres verificar la contraseña en texto plano
-        if (!sesionDTO.password().equals(cliente.getPassword())) {
-            throw new Exception("La contraseña es incorrecta");
-        }
-
-        // Aquí puedes realizar cualquier lógica adicional que necesites para la sesión
-        // Por ejemplo, generar un token de sesión, configurar la sesión del usuario, etc.
-
-        System.out.println("!sesion iniciada¡");
-
-    }
-    **/
-
-    @Override
-    public void eliminarCuenta(String idCuenta) throws Exception {
-
-        Optional<Cliente> optional = clienteRepo.findById(idCuenta);
-
-        if (optional.isEmpty()) {
-            throw new Exception("No existe el cliente con el ID " + idCuenta);
-        }
-
-        Cliente cliente = optional.get();
-
-        cliente.setEstado(EstadoCuenta.INACTIVO);
-
-        clienteRepo.save(cliente);
-    }
-
     //falta
     @Override
     public void enviarLinkRecuperacion(String email) throws Exception {

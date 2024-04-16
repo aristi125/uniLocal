@@ -5,6 +5,7 @@ import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.AutentificacionServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -20,6 +21,7 @@ public class ClienteTest {
 
     @Autowired
     private ClienteServicio clienteServicio;
+    private AutentificacionServicio autentificacionServicio;
 
 
     //-------------------------Prueba unitaria de metodos DTO en carpeta CLIENTE-----------------------
@@ -107,9 +109,8 @@ public class ClienteTest {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
         //Iniciamos sesion con el objeto creado anteriormente
-        clienteServicio.iniciarSesion(sesionDTO);
+        autentificacionServicio.iniciarSesionCliente(sesionDTO);
     }
-
 
     /**
      * Test que prueba el metodo de favoritos

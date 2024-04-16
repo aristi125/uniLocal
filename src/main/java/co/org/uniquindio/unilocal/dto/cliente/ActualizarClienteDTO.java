@@ -1,6 +1,8 @@
 package co.org.uniquindio.unilocal.dto.cliente;
 
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
 
 public record ActualizarClienteDTO(
 
@@ -8,7 +10,7 @@ public record ActualizarClienteDTO(
         String nombre,
         String fotoPerfil,
         String nickname,
-        String email,
-        Ciudades ciudadResidencia
+        @Email String email,
+        @NotBlank Ciudades ciudadResidencia
 ) {
 }
