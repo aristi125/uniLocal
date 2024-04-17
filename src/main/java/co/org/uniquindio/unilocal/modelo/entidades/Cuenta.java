@@ -12,6 +12,8 @@ import lombok.*;
 @EqualsAndHashCode
 public class Cuenta {
 
+    private String codigo;
+
     private String email;
 
     private String nombre;

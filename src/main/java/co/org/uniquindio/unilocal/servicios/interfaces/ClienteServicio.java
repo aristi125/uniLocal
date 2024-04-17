@@ -16,10 +16,6 @@ public interface ClienteServicio  {
 
     List<ItemDetalleClienteDTO> listarClientes() throws Exception;
 
-    void enviarLinkRecuperacion(String email) throws Exception;
-
-    void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception;
-
     void agregarFavoritos(String idNegocio, String idCliente) throws Exception;
 
     List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception;

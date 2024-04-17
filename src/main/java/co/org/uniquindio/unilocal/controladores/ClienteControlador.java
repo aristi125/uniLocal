@@ -4,6 +4,7 @@ import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -16,6 +17,8 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClienteControlador {
     private final ClienteServicio clienteServicio;
+
+    private final CuentaServicio cuentaServicio;
 
     @PostMapping("/registrar-cliente")
     public ResponseEntity<MensajeDTO<String>> registrarCliente(@Valid @RequestBody RegistroClienteDTO registroClienteDTO) throws Exception {
@@ -46,13 +49,13 @@ public class ClienteControlador {
 
     @GetMapping("/enviar-link-recuperacion-password")
     public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacion(String email) throws Exception {
-        clienteServicio.enviarLinkRecuperacion(email);
+        cuentaServicio.enviarLinkRecuperacion(email);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
     }
 
     @PutMapping("/cambiar-password")
     public ResponseEntity<MensajeDTO<String>> cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
-        clienteServicio.cambiarPassword(cambioPasswordDTO);
+        cuentaServicio.cambiarPassword(cambioPasswordDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha cambiado su contraseña" ));
     }
 

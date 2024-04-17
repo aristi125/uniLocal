@@ -22,6 +22,5 @@ public class Producto implements Serializable {
     private String codigo;
     private String nombre;
     private List<TipoProducto> tipoProducto;
-    private int unidades;
     private float precio;
 }

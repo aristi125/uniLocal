@@ -137,51 +137,6 @@ public class ClienteServicioImpl implements ClienteServicio {
         return items;
     }
 
-    //falta
-    @Override
-    public void enviarLinkRecuperacion(String email) throws Exception {
-        //Buscamos el cliente con el email
-        Optional<Cliente> optionalCliente = clienteRepo.findByEmail(email);
-        //Si no se encontró el cliente, lanzamos una excepción
-        if(optionalCliente.isEmpty()){
-            throw new Exception("No se encontró el cliente con el email "+email);
-        }
-        //Obtenemos el cliente
-        Cliente cliente = optionalCliente.get();
-
-        EmailDTO emailDTO = new EmailDTO(
-                email,
-                "Recuperación de contraseña",
-                "Hola "+cliente.getNombre()+"! \n\n"+
-                        "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
-                        "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
-                        "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+
-                        "http://localhost:8081/recuperar-password?codigo="+cliente.getCodigo()+"\n\n"+
-                        "Gracias por confiar en nosotros!"
-        );
-
-    }
-
-    @Override
-    public void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
-        Optional<Cliente> optional =clienteRepo.findById(cambioPasswordDTO.id());
-
-        if(optional.isEmpty()){
-            throw new Exception("No existe el paciente con el codigo "+ cambioPasswordDTO.id());
-        }
-
-        //BUSCAMOS AL CLIENTE CON EL GET
-        Cliente buscado = optional.get();
-
-        // Encriptar la nueva contraseña
-        String nuevaPasswordEncriptada = "";//passwordEncoder.encode(cambioPasswordDTO.passwordNueva());
-
-        // Asignar la nueva contraseña encriptada al cliente
-        buscado.setPassword(nuevaPasswordEncriptada);
-
-        // Guardar el cliente actualizado en la base de datos
-        clienteRepo.save(buscado);
-    }
 
     @Override
     public void agregarFavoritos(String idNegocio, String idCliente) throws Exception{

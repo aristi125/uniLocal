@@ -7,6 +7,7 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.servicios.interfaces.AutentificacionServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,6 +26,8 @@ public class ClienteTest {
     private ComentarioServicio comentarioServicio;
 
     private AutentificacionServicio autentificacionServicio;
+
+    private CuentaServicio cuentaServicio;
 
 
     //-------------------------Prueba unitaria de metodos en ClienteServicioIMPL-----------------------
@@ -169,7 +172,7 @@ public class ClienteTest {
     //@Test
     public void enviarLinkRecuperacionTest() throws Exception {
         //Enviamos un link de recuperacion a un correo
-        clienteServicio.enviarLinkRecuperacion("ana@gmail.com");
+        cuentaServicio.enviarLinkRecuperacion("ana@gmail.com");
     }
 
     /**
@@ -179,7 +182,7 @@ public class ClienteTest {
     public void cambiarPasswordTest() throws Exception {
         //Cambiamos la contraseña de un cliente
         CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cliente1", "nuevaContraseña", "ana@gmail.com", "1" );
-        clienteServicio.cambiarPassword(cambioPasswordDTO);
+        cuentaServicio.cambiarPassword(cambioPasswordDTO);
     }
 
     //-------------------------Prueba unitaria de metodos en ComentarioServicio -----------------------

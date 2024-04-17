@@ -4,7 +4,6 @@ import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
 import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
 
 public interface CuentaServicio {
-    void iniciarSesion(SesionDTO sesionDTO)throws Exception;
     void enviarLinkRecuperacion(String email)throws Exception;
     void cambiarPassword(CambioPasswordDTO cambioPasswordDTO)throws Exception;
 }
