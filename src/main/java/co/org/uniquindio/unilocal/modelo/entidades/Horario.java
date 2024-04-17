@@ -14,7 +14,7 @@ public class Horario {
 
     private String dia;
 
-    private LocalDate horaInicio;
+    private LocalTime horaInicio;
 
-    private LocalDate horaFin;
+    private LocalTime horaFin;
 }

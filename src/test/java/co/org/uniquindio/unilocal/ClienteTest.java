@@ -2,8 +2,12 @@ package co.org.uniquindio.unilocal;
 
 import co.org.uniquindio.unilocal.dto.Cuenta.*;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
+import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
+import co.org.uniquindio.unilocal.modelo.entidades.Horario;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
@@ -11,7 +15,9 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -182,6 +188,60 @@ public class ClienteTest {
         Assertions.assertEquals(1, lugares.size());
     }
 
+    /**
+     * Test que prueba el metodo de listar lugares por filtro de nombre
+     */
+    //@Test
+    public void listarLugaresPorFiltroNombreTest() throws Exception {
+        //Obtenemos la lista de lugares por filtro de nombre
+        List<ItemListaLugaresDTO> lugares = clienteServicio.buscarNegocioNombre("Negocio1");
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de listar lugares por filtro de categoria
+     */
+    //@Test
+    public void listarLugaresPorFiltroCategoriaTest() throws Exception {
+
+        //Obtenemos la lista de lugares por filtro de categoria
+        List<ItemListaLugaresDTO> lugares = clienteServicio.buscarNegocioCategoria(Categoria.RESTAURANTE);
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de listar lugares por filtro de distancia
+     */
+    //@Test
+    public void listarLugaresPorFiltroDistanciaTest() throws Exception {
+        Ubicacion ubicacionCliente = new Ubicacion(4, 4);
+        //Obtenemos la lista de lugares por filtro de distancia
+        List<ItemListaLugaresDTO> lugares = clienteServicio.buscarNegocioDistancia(5, ubicacionCliente);
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de listar lugares recomendados por busqueda
+     */
+    //@Test
+    public void recomendarNegocio() throws Exception {
+        //Obtenemos la lista de lugares recomendados por busqueda
+        List<ItemListaLugaresDTO> lugares = clienteServicio.recomendarNegocio("comida");
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
 
 
     //-------------------------Prueba unitaria de metodos en ComentarioServicio -----------------------
@@ -266,8 +326,25 @@ public class ClienteTest {
         emailServicio.enviarCorreo(emailDTO);
     }
 
+    //-------------------------Prueba unitaria de metodos en ModeradorServicioImpl-----------------------
+
+  //pendiente
 
 
+    //-------------------------Prueba unitaria de metodos en NegocioServicioImpl-----------------------
 
+    /**
+     * Metodo para crear un negocio
+     */
+    //@Test
+    /*
+    public void crearNegocioTest() throws Exception {
+        //Creamos un negocio
+        RegistroNegocioDTO registroNegocioDTO = new RegistroNegocioDTO(
+                "Negocio1",
+                "Hospedaje comodo y economico",
+                Horario horario = new Horario("Lunes a Viernes", new LocalTime(8,00,00,00), new LocalTime(18:00:00:00)),
+
+*/
 
 }
