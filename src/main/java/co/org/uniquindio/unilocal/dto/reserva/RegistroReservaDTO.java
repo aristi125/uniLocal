@@ -12,8 +12,8 @@ public record RegistroReservaDTO (
         @NotBlank @Length(max = 10) LocalDateTime fecha,
         @NotBlank @Length(max = 2) int hora,
         @NotBlank @Length(max = 2)  int cantidadPersonas,
-        @NotBlank Cliente cliente,
-        @NotBlank Negocio negocio
+        @NotBlank String codigoCliente,
+        @NotBlank String codigoNegocio
 
 ) {
 }

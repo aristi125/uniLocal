@@ -20,8 +20,8 @@ public class Reserva {
     private LocalDateTime fecha;
     private int hora;
     private int cantidadPersonas;
-    private Cliente cliente;
-    private Negocio negocio;
+    private String codigoCliente;
+    private String codigoNegocio;
 
 }
 

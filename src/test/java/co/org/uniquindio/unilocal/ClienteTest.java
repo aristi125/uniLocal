@@ -1,13 +1,11 @@
 package co.org.uniquindio.unilocal;
 
 import co.org.uniquindio.unilocal.dto.Cuenta.*;
+import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
-import co.org.uniquindio.unilocal.servicios.interfaces.AutentificacionServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -25,9 +23,39 @@ public class ClienteTest {
     @Autowired
     private ComentarioServicio comentarioServicio;
 
+    @Autowired
+    private EmailServicio emailServicio;
+
+    @Autowired
     private AutentificacionServicio autentificacionServicio;
 
+    @Autowired
     private CuentaServicio cuentaServicio;
+
+
+    //-------------------------Prueba unitaria de metodos en AutentificacionServicioIMPL-----------------------
+
+
+    /**
+     * Test que prueba el metodo de iniciar sesion para el cliente
+     */
+    //@Test
+    public void iniciarSesionTestCliente() throws Exception {
+        //Creamos un objeto de tipo SesionDTO
+        SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
+        //Iniciamos sesion con el objeto creado anteriormente
+        autentificacionServicio.iniciarSesionCliente(sesionDTO);
+    }
+
+    /**
+     * Test que prueba el metodo de iniciar sesion moderador
+     */
+    public void iniciarSesionTestModerador() throws Exception {
+        //Creamos un objeto de tipo SesionDTO
+        SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
+        //Iniciamos sesion con el objeto creado anteriormente
+        autentificacionServicio.iniciarSesionModerador(sesionDTO);
+    }
 
 
     //-------------------------Prueba unitaria de metodos en ClienteServicioIMPL-----------------------
@@ -40,7 +68,7 @@ public class ClienteTest {
 
                 "sofia",
                 "mifoto",
-                        "sofi",
+                "sofi",
                 "sofia@gmail.com",
                 "contraseña",
                 Ciudades.ARMENIA
@@ -108,19 +136,6 @@ public class ClienteTest {
 
 
     /**
-     * Test que prueba el metodo de iniciar sesion
-     */
-    //@Test
-    /*
-    public void iniciarSesionTest() throws Exception {
-        //Creamos un objeto de tipo SesionDTO
-        SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
-        //Iniciamos sesion con el objeto creado anteriormente
-        autentificacionServicio.iniciarSesionCliente(sesionDTO);
-    }
-    */
-
-    /**
      * Test que prueba el metodo de agregar favoritos
      */
     //@Test
@@ -166,24 +181,7 @@ public class ClienteTest {
         Assertions.assertEquals(1, lugares.size());
     }
 
-    /**
-     * Test que prueba el metodo de enviar link de recuperacion
-     */
-    //@Test
-    public void enviarLinkRecuperacionTest() throws Exception {
-        //Enviamos un link de recuperacion a un correo
-        cuentaServicio.enviarLinkRecuperacion("ana@gmail.com");
-    }
 
-    /**
-     * Test que prueba el metodo de cambiar contraseña
-     */
-    //@Test
-    public void cambiarPasswordTest() throws Exception {
-        //Cambiamos la contraseña de un cliente
-        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cliente1", "nuevaContraseña", "ana@gmail.com", "1" );
-        cuentaServicio.cambiarPassword(cambioPasswordDTO);
-    }
 
     //-------------------------Prueba unitaria de metodos en ComentarioServicio -----------------------
 
@@ -235,6 +233,37 @@ public class ClienteTest {
 
     }
 
+    //-------------------------Prueba unitaria de metodos en CuentaServicio -----------------------
+    /**
+     * Test que prueba el metodo de enviar link de recuperacion
+     */
+    //@Test
+    public void enviarLinkRecuperacionTest() throws Exception {
+        //Enviamos un link de recuperacion a un correo
+        cuentaServicio.enviarLinkRecuperacion("ana@gmail.com");
+    }
+
+    /**
+     * Test que prueba el metodo de cambiar contraseña
+     */
+    //@Test
+    public void cambiarPasswordTest() throws Exception {
+        //Cambiamos la contraseña de un cliente
+        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cliente1", "nuevaContraseña", "ana@gmail.com", "1" );
+        cuentaServicio.cambiarPassword(cambioPasswordDTO);
+    }
+
+    //-------------------------Prueba unitaria de metodos en EmailServicioImpl-----------------------
+    /**
+     * Test que prueba el metodo de enviar correo
+     */
+    //@Test
+    public void enviarCorreoTest() throws Exception {
+        //Creamos un objeto de tipo EmailDTO
+        EmailDTO emailDTO = new EmailDTO("Prueba", "Este es un correo de prueba", "ana@gmail.com");
+        //Enviamos el correo
+        emailServicio.enviarCorreo(emailDTO);
+    }
 
 
 
