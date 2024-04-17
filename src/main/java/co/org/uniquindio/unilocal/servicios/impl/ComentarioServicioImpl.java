@@ -2,6 +2,7 @@ package co.org.uniquindio.unilocal.servicios.impl;
 
 
 import co.org.uniquindio.unilocal.dto.comentario.*;
+import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
@@ -28,25 +29,43 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
     @Override
     public void crearComentario(RegistroComentarioDTO comentario) {
-        Negocio negocio = negocioRepo.findByCodigo(comentario.codigoNegocio());
-        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(negocio.getCodigo());
+
+        Optional<Negocio> negocio = negocioRepo.findById(comentario.codigoNegocio());
+        if (negocio.isEmpty()) {
+            throw new RuntimeException("No existe negocio");
+        }
+
+        Optional<Cliente> cliente = clienteRepo.findById(comentario.codigoCliente());
+        if (cliente.isEmpty()) {
+            throw new RuntimeException("No existe cliente");
+        }
+
+        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(comentario.codigoNegocio());
         Comentario comentarioComentario = new Comentario();
         comentarioComentario.setFecha(comentario.fecha());
         comentarioComentario.setCalificacion(comentario.calificacion());
         comentarioComentario.setCodigoCliente(comentario.codigoCliente());
-        comentarioComentario.setCodigoNegocio(negocio.getCodigo());
+        comentarioComentario.setCodigoNegocio(comentario.codigoNegocio());
         comentarioComentario.setMensaje(comentario.mensaje());
         comentarioComentario.setRespuesta("");
 
         listaComentarios.add(comentarioComentario);
-        negocio.setComentarios(listaComentarios);
-        negocioRepo.save(negocio);
+        negocio.get().setComentarios(listaComentarios);
+        negocioRepo.save(negocio.get());
         comentarioRepo.save(comentarioComentario);
     }
 
     @Override
     public void responderComentario(RespuestaComentarioDTO comentario) {
-        Negocio negocio = negocioRepo.findByCodigo(comentario.codigoNegocio());
+        Optional<Cliente> cliente = clienteRepo.findById(comentario.codigoCliente());
+        if (cliente.isEmpty()) {
+            throw new RuntimeException("No existe cliente");
+        }
+        Optional<Negocio> negocio = negocioRepo.findById(comentario.codigoNegocio());
+        if (negocio.isEmpty()) {
+            throw new RuntimeException("No existe negocio");
+        }
+
         Comentario aux = comentarioRepo.findByCodigoComentario(comentario.codigoComentario());
         aux.setRespuesta(comentario.respuesta());
         comentarioRepo.save(aux);

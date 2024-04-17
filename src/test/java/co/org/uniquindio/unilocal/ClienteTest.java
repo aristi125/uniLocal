@@ -201,7 +201,7 @@ public class ClienteTest {
     //@Test
     public void responderComentarioTest() throws Exception {
         //Creamos un comentario
-        RespuestaComentarioDTO respuestaComentarioDTO = new RespuestaComentarioDTO("Comentario1", "Negocio1", "Gracias por tu comentario" );
+        RespuestaComentarioDTO respuestaComentarioDTO = new RespuestaComentarioDTO("Comentario1", "Cliente1","Negocio1", "Gracias por tu comentario" );
         //Respondemos el comentario
         comentarioServicio.responderComentario(respuestaComentarioDTO);
     }
