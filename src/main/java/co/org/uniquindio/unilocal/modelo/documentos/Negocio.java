@@ -4,6 +4,7 @@ package co.org.uniquindio.unilocal.modelo.documentos;
 import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.entidades.*;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import lombok.*;
@@ -38,4 +39,7 @@ public class Negocio implements Serializable {
     private List<HistorialRevision> historialRevisiones;
     private String codigoCliente;
     private EstadoNegocio estadoNegocio;
+    private List<Reserva> listaReservas;
+    private Agenda agenda;
+
 }

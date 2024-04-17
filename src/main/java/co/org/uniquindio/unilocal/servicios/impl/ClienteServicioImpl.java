@@ -1,9 +1,5 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-
-import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
-import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;

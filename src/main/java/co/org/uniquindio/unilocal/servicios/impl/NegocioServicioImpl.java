@@ -1,8 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.Negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;

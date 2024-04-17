@@ -1,6 +1,6 @@
 package co.org.uniquindio.unilocal.controladores;
 
-import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
+import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;

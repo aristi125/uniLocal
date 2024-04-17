@@ -1,6 +1,6 @@
 package co.org.uniquindio.unilocal;
 
-import co.org.uniquindio.unilocal.dto.Cuenta.*;
+import co.org.uniquindio.unilocal.dto.cuenta.*;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
@@ -264,10 +264,4 @@ public class ClienteTest {
         //Enviamos el correo
         emailServicio.enviarCorreo(emailDTO);
     }
-
-
-
-
-
-
 }

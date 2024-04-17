@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto.Negocio;
+package co.org.uniquindio.unilocal.dto.negocio;
 
 import java.time.LocalDateTime;
 

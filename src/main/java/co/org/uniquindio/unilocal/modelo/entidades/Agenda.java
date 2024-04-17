@@ -10,11 +10,6 @@ import lombok.*;
 @EqualsAndHashCode
 public class Agenda {
 
-    private  String codigoNegocio;
-
-    private String nombreNegocio;
-
     private String tematica;
-
     private String descripcion;
 }
