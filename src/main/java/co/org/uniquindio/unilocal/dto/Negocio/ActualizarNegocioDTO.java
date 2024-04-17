@@ -6,8 +6,8 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
 import java.util.List;
 
 public record ActualizarNegocioDTO(
-        String id,
-        String nombre,
+       @NotBlank String id,
+       @NotBlank  String nombre,
         String descripcion,
         List<Horario> horarios,
         List<String> telefonos,
