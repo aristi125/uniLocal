@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto.reserva;
+package co.org.uniquindio.unilocal.dto.Negocio;
 
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -6,11 +6,12 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import java.time.LocalDateTime;
 
 public record DetalleReservaDTO (
+        String codigoReserva,
         LocalDateTime fecha,
         int hora,
         int cantidadPersonas,
-        Cliente cliente,
-        Negocio negocio
+        String cliente,
+        String negocio
 ) {
 
 }

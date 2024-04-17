@@ -3,6 +3,7 @@ package co.org.uniquindio.unilocal.modelo.documentos;
 
 import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
+import co.org.uniquindio.unilocal.modelo.entidades.Reserva;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioEliminar;
@@ -39,4 +40,5 @@ public class Negocio implements Serializable {
     private List<HistorialRevision> historialRevisiones;
     private String codigoCliente;
     private EstadoNegocioEliminar estadoNegocio;
+    private List<Reserva> listaReservas;
 }

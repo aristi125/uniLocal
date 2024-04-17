@@ -5,6 +5,7 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Getter
 @Setter
@@ -22,6 +23,8 @@ public class Reserva {
     private int cantidadPersonas;
     private String codigoCliente;
     private String codigoNegocio;
+
+
 
 }
 

@@ -1,6 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
-import co.org.uniquindio.unilocal.dto.reserva.*;
+import co.org.uniquindio.unilocal.dto.Negocio.ActualizarReservaDTO;
+import co.org.uniquindio.unilocal.dto.Negocio.DetalleReservaDTO;
+import co.org.uniquindio.unilocal.dto.Negocio.RegistroReservaDTO;
 
 import java.util.List;
 
@@ -11,11 +13,11 @@ public interface ReservaServicio {
 
     void ActualizarReserva(ActualizarReservaDTO actualizarReservaDTO) throws Exception;
 
-    DetalleReservaDTO ObtenerReserva(String idReserva) throws Exception;
+    DetalleReservaDTO ObtenerReserva(String idNegocio, String idReserva) throws Exception;
 
-    void EliminarReserva(String idReserva) throws Exception;
+    void EliminarReserva(String idNegocio, String idReserva) throws Exception;
 
-    List<DetalleReservaDTO> ListarReservas();
+    List<DetalleReservaDTO> ListarReservas(String idNegocio) throws Exception;
 
 
 }

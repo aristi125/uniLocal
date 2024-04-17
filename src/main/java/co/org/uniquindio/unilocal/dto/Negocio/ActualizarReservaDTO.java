@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto.reserva;
+package co.org.uniquindio.unilocal.dto.Negocio;
 
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -9,11 +9,12 @@ import java.time.LocalDateTime;
 
 public record ActualizarReservaDTO (
 
+        @NotBlank String codigoReserva,
         @NotBlank @Length(max = 10) LocalDateTime fecha,
         @NotBlank @Length(max = 2) int hora,
         @NotBlank @Length(max = 2)  int cantidadPersonas,
-        @NotBlank Cliente cliente,
-        @NotBlank Negocio negocio
+        @NotBlank String codigoCliente,
+        @NotBlank String codigoNegocio
 
 ) {
 }

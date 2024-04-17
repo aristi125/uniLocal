@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto.reserva;
+package co.org.uniquindio.unilocal.dto.Negocio;
 
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
