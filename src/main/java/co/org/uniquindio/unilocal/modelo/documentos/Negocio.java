@@ -5,8 +5,7 @@ import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioEliminar;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioModerador;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
@@ -38,5 +37,5 @@ public class Negocio implements Serializable {
     private int calificaciones;
     private List<HistorialRevision> historialRevisiones;
     private String codigoCliente;
-    private EstadoNegocioEliminar estadoNegocio;
+    private EstadoNegocio estadoNegocio;
 }

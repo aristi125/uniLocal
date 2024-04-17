@@ -3,7 +3,9 @@ package co.org.uniquindio.unilocal.servicios.interfaces;
 import co.org.uniquindio.unilocal.dto.Negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
 import java.io.IOException;
 import java.util.List;
@@ -16,13 +18,11 @@ public interface NegocioServicio {
 
     void eliminarNegocio(String idNegocio) throws Exception;
 
-    void buscarNegocios() throws Exception;
+    List<Negocio> buscarNegocios() throws Exception;
 
-    List<HistorialRevision> getHistorialRevisiones(String idNegocio) throws Exception;
+    List<Negocio> filtrarPorEstado(EstadoNegocio estadoNegocio) throws Exception;
 
-    void filtrarPorEstado() throws Exception;
-
-    void listarNegociosPropietario() throws Exception;
+    List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception;
 
     void cambiarEstado() throws Exception;
 

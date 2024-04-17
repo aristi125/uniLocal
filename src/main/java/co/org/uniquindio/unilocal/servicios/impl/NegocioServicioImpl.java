@@ -3,11 +3,10 @@ package co.org.uniquindio.unilocal.servicios.impl;
 import co.org.uniquindio.unilocal.dto.Negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Negocio.ReporteDTO;
-import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioEliminar;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -42,16 +42,13 @@ public class NegocioServicioImpl implements NegocioServicio {
         Negocio negocio = new Negocio();
         negocio.setNombre(registroNegocioDTO.nombre());
         negocio.setDescripcion(registroNegocioDTO.descripcion());
-        //PORQUE NO FUNCIONA
         negocio.setHorarios(registroNegocioDTO.horarios());
-
         negocio.setTelefonos((registroNegocioDTO.telefono()));
         negocio.setCategoriaNegocio(registroNegocioDTO.categoria());
         negocio.setUrlfoto((registroNegocioDTO.urlFoto()));
-        //FALTA QUE AGREGUE LA UBICACION OSEA LOS DATOS X y Y
+        //AGREGUA LA UBICACION O SEA LOS DATOS X y Y
         negocio.getUbicacion().setLongitud(registroNegocioDTO.longitud());
         negocio.getUbicacion().setLatitud(registroNegocioDTO.latitud());
-
 
         // Asignar el cliente como propietario del negocio
         negocio.setCodigoCliente(id);
@@ -102,11 +99,11 @@ public class NegocioServicioImpl implements NegocioServicio {
         if (negocioOptional.isEmpty()){
             throw new Exception("No existe un negocio con el codigo: "+ idNegocio);
         }
-
+//PENDIENTE CORREGIR
         Negocio negocio = negocioOptional.get();
 
-        if (negocio.getEstadoNegocio().equals(EstadoNegocioEliminar.ACTIVO)){
-            negocio.setEstadoNegocio(EstadoNegocioEliminar.INACTIVO);
+        if (negocio.getEstadoNegocio().equals(EstadoNegocio.ACTIVO)){
+            negocio.setEstadoNegocio(EstadoNegocio.INACTIVO);
         }
         else {
             throw new Exception(("No se que esta pasando"));
@@ -114,26 +111,36 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void buscarNegocios() {
-
-    }
-
-    @Override
-    public List<HistorialRevision> getHistorialRevisiones(String idNegocio) throws Exception{
-        List<HistorialRevision> historiales = negocioRepo.findByCodigo(idNegocio).getHistorialRevisiones();
-        if(historiales.isEmpty()){
+    public List<Negocio> buscarNegocios() throws Exception{
+        List<Negocio> negocios = negocioRepo.findAll();
+        if(negocios.isEmpty()){
             throw  new Exception("No existen historiales para este negocio");
         }
-        return historiales;
-    }
-    @Override
-    public void filtrarPorEstado() {
-
+        return negocios;
     }
 
-    @Override
-    public void listarNegociosPropietario() {
 
+    @Override
+    public List<Negocio> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception {
+        List<Negocio> negocios =negocioRepo.findByEstadoNegocio(estadoNegocio);
+        if(negocios.isEmpty()){
+            throw  new Exception("No existen negocios con ese estado");
+        }
+        return negocios;
+    }
+
+    @Override
+    public List<Negocio> listarNegociosPropietario(String codigoPropietario) {
+
+        List<Negocio> negocios = negocioRepo.findAll();
+        ArrayList<Negocio> negociosAux = new ArrayList<Negocio>();
+        for(int i = 0; i<negocios.size();i++){
+
+            if(negocios.get(i).getCodigoCliente()==codigoPropietario){
+                negociosAux.add(negocios.get(i));
+            }
+        }
+        return null;
     }
 
     @Override

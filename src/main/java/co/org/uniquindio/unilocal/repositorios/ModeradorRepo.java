@@ -9,4 +9,8 @@ import java.util.Optional;
 @Repository
 public interface ModeradorRepo extends MongoRepository<Moderador, String> {
     Optional<Moderador> findByEmail(String email);
+
+
+
+
 }

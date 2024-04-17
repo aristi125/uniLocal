@@ -24,8 +24,10 @@ public class ReservaServicioImpl implements ReservaServicio {
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
 
+
+    // Aqui habia un String, pero hacia falta el retorno
     @Override
-    public String RegistrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception {
+    public void RegistrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception {
         Optional<Cliente> cliente = clienteRepo.findById(registroReservaDTO.codigoCliente());
         if (cliente.isEmpty()) {
             throw new Exception("El cliente no existe");

@@ -1,6 +1,9 @@
 package co.org.uniquindio.unilocal.repositorios;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-
-public interface ProductoRepo extends MongoRepository<ProductoRepo, String> {
+import co.org.uniquindio.unilocal.modelo.documentos.Producto;
+import java.util.List;
+public interface ProductoRepo extends MongoRepository<Producto, String> {
+    //List<Producto> findAllProducto();
+    //Producto findByCodigoProducto(String codigoProducto);
 }

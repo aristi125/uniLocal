@@ -15,16 +15,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/clientes")
 @RequiredArgsConstructor
-public class ClienteControlador {
+public class ClienteController {
     private final ClienteServicio clienteServicio;
-
     private final CuentaServicio cuentaServicio;
-
-    @PostMapping("/registrar-cliente")
-    public ResponseEntity<MensajeDTO<String>> registrarCliente(@Valid @RequestBody RegistroClienteDTO registroClienteDTO) throws Exception {
-        clienteServicio.registrarCliente(registroClienteDTO);
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, "El cliente se ha registrado satisfactoriamente"));
-    }
 
     @PutMapping("/actualizar-perfil-cliente")
     public void actualizarCliente(@Valid @RequestBody ActualizarClienteDTO actualizarClienteDTO) throws Exception {
@@ -60,8 +53,8 @@ public class ClienteControlador {
     }
 
     @PostMapping("/sitios-favoritos")
-    public void favoritos(String idNegocio, String idCliente) throws Exception {
-
+    public ResponseEntity<MensajeDTO<String>> favoritos(String idNegocio, String idCliente) throws Exception {
+        return null;
     }
 
     @GetMapping("/obtener-favoritos-cliente")

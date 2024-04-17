@@ -7,7 +7,7 @@ import java.util.List;
 public interface ReservaServicio {
 
 
-    String RegistrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception;
+    void RegistrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception;
 
     void ActualizarReserva(ActualizarReservaDTO actualizarReservaDTO) throws Exception;
 
