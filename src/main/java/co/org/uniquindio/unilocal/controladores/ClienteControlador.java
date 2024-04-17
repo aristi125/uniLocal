@@ -75,7 +75,7 @@ public class ClienteControlador {
     }
 
     @GetMapping("lugares-creados-cliente")
-    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception {
+    public List<ItemListaLugaresDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception {
         return null;
     }
 }

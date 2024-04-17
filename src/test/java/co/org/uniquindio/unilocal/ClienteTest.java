@@ -7,6 +7,7 @@ import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
@@ -174,7 +175,7 @@ public class ClienteTest {
     //@Test
     public void listaLugaresCreadosTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.listaLugaresCreados("Cliente1", "Negocio1");
+        List<ItemListaLugaresDTO> lugares = clienteServicio.listaLugaresCreados("Cliente1", "Negocio1");
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -264,7 +265,6 @@ public class ClienteTest {
         //Enviamos el correo
         emailServicio.enviarCorreo(emailDTO);
     }
-
 
 
 

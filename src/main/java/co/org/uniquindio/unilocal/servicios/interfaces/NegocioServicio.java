@@ -16,17 +16,9 @@ public interface NegocioServicio {
 
     void eliminarNegocio(String idNegocio) throws Exception;
 
-    void buscarNegocios() throws Exception;
+    void buscarNegocios(String id) throws Exception;
 
     List<HistorialRevision> getHistorialRevisiones(String idNegocio) throws Exception;
-
-    void filtrarPorEstado() throws Exception;
-
-    void listarNegociosPropietario() throws Exception;
-
-    void cambiarEstado() throws Exception;
-
-    void registrarRevision() throws Exception;
 
     void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws IOException;
 

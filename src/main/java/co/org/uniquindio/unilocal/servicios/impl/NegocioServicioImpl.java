@@ -114,7 +114,7 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void buscarNegocios() {
+    public void buscarNegocios(String id) {
 
     }
 
@@ -126,25 +126,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         }
         return historiales;
     }
-    @Override
-    public void filtrarPorEstado() {
 
-    }
-
-    @Override
-    public void listarNegociosPropietario() {
-
-    }
-
-    @Override
-    public void cambiarEstado() {
-
-    }
-
-    @Override
-    public void registrarRevision() {
-
-    }
 
     @Override
     public void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws IOException {

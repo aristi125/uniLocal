@@ -1,6 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.Negocio.*;
+import co.org.uniquindio.unilocal.dto.reserva.ActualizarReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.RegistroReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.*;
 import co.org.uniquindio.unilocal.modelo.entidades.Reserva;
 import co.org.uniquindio.unilocal.repositorios.*;

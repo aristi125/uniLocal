@@ -1,8 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
-import co.org.uniquindio.unilocal.dto.Negocio.ActualizarReservaDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.DetalleReservaDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.RegistroReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.ActualizarReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.RegistroReservaDTO;
 
 import java.util.List;
 
