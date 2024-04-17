@@ -1,23 +1,18 @@
 package co.org.uniquindio.unilocal;
 
-import co.org.uniquindio.unilocal.dto.Cuenta.*;
+import co.org.uniquindio.unilocal.dto.cuenta.*;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
-import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 
 

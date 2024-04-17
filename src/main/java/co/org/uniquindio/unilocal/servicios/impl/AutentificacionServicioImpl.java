@@ -1,6 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
+import co.org.uniquindio.unilocal.dto.cuenta.SesionDTO;
 import co.org.uniquindio.unilocal.dto.TokenDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Moderador;

@@ -1,6 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
+import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cuenta;
 import co.org.uniquindio.unilocal.repositorios.CuentaRepo;
