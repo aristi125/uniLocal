@@ -1,7 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.cliente.*;
-import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
 
 import java.util.List;
 

@@ -1,16 +1,10 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
-<<<<<<< HEAD
-import co.org.uniquindio.unilocal.dto.Negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
-import co.org.uniquindio.unilocal.dto.Negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-=======
+
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
->>>>>>> 46c14894fe023487caa577b2dde24fc79c683893
-import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
 import java.io.IOException;
