@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.modelo.entidades;
+package co.org.uniquindio.unilocal.modelo.documentos;
 
 
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;

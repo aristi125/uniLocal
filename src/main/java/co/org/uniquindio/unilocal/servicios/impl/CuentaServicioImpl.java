@@ -1,14 +1,10 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.Cuenta.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.Cuenta.SesionDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
-import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
-import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
-import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.modelo.documentos.Cuenta;
 import co.org.uniquindio.unilocal.repositorios.CuentaRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

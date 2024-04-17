@@ -21,6 +21,5 @@ public class HistorialRevision {
 
     private String codigoModerador;
 
-
-
+    private String codigoNegocio;
 }

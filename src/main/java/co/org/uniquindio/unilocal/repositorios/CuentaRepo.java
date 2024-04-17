@@ -1,6 +1,6 @@
 package co.org.uniquindio.unilocal.repositorios;
 
-import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
+import co.org.uniquindio.unilocal.modelo.documentos.Cuenta;
 import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.util.Optional;

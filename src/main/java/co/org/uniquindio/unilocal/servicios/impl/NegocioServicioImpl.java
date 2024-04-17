@@ -3,6 +3,7 @@ package co.org.uniquindio.unilocal.servicios.impl;
 import co.org.uniquindio.unilocal.dto.Negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -19,6 +20,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -116,6 +118,14 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     }
 
+    @Override
+    public List<HistorialRevision> getHistorialRevisiones(String idNegocio) throws Exception{
+        List<HistorialRevision> historiales = negocioRepo.findByCodigo(idNegocio).getHistorialRevisiones();
+        if(historiales.isEmpty()){
+            throw  new Exception("No existen historiales para este negocio");
+        }
+        return historiales;
+    }
     @Override
     public void filtrarPorEstado() {
 
