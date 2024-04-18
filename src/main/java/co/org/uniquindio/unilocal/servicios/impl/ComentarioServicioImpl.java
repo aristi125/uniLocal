@@ -10,6 +10,7 @@ import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,9 +28,10 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     private final ClienteRepo clienteRepo; // Validar que el cliente exista
     private final NegocioRepo negocioRepo;
     private final ComentarioRepo comentarioRepo;
+    private final EmailServicio emailServicio;
 
     @Override
-    public void crearComentario(RegistroComentarioDTO comentario) {
+    public void crearComentario(RegistroComentarioDTO comentario) throws Exception {
 
         Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
         if (negocioOptional.isEmpty()) {
@@ -75,12 +77,14 @@ public class ComentarioServicioImpl implements ComentarioServicio {
                 email
         );
 
+        emailServicio.enviarCorreo(emailDTO);
+
 
 
     }
 
     @Override
-    public void responderComentario(RespuestaComentarioDTO comentario) {
+    public void responderComentario(RespuestaComentarioDTO comentario) throws Exception{
         Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoClienteReceptor());
         if (clienteOptional.isEmpty()) {
             throw new RuntimeException("No existe cliente receptor");
@@ -115,6 +119,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
                         "Gracias por confiar en nosotros!",
                 email
         );
+
+        emailServicio.enviarCorreo(emailDTO);
 
     }
 
