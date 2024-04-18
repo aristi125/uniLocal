@@ -32,14 +32,14 @@ public class CuentaServicioImpl implements CuentaServicio {
         Cuenta cuenta = optionalCuenta.get();
 
         EmailDTO emailDTO = new EmailDTO(
-                email,
                 "Recuperación de contraseña",
                 "Hola "+cuenta.getNombre()+"! \n\n"+
                         "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
                         "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
                         "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+
                         "http://localhost:8081/recuperar-password?codigo="+cuenta.getCodigo()+"\n\n"+
-                        "Gracias por confiar en nosotros!"
+                        "Gracias por confiar en nosotros!",
+                email
         );
 
     }

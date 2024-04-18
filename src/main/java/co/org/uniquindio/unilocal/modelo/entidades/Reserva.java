@@ -1,5 +1,7 @@
 package co.org.uniquindio.unilocal.modelo.entidades;
 
+import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import lombok.*;
 
 import java.time.LocalDateTime;
@@ -9,7 +11,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Reserva {
 
     private LocalDateTime fecha;
