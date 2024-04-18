@@ -4,7 +4,7 @@ import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
-import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
@@ -247,7 +247,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(Categoria categoria) throws Exception {
+    public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
 
         List<Negocio> negocios = negocioRepo.findByCategoriaNegocio(categoria);
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();

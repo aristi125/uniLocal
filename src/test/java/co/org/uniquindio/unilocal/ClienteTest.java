@@ -15,7 +15,7 @@ import co.org.uniquindio.unilocal.dto.reserva.RegistroReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
-import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
@@ -223,7 +223,7 @@ public class ClienteTest {
     //@Test
     public void filtrarLugarPorCategoriaTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioCategoria(Categoria.HOTEL);
+        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -372,7 +372,7 @@ public class ClienteTest {
                 "Hotel calido y acogedor",
                 horarios,
                 telefonos,
-                Categoria.HOTEL,
+                CategoriaNegocio.HOTEL,
                 urlFotos,
                 4.5,
                 4.5,
@@ -402,7 +402,7 @@ public class ClienteTest {
                 "Hotel de 5 estrellas",
                 horarios,
                 telefonos,
-                Categoria.HOTEL,
+                CategoriaNegocio.HOTEL,
                 urlFoto,
                 "Cliente1"
         );
