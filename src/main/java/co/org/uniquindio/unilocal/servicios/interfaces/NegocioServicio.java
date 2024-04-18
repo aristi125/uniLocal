@@ -11,15 +11,13 @@ import java.io.IOException;
 import java.util.List;
 
 public interface NegocioServicio {
-    String crearNegocio(RegistroNegocioDTO registroNegocioDTO, String id) throws Exception;
+    String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception;
 
-    void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO, String id) throws Exception;
+    void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception;
 
     void eliminarNegocio(String idNegocio) throws Exception;
 
-    List<Negocio> buscarNegocios() throws Exception;
-
-    List<Negocio> filtrarPorEstado(EstadoNegocio estadoNegocio) throws Exception;
+    Negocio buscarNegocio(String codigoNegocio) throws Exception;
 
     List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception;
 

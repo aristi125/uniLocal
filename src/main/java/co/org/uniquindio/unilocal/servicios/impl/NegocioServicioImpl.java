@@ -31,11 +31,11 @@ public class NegocioServicioImpl implements NegocioServicio {
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
     @Override
-    public String crearNegocio(RegistroNegocioDTO registroNegocioDTO, String id) throws Exception {
+    public String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception {
         // Obtener la información del usuario autenticado
 
         // Verificar si el usuario autenticado existe en la base de datos
-        Cliente cliente = clienteRepo.findByEmail(id)
+        Cliente cliente = clienteRepo.findByEmail(registroNegocioDTO.codigoPropietario())
                 .orElseThrow(() -> new Exception("El usuario autenticado no está registrado"));
 
         // Crear un nuevo negocio con la información proporcionada en el DTO
@@ -51,7 +51,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.getUbicacion().setLatitud(registroNegocioDTO.latitud());
 
         // Asignar el cliente como propietario del negocio
-        negocio.setCodigoCliente(id);
+        negocio.setCodigoCliente(registroNegocioDTO.codigoPropietario());
 
         // Guardar el negocio en la base de datos
         negocioRepo.save(negocio);
@@ -60,10 +60,12 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO, String id) throws Exception {
+    public void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception {
         // Verificar si el usuario autenticado existe en la base de datos
-        Cliente cliente = clienteRepo.findByEmail(id)
-                .orElseThrow(() -> new Exception("El usuario autenticado no está registrado"));
+        Optional<Cliente> optionalCliente = clienteRepo.findById(actualizarNegocioDTO.codigoPropietario());
+        if (optionalCliente.isEmpty()) {
+            throw new Exception("El usuario autenticado no está registrado");
+        }
 
         // Buscar el negocio por su ID
         Optional<Negocio> optionalNegocio = negocioRepo.findById(actualizarNegocioDTO.id());
@@ -75,7 +77,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         Negocio negocio = optionalNegocio.get();
 
         // Verificar si el usuario autenticado es propietario del negocio
-        if (!negocio.getCodigoCliente().equals(id)) {
+        if (!negocio.getCodigoCliente().equals(actualizarNegocioDTO.codigoPropietario())) {
             throw new Exception("El negocio no pertenece al usuario autenticado");
         }
 
@@ -111,36 +113,28 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<Negocio> buscarNegocios() throws Exception{
-        List<Negocio> negocios = negocioRepo.findAll();
-        if(negocios.isEmpty()){
-            throw  new Exception("No existen historiales para este negocio");
+    public Negocio buscarNegocio(String codigoNegocio) throws Exception{
+        Optional<Negocio> negocioOptional = negocioRepo.findById(codigoNegocio);
+        if(negocioOptional.isEmpty()){
+            throw  new Exception("No existe negocio");
         }
-        return negocios;
-    }
 
-
-    @Override
-    public List<Negocio> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception {
-        List<Negocio> negocios =negocioRepo.findByEstadoNegocio(estadoNegocio);
-        if(negocios.isEmpty()){
-            throw  new Exception("No existen negocios con ese estado");
-        }
-        return negocios;
+        Negocio negocio = negocioOptional.get();
+        return negocio;
     }
 
     @Override
     public List<Negocio> listarNegociosPropietario(String codigoPropietario) {
 
         List<Negocio> negocios = negocioRepo.findAll();
-        ArrayList<Negocio> negociosAux = new ArrayList<Negocio>();
-        for(int i = 0; i<negocios.size();i++){
 
-            if(negocios.get(i).getCodigoCliente()==codigoPropietario){
-                negociosAux.add(negocios.get(i));
+        List<Negocio> negociosAux = new ArrayList<>();
+        for (Negocio negocio : negocios) {
+            if (negocio.getCodigoCliente().equals(codigoPropietario)) {
+                negociosAux.add(negocio);
             }
         }
-        return null;
+        return negociosAux;
     }
 
     @Override

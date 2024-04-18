@@ -6,7 +6,6 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import java.util.List;
 
 public record RegistroNegocioDTO(
-        String id,
         String nombre,
         String descripcion,
         List<Horario> horarios,
@@ -14,7 +13,9 @@ public record RegistroNegocioDTO(
         CategoriaNegocio categoriaNegocio,
         List<String> urlFoto,
         double longitud,
-        double latitud
+        double latitud,
+        String codigoPropietario
+
 
 ) {
 }

@@ -3,8 +3,11 @@ package co.org.uniquindio.unilocal.servicios.impl;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
@@ -219,6 +222,136 @@ public class ClienteServicioImpl implements ClienteServicio {
         return respuesta;
     }
 
+    @Override
+    public List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception {
+
+        List<Negocio> negocios = negocioRepo.findAll();
+        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
+        if (negocios.isEmpty()) {
+            throw new Exception("No se encontraron negocios con el nombre " + nombre);
+        }
+        for (Negocio n : negocios) {
+
+            if (n.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                lugares.add(new ItemListaLugaresCreadosDTO(
+                                n.getCodigo(),
+                                n.getNombre(),
+                                n.getTelefonos(),
+                                n.getCategoriaNegocio(),
+                                n.getUrlfoto()
+                        )
+                );
+        }
+        return lugares;
+
+    }
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
+
+        List<Negocio> negocios = negocioRepo.findByCategoriaNegocio(categoria);
+        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
+        if (negocios.isEmpty()) {
+            throw new Exception("No se encontraron negocios con la categoria " + categoria);
+        }
+        for (Negocio n : negocios) {
+            lugares.add(new ItemListaLugaresCreadosDTO(
+                            n.getCodigo(),
+                            n.getNombre(),
+                            n.getTelefonos(),
+                            n.getCategoriaNegocio(),
+                            n.getUrlfoto()
+                    )
+            );
+        }
+        return lugares;
+    }
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(double distancia, Ubicacion ubicacionCliente) throws Exception {
+
+        List<Negocio> negocios = negocioRepo.findAll();
+        List<ItemListaLugaresCreadosDTO> lugaresCercanos = new ArrayList<>();
+
+        for (Negocio negocio : negocios) {
+            double distanciaCalculada = calcularDistancia(ubicacionCliente, negocio.getUbicacion());
+
+            if (distanciaCalculada <= distancia) {
+                // Agregar el lugar a la lista de lugares dentro de la distancia especificada
+                lugaresCercanos.add(new ItemListaLugaresCreadosDTO(
+                        negocio.getCodigo(),
+                        negocio.getNombre(),
+                        negocio.getTelefonos(),
+                        negocio.getCategoriaNegocio(),
+                        negocio.getUrlfoto()
+                ));
+            }
+        }
+
+        return lugaresCercanos;
+
+    }
+
+    public double calcularDistancia(Ubicacion ubicacionCliente, Ubicacion ubicacionNegocio) {
+        double radioTierra = 6371; //en kilómetros
+        double dLat = Math.toRadians(ubicacionNegocio.getLatitud() - ubicacionCliente.getLatitud());
+        double dLng = Math.toRadians(ubicacionNegocio.getLongitud() - ubicacionCliente.getLongitud());
+        double sindLat = Math.sin(dLat / 2);
+        double sindLng = Math.sin(dLng / 2);
+        double va1 = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(Math.toRadians(ubicacionCliente.getLatitud())) * Math.cos(Math.toRadians(ubicacionNegocio.getLatitud()));
+        double va2 = 2 * Math.atan2(Math.sqrt(va1), Math.sqrt(1 - va1));
+        double distancia = radioTierra * va2;
+        return distancia;
+    }
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception {
+
+        List<Negocio> negocios = negocioRepo.findAll();
+        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
+        if (negocios.isEmpty()) {
+            throw new Exception("No se encontraron negocios");
+        }
+        for (Negocio n : negocios) {
+            if (n.getNombre().toLowerCase().contains(busqueda) || n.getCategoriaNegocio().toString().toLowerCase().contains(busqueda)
+                    || n.getDescripcion().toLowerCase().contains(busqueda) || n.getEstadoNegocio().toString().toLowerCase().contains(busqueda)) {
+
+                lugares.add(new ItemListaLugaresCreadosDTO(
+                                n.getCodigo(),
+                                n.getNombre(),
+                                n.getTelefonos(),
+                                n.getCategoriaNegocio(),
+                                n.getUrlfoto()
+                        )
+                );
+            }
+        }
+        return lugares;
+    }
+
+
+    @Override
+    public List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception {
+        List<Negocio> negocios =negocioRepo.findByEstadoNegocio(estadoNegocio);
+        if(negocios.isEmpty()){
+            throw  new Exception("No existen negocios con ese estado");
+        }
+
+        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
+
+        for (Negocio n : negocios) {
+            lugares.add(new ItemListaLugaresCreadosDTO(
+                            n.getCodigo(),
+                            n.getNombre(),
+                            n.getTelefonos(),
+                            n.getCategoriaNegocio(),
+                            n.getUrlfoto()
+                    )
+            );
+        }
+
+        return lugares;
+    }
     // Validaciones
     private boolean existeEmail(String email){
         return clienteRepo.findByEmail(email).isPresent();

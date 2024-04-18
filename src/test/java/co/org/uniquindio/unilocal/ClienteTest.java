@@ -1,16 +1,31 @@
 package co.org.uniquindio.unilocal;
 
+import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.*;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
+import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.dto.reserva.ActualizarReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
+import co.org.uniquindio.unilocal.dto.reserva.RegistroReservaDTO;
+import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
+import co.org.uniquindio.unilocal.modelo.entidades.Horario;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
 
 
@@ -31,6 +46,14 @@ public class ClienteTest {
 
     @Autowired
     private CuentaServicio cuentaServicio;
+
+    @Autowired
+    private NegocioServicio negocioServicio;
+
+    @Autowired
+    private ReservaServicio reservaServicio;
+
+   AgendaServicio agendaServicio;
 
 
     //-------------------------Prueba unitaria de metodos en AutentificacionServicioIMPL-----------------------
@@ -181,6 +204,71 @@ public class ClienteTest {
         Assertions.assertEquals(1, lugares.size());
     }
 
+    /**
+     * Test que prueba el metodo de filtrar lugar por nombre
+     */
+    //@Test
+    public void filtrarLugarPorNombreTest() throws Exception {
+        //Obtenemos la lista de lugares creados por un cliente
+        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioNombre("Hotel");
+        //Imprimimos los lugares creados
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar creado
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugar por categoria
+     */
+    //@Test
+    public void filtrarLugarPorCategoriaTest() throws Exception {
+        //Obtenemos la lista de lugares creados por un cliente
+        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
+        //Imprimimos los lugares creados
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar creado
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugar por distancia
+     */
+    //@Test
+    public void filtrarLugarPorDistanciaTest() throws Exception {
+        Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
+        //Obtenemos la lista de lugares filtrados
+        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioDistancia(5.0, ubicacion);
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar recomendaciones de lugares
+     */
+    //@Test
+    public void filtrarRecomendacionesTest() throws Exception {
+        //Obtenemos la lista de lugares recomendados
+        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.recomendarNegocio("comida");
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugares por estado
+     */
+    //@Test
+    public void filtrarLugarPorEstadoTest() throws Exception {
+        //Obtenemos la lista de lugares filtrados
+        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
 
 
     //-------------------------Prueba unitaria de metodos en ComentarioServicio -----------------------
@@ -264,4 +352,238 @@ public class ClienteTest {
         //Enviamos el correo
         emailServicio.enviarCorreo(emailDTO);
     }
+
+    //-------------------------Prueba unitaria de metodos en NegocioServicioIMPL-----------------------
+
+    /**
+     * Test que prueba el metodo de registrar negocio
+     */
+    //@Test
+    public void registroNegocioTest() throws Exception {
+        Horario horario = new Horario("Lunes a viernes", LocalDate.now(), LocalDate.now());
+        List<Horario> horarios = List.of(horario);
+        String telefono = "123456";
+        List<String> telefonos = List.of(telefono);
+        String urlFoto = "urlFoto";
+        List<String> urlFotos = List.of(urlFoto);
+
+        RegistroNegocioDTO registroNegocioDTO = new RegistroNegocioDTO(
+                "Negocio6",
+                "Hotel calido y acogedor",
+                horarios,
+                telefonos,
+                CategoriaNegocio.HOTEL,
+                urlFotos,
+                4.5,
+                4.5,
+                "Cliente1"
+        );
+
+        String codigo = negocioServicio.crearNegocio(registroNegocioDTO);
+        Assertions.assertNotNull(codigo);
+
+    }
+
+    /**
+     * Test que prueba el metodo de actualizar negocio
+     */
+    //@Test
+
+    public void actualizarNegocioTest() throws Exception {
+        Horario horario = new Horario("Lunes a viernes", LocalDate.now(), LocalDate.now());
+        List<Horario> horarios = List.of(horario);
+        String telefono = "123456";
+        List<String> telefonos = List.of(telefono);
+        String urlFoto = "urlFoto";
+
+        ActualizarNegocioDTO actualizarNegocioDTO = new ActualizarNegocioDTO(
+                "Negocio5",
+                "Hotel Premium",
+                "Hotel de 5 estrellas",
+                horarios,
+                telefonos,
+                CategoriaNegocio.HOTEL,
+                urlFoto,
+                "Cliente1"
+        );
+
+        negocioServicio.actualizarNegocio(actualizarNegocioDTO);
+
+    }
+
+    /**
+     * Test que prueba el metodo de eliminar negocio
+     */
+    //@Test
+    public void eliminarNegocioTest() throws Exception {
+        //cambiamos el estado del negocio con el id creado anteriormente
+        //de activo a inactivo
+        negocioServicio.eliminarNegocio("Negocio5");
+    }
+
+    /**
+     * Test que prueba el metodo de obtener negocio
+     */
+    //@Test
+    public void obtenerNegocioTest() throws Exception {
+        //Obtenemos el negocio con el id creado anteriormente
+        Negocio negocio = negocioServicio.buscarNegocio("Negocio5");
+        //Imprimimos el negocio
+        System.out.println(negocio);
+
+    }
+
+    /**
+     * Test que prueba el metodo de listar negocios
+     */
+    //@Test
+    public void listarNegociosTest() throws Exception {
+        //Obtenemos la lista de todos los negocios (por ahora solo tenemos 1)
+        List<Negocio> negocios = negocioServicio.listarNegociosPropietario("Cliente1");
+        //Imprimimos los negocios, se hace uso de una función lambda
+        negocios.forEach(System.out::println);
+        //Verificamos que solo exista un negocio
+        Assertions.assertEquals(1, negocios.size());
+    }
+
+    /**
+     * Test que prueba el metodo de generar pdf
+     */
+    //@Test
+    public void generarPDFTest() throws Exception {
+        LocalDateTime fecha = LocalDateTime.of(2024, 4, 18, 15, 30, 45);
+        //Creamos un objeto de tipo ReporteDTO
+        ReporteDTO reporteDTO = new ReporteDTO("Negocio1", "Hotel Premium",fecha,4);
+        //Generamos el pdf
+        negocioServicio.generarPDF(reporteDTO, "rutaArchivo");
+    }
+
+
+    //-------------------------Prueba unitaria de metodos en ReservaServicioIMPL-----------------------
+    /**
+     * Test que prueba el metodo de registrar reserva
+     */
+    //@Test
+    public void registrarReservaTest() throws Exception {
+        //Creamos un objeto de tipo RegistroReservaDTO
+        RegistroReservaDTO registroReservaDTO = new RegistroReservaDTO(
+                LocalDate.now(),
+                LocalTime.now(),
+                5,
+                "Cliente1",
+                "Negocio1"
+        );
+        //Registramos la reserva
+        reservaServicio.registrarReserva(registroReservaDTO);
+    }
+
+    /**
+     * Test que prueba el metodo de actualizar reserva
+     */
+    //@Test
+    public void actualizarReservaTest() throws Exception {
+        //Creamos un objeto de tipo ActualizarReservaDTO
+        ActualizarReservaDTO actualizarReservaDTO = new ActualizarReservaDTO(
+                LocalDate.now(),
+                LocalTime.now(),
+                5,
+                "Cliente1",
+                "Negocio1"
+        );
+        //Actualizamos la reserva
+        reservaServicio.actualizarReserva(actualizarReservaDTO);
+    }
+
+    /**
+     * Test que prueba el metodo de obtener reserva
+     */
+    //@Test
+    public void obtenerReservaTest() throws Exception {
+        //Obtenemos la reserva
+        DetalleReservaDTO reserva = reservaServicio.obtenerReserva("Negocio1", "Cliente1");
+        //Imprimimos la reserva
+        System.out.println(reserva);
+        //Verificamos que la reserva no sea nula
+        Assertions.assertNotNull(reserva);
+    }
+
+    /**
+     * Test que prueba el metodo de eliminar reserva
+     */
+    //@Test
+    public void eliminarReservaTest() throws Exception {
+        //Eliminamos la reserva
+        reservaServicio.eliminarReserva("Negocio1", "Cliente1");
+    }
+
+    /**
+     * Test que prueba el metodo de listar reservas
+     */
+    //@Test
+    public void listarReservasTest() throws Exception {
+        //Listamos las reservas
+        List<DetalleReservaDTO> reservas = reservaServicio.listarReservas("Negocio1");
+        //Imprimimos las reservas
+        reservas.forEach(System.out::println);
+        //Verificamos que solo exista una reserva
+        Assertions.assertEquals(1, reservas.size());
+    }
+
+    //-------------------------Prueba unitaria de metodos en AgenteServicioIMPL-----------------------
+
+    /**
+     * Test que prueba el metodo de registrar agenda
+     */
+    //@Test
+    public void registrarAgendaTest() throws Exception {
+        //Creamos un objeto de tipo RegistroAgendaDTO
+        RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
+                "Negocio1",
+                "Tematica",
+                "Descripcion"
+        );
+        //Registramos la agenda
+        agendaServicio.registrarAgenda(registroAgendaDTO);
+    }
+
+    /**
+     * Test que prueba el metodo de actualizar agenda
+     */
+    //@Test
+    public void actualizarAgendaTest() throws Exception {
+        //Creamos un objeto de tipo RegistroAgendaDTO
+        RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
+                "Negocio1",
+                "Tematica",
+                "Descripcion"
+        );
+        //Actualizamos la agenda
+        agendaServicio.actualizarAgenda(registroAgendaDTO);
+    }
+
+    /**
+     * Test que prueba el metodo de eliminar agenda
+     */
+    //@Test
+    public void eliminarAgendaTest() throws Exception {
+        //Eliminamos la agenda
+        agendaServicio.eliminarAgenda("Negocio1");
+    }
+
+    /**
+     * Test que prueba el metodo de obtener agenda
+     */
+    //@Test
+    public void obtenerAgendaTest() throws Exception {
+        //Obtenemos la agenda
+        DetalleAgendaDTO agenda = agendaServicio.obtenerAgenda("Negocio1");
+        //Imprimimos la agenda
+        System.out.println(agenda);
+        //Verificamos que la agenda no sea nula
+        Assertions.assertNotNull(agenda);
+
+    }
+
+
 }
+

@@ -26,7 +26,7 @@ public class ReservaServicioImpl implements ReservaServicio {
     private final NegocioRepo negocioRepo;
 
     @Override
-    public void RegistrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception {
+    public void registrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception {
         Optional<Cliente> clienteOptional = clienteRepo.findById(registroReservaDTO.codigoCliente());
         if (clienteOptional.isEmpty()) {
             throw new Exception("El cliente no existe");
@@ -59,7 +59,7 @@ public class ReservaServicioImpl implements ReservaServicio {
     }
 
     @Override
-    public void ActualizarReserva(ActualizarReservaDTO actualizarReservaDTO) throws Exception {
+    public void actualizarReserva(ActualizarReservaDTO actualizarReservaDTO) throws Exception {
 
         Optional<Cliente> clienteOptional = clienteRepo.findById(actualizarReservaDTO.codigoCliente());
         if (clienteOptional.isEmpty()) {
@@ -98,7 +98,7 @@ public class ReservaServicioImpl implements ReservaServicio {
     }
 
     @Override
-    public DetalleReservaDTO ObtenerReserva(String idNegocio, String idCliente) throws Exception {
+    public DetalleReservaDTO obtenerReserva(String idNegocio, String idCliente) throws Exception {
 
         Optional<Negocio> negocioOptional = negocioRepo.findById(idNegocio);
         if (negocioOptional.isEmpty()) {
@@ -127,7 +127,7 @@ public class ReservaServicioImpl implements ReservaServicio {
     }
 
     @Override
-    public void EliminarReserva(String idNegocio, String idCliente) throws Exception {
+    public void eliminarReserva(String idNegocio, String idCliente) throws Exception {
 
         Optional<Negocio> negocioOptional = negocioRepo.findById(idNegocio);
         if (negocioOptional.isEmpty()) {
@@ -155,7 +155,7 @@ public class ReservaServicioImpl implements ReservaServicio {
     }
 
     @Override
-    public List<DetalleReservaDTO> ListarReservas(String idNegocio) {
+    public List<DetalleReservaDTO> listarReservas(String idNegocio) {
         List<DetalleReservaDTO> respuesta = new ArrayList<>();
         Optional<Negocio> negocioOptional = negocioRepo.findById(idNegocio);
         if (negocioOptional.isEmpty()) {
