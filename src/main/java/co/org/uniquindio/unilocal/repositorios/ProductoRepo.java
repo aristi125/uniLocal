@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import co.org.uniquindio.unilocal.modelo.documentos.Producto;
 import java.util.List;
 public interface ProductoRepo extends MongoRepository<Producto, String> {
-    //List<Producto> findAllProducto();
-    //Producto findByCodigoProducto(String codigoProducto);
+   List<Producto> findAll();
+    Producto findByCodigo(String codigoProducto);
+
 }

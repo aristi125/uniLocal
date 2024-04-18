@@ -5,7 +5,7 @@ import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.entidades.*;
-import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -28,7 +28,7 @@ public class Negocio implements Serializable {
     private String codigo;
     private String nombre;
     private String descripcion;
-    private Categoria categoriaNegocio;
+    private CategoriaNegocio categoriaNegocio;
     private Ubicacion ubicacion;
     private List<String> imagenes;
     private List<Horario> horarios;

@@ -1,10 +1,9 @@
 package co.org.uniquindio.unilocal.controladores;
 
-import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
+
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,11 +16,11 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteServicio clienteServicio;
-    private final CuentaServicio cuentaServicio;
 
     @PutMapping("/actualizar-perfil-cliente")
-    public void actualizarCliente(@Valid @RequestBody ActualizarClienteDTO actualizarClienteDTO) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> actualizarCliente(@Valid @RequestBody ActualizarClienteDTO actualizarClienteDTO) throws Exception {
         clienteServicio.actualizarCliente(actualizarClienteDTO);
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Cliente actualizado exitosamente"));
     }
 
     @GetMapping("/obtener/{idCuenta}")
@@ -40,35 +39,25 @@ public class ClienteController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, clienteServicio.listarClientes() ));
     }
 
-    @GetMapping("/enviar-link-recuperacion-password")
-    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacion(String email) throws Exception {
-        cuentaServicio.enviarLinkRecuperacion(email);
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
-    }
-
-    @PutMapping("/cambiar-password")
-    public ResponseEntity<MensajeDTO<String>> cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
-        cuentaServicio.cambiarPassword(cambioPasswordDTO);
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha cambiado su contraseña" ));
-    }
-
     @PostMapping("/sitios-favoritos")
-    public ResponseEntity<MensajeDTO<String>> favoritos(String idNegocio, String idCliente) throws Exception {
-        return null;
+    public ResponseEntity<MensajeDTO<String>> agregarFavoritos(@Valid @RequestBody String idNegocio, String idCliente) throws Exception {
+        clienteServicio.agregarFavoritos(idNegocio, idCliente);
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Sitio agregado a favoritos"));
     }
 
     @GetMapping("/obtener-favoritos-cliente")
-    public List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception {
-        return null;
+    public ResponseEntity<MensajeDTO<List<FavoritoDTO>>> mostrarFavoritos(@PathVariable String idCliente) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, clienteServicio.mostrarFavoritos(idCliente)));
     }
 
     @DeleteMapping("eliminar-favoritos")
-    public void removerFavoritos(String idNegocio, String idCliente) throws Exception {
-
+    public ResponseEntity<MensajeDTO<String>> removerFavoritos(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
+        clienteServicio.removerFavoritos(idNegocio, idCliente);
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado de favoritos"));
     }
 
     @GetMapping("lugares-creados-cliente")
-    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception {
-        return null;
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@PathVariable String idCliente, @PathVariable String idNegocio) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listaLugaresCreados(idCliente, idNegocio)));
     }
 }

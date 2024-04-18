@@ -1,18 +1,21 @@
 package co.org.uniquindio.unilocal.modelo.entidades;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoPago;
+import co.org.uniquindio.unilocal.modelo.enumeracion.MetodoPago;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class Pago {
-    private String codigo;
+
     private LocalDateTime fecha;
     private float totalPagado;
-    private String estado;
-    private String metodoPago;
+    private EstadoPago estado;
+    private MetodoPago metodoPago;
 }

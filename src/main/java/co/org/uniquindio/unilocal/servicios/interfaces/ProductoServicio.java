@@ -7,9 +7,9 @@ import co.org.uniquindio.unilocal.repositorios.ProductoRepo;
 import java.util.List;
 public interface ProductoServicio {
 
-    String registrarProducto(ProductoDTO productoDTO)throws Exception;
-    void actualizarProducto(ProductoDTO productoDTO)throws Exception;
-    void eliminarProducto(ProductoDTO productoDTO)throws Exception;
-    //List<Producto> listarProductos()throws Exception;
+    void registrarProducto(ProductoDTO productoDTO,String id)throws Exception;
+    void actualizarProducto(ProductoDTO productoDTO, String id)throws Exception;
+    void eliminarProducto(String codigoProducto, String id)throws Exception;
+    List<Producto> listarProductos()throws Exception;
     //Producto buscarProducto(String codigoProducto)throws Exception;
 }

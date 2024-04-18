@@ -1,10 +1,7 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
 import co.org.uniquindio.unilocal.modelo.enumeracion.TipoProducto;
-import lombok.EqualsAndHashCode;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -15,6 +12,8 @@ import java.util.List;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
+@ToString
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Producto implements Serializable {
     @Id

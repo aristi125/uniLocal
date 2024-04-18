@@ -8,6 +8,6 @@ public record CambioPasswordDTO(
       @NotBlank String id,
       @NotBlank @Length(min=8, message="La contraseña debe tener minim 8 caracteres") String passwordNueva,
       @NotBlank @Email String email,
-                String token
+      @NotBlank String token
 ) {
 }

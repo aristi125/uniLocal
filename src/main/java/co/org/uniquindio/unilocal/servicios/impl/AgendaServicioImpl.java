@@ -1,7 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
-import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.RegistrarAgendaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Agenda;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
@@ -13,9 +13,9 @@ public class AgendaServicioImpl implements AgendaServicio {
 
     NegocioRepo negocioRepositorio;
     @Override
-    public void registrarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception {
+    public void registrarAgenda(RegistrarAgendaDTO registrarAgendaDTO) throws Exception {
 
-        Optional<Negocio> negocioOptional = negocioRepositorio.findById(registroAgendaDTO.codigoNegocio());
+        Optional<Negocio> negocioOptional = negocioRepositorio.findById(registrarAgendaDTO.codigoNegocio());
         if(negocioOptional.isEmpty()){
             throw new Exception("El negocio no existe");
         }
@@ -23,8 +23,8 @@ public class AgendaServicioImpl implements AgendaServicio {
         Negocio negocio = negocioOptional.get();
 
         Agenda agendaNueva = new Agenda(
-                registroAgendaDTO.tematica(),
-                registroAgendaDTO.descripcion()
+                registrarAgendaDTO.tematica(),
+                registrarAgendaDTO.descripcion()
         );
 
         negocio.setAgenda(agendaNueva);
@@ -33,9 +33,9 @@ public class AgendaServicioImpl implements AgendaServicio {
     }
 
     @Override
-    public void actualizarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception {
+    public void actualizarAgenda(RegistrarAgendaDTO registrarAgendaDTO) throws Exception {
 
-        Optional<Negocio> negocioOptional = negocioRepositorio.findById(registroAgendaDTO.codigoNegocio());
+        Optional<Negocio> negocioOptional = negocioRepositorio.findById(registrarAgendaDTO.codigoNegocio());
         if(negocioOptional.isEmpty()){
             throw new Exception("El negocio no existe");
         }
@@ -44,13 +44,13 @@ public class AgendaServicioImpl implements AgendaServicio {
 
         Agenda agenda = negocio.getAgenda();
 
-        if (agenda.getTematica().equals(registroAgendaDTO.tematica())) {
+        if (agenda.getTematica().equals(registrarAgendaDTO.tematica())) {
             throw new Exception("Ya existe una agenda con esa tematica");
         }
 
         Agenda agendaNueva = new Agenda(
-                registroAgendaDTO.tematica(),
-                registroAgendaDTO.descripcion()
+                registrarAgendaDTO.tematica(),
+                registrarAgendaDTO.descripcion()
         );
 
         negocio.setAgenda(agendaNueva);
