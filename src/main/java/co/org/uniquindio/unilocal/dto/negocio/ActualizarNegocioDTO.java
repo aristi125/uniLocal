@@ -9,12 +9,11 @@ import java.util.List;
 public record ActualizarNegocioDTO(
        @NotBlank String id,
        @NotBlank  String nombre,
-        String descripcion,
-        List<Horario> horarios,
-        List<String> telefonos,
-        CategoriaNegocio categoriaNegocio,
-        String urlFoto,
-
-        String codigoCliente
+       String descripcion,
+       List<Horario> horarios,
+       List<String> telefonos,
+       CategoriaNegocio categoriaNegocio,
+       String urlFoto,
+       String codigoCliente
 ) {
 }

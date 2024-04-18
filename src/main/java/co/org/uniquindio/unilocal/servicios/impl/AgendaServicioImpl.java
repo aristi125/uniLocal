@@ -19,86 +19,64 @@ public class AgendaServicioImpl implements AgendaServicio {
     NegocioRepo negocioRepositorio;
     @Override
     public void registrarAgenda(RegistroAgendaDTO registrarAgendaDTO) throws Exception {
-
         Optional<Negocio> negocioOptional = negocioRepositorio.findById(registrarAgendaDTO.codigoNegocio());
         if(negocioOptional.isEmpty()){
             throw new Exception("El negocio no existe");
         }
-
         Negocio negocio = negocioOptional.get();
-
         Agenda agendaNueva = new Agenda(
                 registrarAgendaDTO.tematica(),
                 registrarAgendaDTO.descripcion()
         );
-
         negocio.setAgenda(agendaNueva);
         negocioRepositorio.save(negocio);
-
     }
 
     @Override
     public void actualizarAgenda(RegistroAgendaDTO registrarAgendaDTO) throws Exception {
-
         Optional<Negocio> negocioOptional = negocioRepositorio.findById(registrarAgendaDTO.codigoNegocio());
         if(negocioOptional.isEmpty()){
             throw new Exception("El negocio no existe");
         }
-
         Negocio negocio = negocioOptional.get();
-
         Agenda agenda = negocio.getAgenda();
-
         if (agenda.getTematica().equals(registrarAgendaDTO.tematica())) {
             throw new Exception("Ya existe una agenda con esa tematica");
         }
-
         Agenda agendaNueva = new Agenda(
                 registrarAgendaDTO.tematica(),
                 registrarAgendaDTO.descripcion()
         );
-
         negocio.setAgenda(agendaNueva);
         negocioRepositorio.save(negocio);
-
     }
 
     @Override
     public void eliminarAgenda(String codigoNegocio) throws Exception {
-
             Optional<Negocio> negocioOptional = negocioRepositorio.findById(codigoNegocio);
             if(negocioOptional.isEmpty()){
                 throw new Exception("El negocio no existe");
             }
-
             Negocio negocio = negocioOptional.get();
-
         Agenda agendaNueva = new Agenda(
                 " ",
                 " "
         );
-
         negocio.setAgenda(agendaNueva);
         negocioRepositorio.save(negocio);
-
     }
 
     @Override
     public DetalleAgendaDTO obtenerAgenda(String codigoNegocio) throws Exception {
-
         Optional<Negocio> negocioOptional = negocioRepositorio.findById(codigoNegocio);
         if(negocioOptional.isEmpty()){
             throw new Exception("El negocio no existe");
         }
-
         Negocio negocio = negocioOptional.get();
-
         Agenda agenda = negocio.getAgenda();
-
         DetalleAgendaDTO detalleAgendaDTO = new DetalleAgendaDTO(
                                             agenda.getTematica(),
                                             agenda.getDescripcion());
-
         return detalleAgendaDTO;
     }
 }

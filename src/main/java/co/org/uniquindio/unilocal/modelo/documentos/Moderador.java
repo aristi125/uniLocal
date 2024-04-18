@@ -10,12 +10,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @NoArgsConstructor
-@AllArgsConstructor
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
 public class Moderador extends Cuenta implements Serializable {
 
-    @Id
-    @EqualsAndHashCode.Include
-    private String codigo;
 }

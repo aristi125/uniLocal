@@ -292,6 +292,7 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     }
 
+
     public double calcularDistancia(Ubicacion ubicacionCliente, Ubicacion ubicacionNegocio) {
         double radioTierra = 6371; //en kilómetros
         double dLat = Math.toRadians(ubicacionNegocio.getLatitud() - ubicacionCliente.getLatitud());

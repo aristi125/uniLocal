@@ -1,7 +1,9 @@
 package co.org.uniquindio.unilocal.dto.agenda;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record DetalleAgendaDTO (
-        String tematica,
-        String descripcion
+        @NotBlank String tematica,
+        @NotBlank String descripcion
 ) {
 }

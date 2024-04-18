@@ -17,10 +17,6 @@ import java.util.List;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente extends Cuenta implements Serializable {
 
-    @EqualsAndHashCode.Include
-    @Id
-    private String codigo;
-
     private String nickname;
     private Ciudades ciudad;
     private String fotoPerfil;
