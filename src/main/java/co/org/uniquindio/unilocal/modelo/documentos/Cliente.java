@@ -14,7 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true, callSuper = false)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente extends Cuenta implements Serializable {
 
     @EqualsAndHashCode.Include
@@ -26,5 +26,5 @@ public class Cliente extends Cuenta implements Serializable {
     private String fotoPerfil;
 
     //AGREGAR A FAVORITOS
-    private List<String> agregarFavoritos;
+    private List<Negocio> agregarFavoritos;
 }

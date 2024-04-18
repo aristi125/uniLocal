@@ -44,7 +44,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.setDescripcion(registroNegocioDTO.descripcion());
         negocio.setHorarios(registroNegocioDTO.horarios());
         negocio.setTelefonos((registroNegocioDTO.telefono()));
-        negocio.setCategoriaNegocio(registroNegocioDTO.categoria());
+        negocio.setCategoriaNegocio(registroNegocioDTO.categoriaNegocio());
         negocio.setUrlfoto((registroNegocioDTO.urlFoto()));
         //AGREGUA LA UBICACION O SEA LOS DATOS X y Y
         negocio.getUbicacion().setLongitud(registroNegocioDTO.longitud());
@@ -85,7 +85,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 
         negocio.setHorarios(actualizarNegocioDTO.horarios());
         negocio.setTelefonos(actualizarNegocioDTO.telefonos());
-        negocio.setCategoriaNegocio(actualizarNegocioDTO.categoria());
+        negocio.setCategoriaNegocio(actualizarNegocioDTO.categoriaNegocio());
         negocio.setUrlfoto(Collections.singletonList(actualizarNegocioDTO.urlFoto()));
 
         // Guardar los cambios en la base de datos

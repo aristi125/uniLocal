@@ -22,4 +22,6 @@ public interface ClienteServicio  {
     void removerFavoritos(String idNegocio, String idCliente) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
+
+
 }

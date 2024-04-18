@@ -136,7 +136,7 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public void agregarFavoritos(String idNegocio, String idCliente) throws Exception{
-        Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio );
+        Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio);
         if(optionalNegocio.isEmpty()){
             throw new Exception("No existe el negocio con el id "+idNegocio);
         }
@@ -147,7 +147,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         Cliente cliente = optionalCliente.get();
 
-        cliente.getAgregarFavoritos().add(idNegocio);
+        cliente.getAgregarFavoritos().add(optionalNegocio.get());
 
         clienteRepo.save(cliente);
     }
@@ -159,12 +159,12 @@ public class ClienteServicioImpl implements ClienteServicio {
             throw new Exception("No existe el cliente con el ID " + idCliente);
         }
         Cliente cliente = optionalCliente.get();
-        List<String> favoritoCliente = cliente.getAgregarFavoritos();
+        List<Negocio> favoritoCliente = cliente.getAgregarFavoritos();
         List<FavoritoDTO> favoritos = new ArrayList<>();
         Negocio negocio = null;
         FavoritoDTO favoritoDTO = null;
-        for (String favorito : favoritoCliente) {
-            negocio = negocioRepo.findByCodigo(favorito);
+        for (Negocio favorito : favoritoCliente) {
+            negocio = negocioRepo.findByCodigo(favorito.getCodigo());
             favoritoDTO = new FavoritoDTO(
                     negocio.getCodigo(),
                     negocio.getUrlfoto().get(0),
@@ -175,7 +175,6 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         return favoritos;
     }
-
 
     @Override
     public void removerFavoritos(String idNegocio, String idCliente) throws Exception{

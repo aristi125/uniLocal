@@ -1,7 +1,7 @@
 package co.org.uniquindio.unilocal.dto.negocio;
 
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
-import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import jakarta.validation.constraints.NotBlank;
 
 import java.util.List;
@@ -12,7 +12,7 @@ public record ActualizarNegocioDTO(
         String descripcion,
         List<Horario> horarios,
         List<String> telefonos,
-        Categoria categoria,
+        CategoriaNegocio categoriaNegocio,
         String urlFoto
 ) {
 }

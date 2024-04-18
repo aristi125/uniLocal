@@ -1,15 +1,15 @@
 package co.org.uniquindio.unilocal.modelo.entidades;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @AllArgsConstructor
 @Getter
 @Setter
+@NoArgsConstructor
+@ToString
+@EqualsAndHashCode
 public class DetalleProducto {
 
-    private String codigoProducto;
     private float precio;
     private int cantidad;
 }
