@@ -12,8 +12,6 @@ import java.time.LocalTime;
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Reserva {
 
-    @EqualsAndHashCode.Include // Incluye el atributo en el método equals y hashCode
-
     private LocalDate fecha;
     private LocalTime hora;
     private int cantidadPersonas;

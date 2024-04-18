@@ -1,6 +1,10 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.cliente.*;
+import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
 import java.util.List;
 
@@ -22,4 +26,12 @@ public interface ClienteServicio  {
     void removerFavoritos(String idNegocio, String idCliente) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
+
+    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(Categoria categoria) throws Exception;
+    List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception;
+    List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(double distancia, Ubicacion ubicacionCliente) throws Exception;
+    List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception;
+    List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
+
+
 }

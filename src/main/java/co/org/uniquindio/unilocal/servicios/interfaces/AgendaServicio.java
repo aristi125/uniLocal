@@ -1,13 +1,13 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
-import co.org.uniquindio.unilocal.dto.agenda.RegistrarAgendaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 
 public interface AgendaServicio {
 
-    void registrarAgenda(RegistrarAgendaDTO registrarAgendaDTO) throws Exception;
+    void registrarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
 
-    void actualizarAgenda(RegistrarAgendaDTO registrarAgendaDTO) throws Exception;
+    void actualizarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
 
     void eliminarAgenda(String codigoNegocio) throws Exception;
 
