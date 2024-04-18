@@ -1,6 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 
+import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
@@ -30,13 +31,13 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     @Override
     public void crearComentario(RegistroComentarioDTO comentario) {
 
-        Optional<Negocio> negocio = negocioRepo.findById(comentario.codigoNegocio());
-        if (negocio.isEmpty()) {
+        Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
+        if (negocioOptional.isEmpty()) {
             throw new RuntimeException("No existe negocio");
         }
 
-        Optional<Cliente> cliente = clienteRepo.findById(comentario.codigoCliente());
-        if (cliente.isEmpty()) {
+        Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoCliente());
+        if (clienteOptional.isEmpty()) {
             throw new RuntimeException("No existe cliente");
         }
 
@@ -50,25 +51,71 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         comentarioComentario.setRespuesta("");
 
         listaComentarios.add(comentarioComentario);
-        negocio.get().setComentarios(listaComentarios);
-        negocioRepo.save(negocio.get());
+        Negocio negocio = negocioOptional.get();
+        negocio.setComentarios(listaComentarios);
+        negocioRepo.save(negocio);
         comentarioRepo.save(comentarioComentario);
+
+        String codigoPropietario = negocio.getCodigoCliente();
+        Optional<Cliente> propietarioOptional = clienteRepo.findById(codigoPropietario);
+        if (propietarioOptional.isEmpty()) {
+            throw new RuntimeException("No existe propietario");
+        }
+        Cliente propietario = propietarioOptional.get();
+        String email = propietario.getEmail();
+
+        // Enviar correo al propietario
+        EmailDTO emailDTO = new EmailDTO(
+                "Nuevo comentario",
+                "Hola " + propietario.getNombre() + "! \n\n" +
+                        "Tu negocio " + negocio.getNombre() + " ha recibido un nuevo comentario. \n\n" +
+                        comentario.mensaje() + "\n\n" +
+                        "Ingresa a la plataforma para responderlo. \n\n" +
+                        "Gracias por confiar en nosotros!",
+                email
+        );
+
+
+
     }
 
     @Override
     public void responderComentario(RespuestaComentarioDTO comentario) {
-        Optional<Cliente> cliente = clienteRepo.findById(comentario.codigoCliente());
-        if (cliente.isEmpty()) {
-            throw new RuntimeException("No existe cliente");
+        Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoClienteReceptor());
+        if (clienteOptional.isEmpty()) {
+            throw new RuntimeException("No existe cliente receptor");
         }
-        Optional<Negocio> negocio = negocioRepo.findById(comentario.codigoNegocio());
-        if (negocio.isEmpty()) {
+        Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
+        if (negocioOptional.isEmpty()) {
             throw new RuntimeException("No existe negocio");
+        }
+
+        Negocio negocio = negocioOptional.get();
+        List<Comentario> listaComentarios = negocio.getComentarios();
+        for (Comentario c : listaComentarios) {
+            if (c.getCodigoComentario().equals(comentario.codigoComentario())) {
+                c.setRespuesta(comentario.respuesta());
+                break;
+            }
         }
 
         Comentario aux = comentarioRepo.findByCodigoComentario(comentario.codigoComentario());
         aux.setRespuesta(comentario.respuesta());
         comentarioRepo.save(aux);
+
+        Cliente cliente = clienteOptional.get();
+        String email = cliente.getEmail();
+        // Enviar correo al cliente
+
+        EmailDTO emailDTO = new EmailDTO(
+                "Respuesta a tu comentario",
+                "Hola " + cliente.getNombre() + "! \n\n" +
+                        "Tu comentario ha sido respondido. \n\n" +
+                        comentario.respuesta() + "\n\n" +
+                        "Gracias por confiar en nosotros!",
+                email
+        );
+
     }
 
     @Override

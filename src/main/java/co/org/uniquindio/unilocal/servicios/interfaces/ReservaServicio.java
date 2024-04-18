@@ -11,11 +11,11 @@ public interface ReservaServicio {
 
     void ActualizarReserva(ActualizarReservaDTO actualizarReservaDTO) throws Exception;
 
-    DetalleReservaDTO ObtenerReserva(String idReserva) throws Exception;
+    DetalleReservaDTO ObtenerReserva(String idNegocio, String idCliente) throws Exception;
 
-    void EliminarReserva(String idReserva) throws Exception;
+    void EliminarReserva(String idNegocio, String idCliente) throws Exception;
 
-    List<DetalleReservaDTO> ListarReservas();
+    List<DetalleReservaDTO> ListarReservas(String idNegocio);
 
 
 }
