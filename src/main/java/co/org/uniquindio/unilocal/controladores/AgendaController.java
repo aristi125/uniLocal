@@ -2,7 +2,7 @@ package co.org.uniquindio.unilocal.controladores;
 
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
-import co.org.uniquindio.unilocal.dto.agenda.RegistrarAgendaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.servicios.interfaces.AgendaServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,14 +17,13 @@ public class AgendaController {
     private final AgendaServicio agendaServicio;
 
     @PostMapping("/registrar-agenda")
-    public ResponseEntity<MensajeDTO<String>> registrarAgenda(@Valid @RequestBody RegistrarAgendaDTO registrarAgendaDTO) throws Exception {
-        agendaServicio.registrarAgenda(registrarAgendaDTO);
+    public ResponseEntity<MensajeDTO<String>> registroAgenda(@Valid @RequestBody RegistroAgendaDTO registroAgendaDTO) throws Exception {
+        agendaServicio.registrarAgenda(registroAgendaDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "La agenda ha sido registrada"));
     }
 
-    @PutMapping("/actualizar-agenda")
-    public ResponseEntity<MensajeDTO<String>> actualizarAgenda(@Valid @RequestBody RegistrarAgendaDTO registrarAgendaDTO) throws Exception {
-        agendaServicio.actualizarAgenda(registrarAgendaDTO);
+    public ResponseEntity<MensajeDTO<String>> actualizarAgenda(@Valid @RequestBody RegistroAgendaDTO registroAgendaDTO) throws Exception {
+        agendaServicio.actualizarAgenda(registroAgendaDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Agenda actualiza correctamente"));
     }
 

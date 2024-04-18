@@ -62,7 +62,7 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception {
         // Verificar si el usuario autenticado existe en la base de datos
-        Optional<Cliente> optionalCliente = clienteRepo.findById(actualizarNegocioDTO.codigoPropietario());
+        Optional<Cliente> optionalCliente = clienteRepo.findById(actualizarNegocioDTO.codigoCliente());
         if (optionalCliente.isEmpty()) {
             throw new Exception("El usuario autenticado no está registrado");
         }
@@ -77,7 +77,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         Negocio negocio = optionalNegocio.get();
 
         // Verificar si el usuario autenticado es propietario del negocio
-        if (!negocio.getCodigoCliente().equals(actualizarNegocioDTO.codigoPropietario())) {
+        if (!negocio.getCodigoCliente().equals(actualizarNegocioDTO.codigoCliente())) {
             throw new Exception("El negocio no pertenece al usuario autenticado");
         }
 

@@ -6,9 +6,14 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Agenda;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.AgendaServicio;
+import lombok.RequiredArgsConstructor;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-
+@Service
+@Transactional
+@RequiredArgsConstructor
 public class AgendaServicioImpl implements AgendaServicio {
 
     NegocioRepo negocioRepositorio;

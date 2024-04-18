@@ -12,7 +12,7 @@ public record ActualizarNegocioDTO(
         String descripcion,
         List<Horario> horarios,
         List<String> telefonos,
-        CategoriaNegocio categoria,
+        CategoriaNegocio categoriaNegocio,
         String urlFoto,
 
         String codigoCliente
