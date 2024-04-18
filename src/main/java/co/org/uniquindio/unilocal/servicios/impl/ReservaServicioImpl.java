@@ -1,8 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.reserva.ActualizarReservaDTO;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
-import co.org.uniquindio.unilocal.dto.reserva.RegistroReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Reserva;
@@ -26,13 +24,13 @@ public class ReservaServicioImpl implements ReservaServicio {
     private final NegocioRepo negocioRepo;
 
     @Override
-    public void registrarReserva(RegistroReservaDTO registroReservaDTO) throws Exception {
-        Optional<Cliente> clienteOptional = clienteRepo.findById(registroReservaDTO.codigoCliente());
+    public void registrarReserva(DetalleReservaDTO detalleReservaDTO) throws Exception {
+        Optional<Cliente> clienteOptional = clienteRepo.findById(detalleReservaDTO.codigoCliente());
         if (clienteOptional.isEmpty()) {
             throw new Exception("El cliente no existe");
         }
 
-        Optional<Negocio> negocioOptional = negocioRepo.findById(registroReservaDTO.codigoNegocio());
+        Optional<Negocio> negocioOptional = negocioRepo.findById(detalleReservaDTO.codigoNegocio());
         if (negocioOptional.isEmpty()) {
             throw new Exception("El negocio no existe");
         }
@@ -42,31 +40,31 @@ public class ReservaServicioImpl implements ReservaServicio {
         List<Reserva> listaReservas =  negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getFecha().equals(registroReservaDTO.fecha()) && reserva.getHora().equals(registroReservaDTO.hora())) {
+            if (reserva.getFecha().equals(detalleReservaDTO.fecha()) && reserva.getHora().equals(detalleReservaDTO.hora())) {
                 throw new Exception("Ya existe una reserva para esa fecha y hora");
             }
         }
 
         Reserva reserva = new Reserva();
-        reserva.setFecha(registroReservaDTO.fecha());
-        reserva.setHora(registroReservaDTO.hora());
-        reserva.setCantidadPersonas(registroReservaDTO.cantidadPersonas());
-        reserva.setCodigoCliente(registroReservaDTO.codigoCliente());
-        reserva.setCodigoNegocio(registroReservaDTO.codigoNegocio());
+        reserva.setFecha(detalleReservaDTO.fecha());
+        reserva.setHora(detalleReservaDTO.hora());
+        reserva.setCantidadPersonas(detalleReservaDTO.cantidadPersonas());
+        reserva.setCodigoCliente(detalleReservaDTO.codigoCliente());
+        reserva.setCodigoNegocio(detalleReservaDTO.codigoNegocio());
 
         negocio.getListaReservas().add(reserva);
         negocioRepo.save(negocio);
     }
 
     @Override
-    public void actualizarReserva(ActualizarReservaDTO actualizarReservaDTO) throws Exception {
+    public void actualizarReserva(DetalleReservaDTO detalleReservaDTO) throws Exception {
 
-        Optional<Cliente> clienteOptional = clienteRepo.findById(actualizarReservaDTO.codigoCliente());
+        Optional<Cliente> clienteOptional = clienteRepo.findById(detalleReservaDTO.codigoCliente());
         if (clienteOptional.isEmpty()) {
             throw new Exception("El cliente no existe");
         }
 
-        Optional<Negocio> negocioOptional = negocioRepo.findById(actualizarReservaDTO.codigoNegocio());
+        Optional<Negocio> negocioOptional = negocioRepo.findById(detalleReservaDTO.codigoNegocio());
         if (negocioOptional.isEmpty()) {
             throw new Exception("El negocio no existe");
         }
@@ -76,19 +74,19 @@ public class ReservaServicioImpl implements ReservaServicio {
         List<Reserva> listaReservas =  negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getFecha().equals(actualizarReservaDTO.fecha()) && reserva.getHora().equals(actualizarReservaDTO.hora())) {
+            if (reserva.getFecha().equals(detalleReservaDTO.fecha()) && reserva.getHora().equals(detalleReservaDTO.hora())) {
                 throw new Exception("Ya existe una reserva para esa fecha y hora");
             }
         }
 
         List<Reserva> listaReservasNegocio = negocio.getListaReservas();
         for (Reserva reserva : listaReservasNegocio) {
-            if (reserva.getCodigoCliente().equals(actualizarReservaDTO.codigoCliente()) ){
-                reserva.setFecha(actualizarReservaDTO.fecha());
-                reserva.setHora(actualizarReservaDTO.hora());
-                reserva.setCantidadPersonas(actualizarReservaDTO.cantidadPersonas());
-                reserva.setCodigoCliente(actualizarReservaDTO.codigoCliente());
-                reserva.setCodigoNegocio(actualizarReservaDTO.codigoNegocio());
+            if (reserva.getCodigoCliente().equals(detalleReservaDTO.codigoCliente()) ){
+                reserva.setFecha(detalleReservaDTO.fecha());
+                reserva.setHora(detalleReservaDTO.hora());
+                reserva.setCantidadPersonas(detalleReservaDTO.cantidadPersonas());
+                reserva.setCodigoCliente(detalleReservaDTO.codigoCliente());
+                reserva.setCodigoNegocio(detalleReservaDTO.codigoNegocio());
                 negocioRepo.save(negocio);
                 return;
             }

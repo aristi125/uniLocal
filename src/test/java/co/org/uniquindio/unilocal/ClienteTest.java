@@ -9,9 +9,7 @@ import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
-import co.org.uniquindio.unilocal.dto.reserva.ActualizarReservaDTO;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
-import co.org.uniquindio.unilocal.dto.reserva.RegistroReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
@@ -466,7 +464,7 @@ public class ClienteTest {
     //@Test
     public void registrarReservaTest() throws Exception {
         //Creamos un objeto de tipo RegistroReservaDTO
-        RegistroReservaDTO registroReservaDTO = new RegistroReservaDTO(
+        DetalleReservaDTO registroReservaDTO = new DetalleReservaDTO(
                 LocalDate.now(),
                 LocalTime.now(),
                 5,
@@ -483,7 +481,7 @@ public class ClienteTest {
     //@Test
     public void actualizarReservaTest() throws Exception {
         //Creamos un objeto de tipo ActualizarReservaDTO
-        ActualizarReservaDTO actualizarReservaDTO = new ActualizarReservaDTO(
+        DetalleReservaDTO actualizarReservaDTO = new DetalleReservaDTO(
                 LocalDate.now(),
                 LocalTime.now(),
                 5,
