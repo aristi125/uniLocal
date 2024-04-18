@@ -8,8 +8,11 @@ import java.util.List;
 public interface ProductoServicio {
 
     void registrarProducto(ProductoDTO productoDTO,String id)throws Exception;
+
     void actualizarProducto(ProductoDTO productoDTO, String id)throws Exception;
+
     void eliminarProducto(String codigoProducto, String id)throws Exception;
+
     List<Producto> listarProductos()throws Exception;
-    //Producto buscarProducto(String codigoProducto)throws Exception;
+
 }

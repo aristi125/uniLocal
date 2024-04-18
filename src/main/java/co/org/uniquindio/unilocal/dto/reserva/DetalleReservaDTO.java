@@ -9,7 +9,7 @@ import java.time.LocalTime;
 
 public record DetalleReservaDTO (
         LocalDate fecha,
-        LocalTime hora,
+        LocalDateTime hora,
         int cantidadPersonas,
         String codigoCliente,
         String codigoNegocio

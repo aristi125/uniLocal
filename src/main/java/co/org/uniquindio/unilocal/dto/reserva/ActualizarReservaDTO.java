@@ -11,9 +11,9 @@ import java.time.LocalTime;
 
 public record ActualizarReservaDTO (
 
-        @NotBlank @Length(max = 10) LocalDate fecha,
-        @NotBlank @Length(max = 2) LocalTime hora,
-        @NotBlank @Length(max = 2)  int cantidadPersonas,
+        @NotBlank LocalDate fecha,
+        @NotBlank LocalDateTime hora,
+        @NotBlank int cantidadPersonas,
         @NotBlank String codigoCliente,
         @NotBlank String codigoNegocio
 
