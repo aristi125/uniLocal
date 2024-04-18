@@ -1,7 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
-import co.org.uniquindio.unilocal.dto.agenda.RegistrarAgendaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Agenda;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
@@ -13,7 +13,7 @@ public class AgendaServicioImpl implements AgendaServicio {
 
     NegocioRepo negocioRepositorio;
     @Override
-    public void registrarAgenda(RegistrarAgendaDTO registrarAgendaDTO) throws Exception {
+    public void registrarAgenda(RegistroAgendaDTO registrarAgendaDTO) throws Exception {
 
         Optional<Negocio> negocioOptional = negocioRepositorio.findById(registrarAgendaDTO.codigoNegocio());
         if(negocioOptional.isEmpty()){
@@ -33,7 +33,7 @@ public class AgendaServicioImpl implements AgendaServicio {
     }
 
     @Override
-    public void actualizarAgenda(RegistrarAgendaDTO registrarAgendaDTO) throws Exception {
+    public void actualizarAgenda(RegistroAgendaDTO registrarAgendaDTO) throws Exception {
 
         Optional<Negocio> negocioOptional = negocioRepositorio.findById(registrarAgendaDTO.codigoNegocio());
         if(negocioOptional.isEmpty()){

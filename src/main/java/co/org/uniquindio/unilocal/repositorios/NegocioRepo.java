@@ -1,7 +1,6 @@
 package co.org.uniquindio.unilocal.repositorios;
 
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-import co.org.uniquindio.unilocal.modelo.enumeracion.Categoria;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import org.springframework.data.mongodb.repository.MongoRepository;
