@@ -32,12 +32,11 @@ public class Negocio implements Serializable {
     private List<String> imagenes;
     private List<Horario> horarios;
     private List<String> telefonos;
-    private List<String> urlfoto;
     private List<Comentario> comentarios;
     private int calificaciones;
     private List<HistorialRevision> historialRevisiones;
     private String codigoCliente;
-    private EstadoNegocio estadoNegocio;
+    private EstadoNegocio estado;
     private List<Reserva> listaReservas;
     private Agenda agenda;
 

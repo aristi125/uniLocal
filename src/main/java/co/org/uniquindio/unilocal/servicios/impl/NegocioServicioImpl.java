@@ -49,7 +49,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.setHorarios(registroNegocioDTO.horarios());
         negocio.setTelefonos((registroNegocioDTO.telefono()));
         negocio.setCategoriaNegocio(registroNegocioDTO.categoriaNegocio());
-        negocio.setUrlfoto((registroNegocioDTO.urlFoto()));
+        negocio.setImagenes((registroNegocioDTO.urlFoto()));
         //AGREGUA LA UBICACION O SEA LOS DATOS X y Y
         negocio.getUbicacion().setLongitud(registroNegocioDTO.longitud());
         negocio.getUbicacion().setLatitud(registroNegocioDTO.latitud());
@@ -57,7 +57,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         // Asignar el cliente como propietario del negocio
         negocio.setCodigoCliente(registroNegocioDTO.codigoPropietario());
 
-        negocio.setEstadoNegocio(EstadoNegocio.PENDIENTE);
+        negocio.setEstado(EstadoNegocio.PENDIENTE);
 
 
         // Guardar el negocio en la base de datos
@@ -95,8 +95,8 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.setHorarios(actualizarNegocioDTO.horarios());
         negocio.setTelefonos(actualizarNegocioDTO.telefonos());
         negocio.setCategoriaNegocio(actualizarNegocioDTO.categoriaNegocio());
-        negocio.setUrlfoto(Collections.singletonList(actualizarNegocioDTO.urlFoto()));
-        negocio.setEstadoNegocio(EstadoNegocio.PENDIENTE);
+        negocio.setImagenes(Collections.singletonList(actualizarNegocioDTO.urlFoto()));
+        negocio.setEstado(EstadoNegocio.PENDIENTE);
 
         // Guardar los cambios en la base de datos
         negocioRepo.save(negocio);
@@ -111,8 +111,8 @@ public class NegocioServicioImpl implements NegocioServicio {
         }
         Negocio negocio = negocioOptional.get();
 
-        if (negocio.getEstadoNegocio().equals(EstadoNegocio.ACTIVO)){
-            negocio.setEstadoNegocio(EstadoNegocio.INACTIVO);
+        if (negocio.getEstado().equals(EstadoNegocio.ACTIVO)){
+            negocio.setEstado(EstadoNegocio.INACTIVO);
         }
         else {
             throw new Exception(("No se que esta pasando"));
@@ -160,7 +160,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         for (HistorialRevision revision : revisionOptional) {
             Optional<Negocio> negocioOptional = negocioRepo.findById(revision.getCodigoNegocio());
             Negocio negocio = negocioOptional.get();
-            negocio.setEstadoNegocio(EstadoNegocio.INACTIVO);
+            negocio.setEstado(EstadoNegocio.INACTIVO);
             negocioRepo.save(negocio);
         }
     }

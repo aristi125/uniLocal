@@ -67,7 +67,7 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         List<Negocio> negocios = negocioRepo.findByEstadoNegocio(estadoNegocio);
         List<ItemNegociosRevisionDTO> itemNegociosRevisionDTOSList = new ArrayList<>();
         for (Negocio negocio : negocios) {
-            itemNegociosRevisionDTOSList.add(new ItemNegociosRevisionDTO(negocio.getNombre(),negocio.getDescripcion(),negocio.getTelefonos(),negocio.getUbicacion(),negocio.getHorarios(),negocio.getCategoriaNegocio(),negocio.getUrlfoto()));
+            itemNegociosRevisionDTOSList.add(new ItemNegociosRevisionDTO(negocio.getNombre(),negocio.getDescripcion(),negocio.getTelefonos(),negocio.getUbicacion(),negocio.getHorarios(),negocio.getCategoriaNegocio(),negocio.getImagenes()));
         }
         return itemNegociosRevisionDTOSList;
 
@@ -115,7 +115,7 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         revision.setEstado(EstadoNegocioModerador.RECHAZADO);
         revision.setFecha(revisionesModeradorDTO.fecha());
 
-        negocio.setEstadoNegocio(EstadoNegocio.INACTIVO);
+        negocio.setEstado(EstadoNegocio.INACTIVO);
         negocio.getHistorialRevisiones().add(revision);
 
         Optional<Cliente> optionalCliente = clienteRepo.findById(optionalNegocio.get().getCodigoCliente());
@@ -156,7 +156,7 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         revision.setEstado(EstadoNegocioModerador.APROBADO);
         revision.setFecha(revisionesModeradorDTO.fecha());
 
-        negocio.setEstadoNegocio(EstadoNegocio.INACTIVO);
+        negocio.setEstado(EstadoNegocio.INACTIVO);
         negocio.getHistorialRevisiones().add(revision);
 
         Optional<Cliente> optionalCliente = clienteRepo.findById(optionalNegocio.get().getCodigoCliente());

@@ -170,7 +170,7 @@ public class ClienteServicioImpl implements ClienteServicio {
             negocio = negocioRepo.findByCodigo(favorito.getCodigo());
             favoritoDTO = new FavoritoDTO(
                     negocio.getCodigo(),
-                    negocio.getUrlfoto().get(0),
+                    negocio.getImagenes().get(0),
                     negocio.getNombre(),
                     negocio.getUbicacion()
             );
@@ -215,7 +215,7 @@ public class ClienteServicioImpl implements ClienteServicio {
                             n.getNombre(),
                             n.getTelefonos(),
                             n.getCategoriaNegocio(),
-                            n.getUrlfoto()
+                            n.getImagenes()
                     )
             );
         }
@@ -238,7 +238,7 @@ public class ClienteServicioImpl implements ClienteServicio {
                                 n.getNombre(),
                                 n.getTelefonos(),
                                 n.getCategoriaNegocio(),
-                                n.getUrlfoto()
+                                n.getImagenes()
                         )
                 );
         }
@@ -260,7 +260,7 @@ public class ClienteServicioImpl implements ClienteServicio {
                             n.getNombre(),
                             n.getTelefonos(),
                             n.getCategoriaNegocio(),
-                            n.getUrlfoto()
+                            n.getImagenes()
                     )
             );
         }
@@ -283,8 +283,8 @@ public class ClienteServicioImpl implements ClienteServicio {
                         negocio.getNombre(),
                         negocio.getTelefonos(),
                         negocio.getCategoriaNegocio(),
-                        negocio.getUrlfoto()
-                ));
+                        negocio.getImagenes())
+                );
             }
         }
 
@@ -315,14 +315,14 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         for (Negocio n : negocios) {
             if (n.getNombre().toLowerCase().contains(busqueda) || n.getCategoriaNegocio().toString().toLowerCase().contains(busqueda)
-                    || n.getDescripcion().toLowerCase().contains(busqueda) || n.getEstadoNegocio().toString().toLowerCase().contains(busqueda)) {
+                    || n.getDescripcion().toLowerCase().contains(busqueda) || n.getEstado().toString().toLowerCase().contains(busqueda)) {
 
                 lugares.add(new ItemListaLugaresCreadosDTO(
                                 n.getCodigo(),
                                 n.getNombre(),
                                 n.getTelefonos(),
                                 n.getCategoriaNegocio(),
-                                n.getUrlfoto()
+                                n.getImagenes()
                         )
                 );
             }
@@ -346,7 +346,7 @@ public class ClienteServicioImpl implements ClienteServicio {
                             n.getNombre(),
                             n.getTelefonos(),
                             n.getCategoriaNegocio(),
-                            n.getUrlfoto()
+                            n.getImagenes()
                     )
             );
         }
