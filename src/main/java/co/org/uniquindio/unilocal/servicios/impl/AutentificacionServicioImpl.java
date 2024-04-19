@@ -3,9 +3,11 @@ package co.org.uniquindio.unilocal.servicios.impl;
 import co.org.uniquindio.unilocal.dto.cuenta.SesionDTO;
 import co.org.uniquindio.unilocal.dto.TokenDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.documentos.Cuenta;
 import co.org.uniquindio.unilocal.modelo.documentos.Moderador;
 import co.org.uniquindio.unilocal.modelo.enumeracion.RolUsuario;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.repositorios.CuentaRepo;
 import co.org.uniquindio.unilocal.repositorios.ModeradorRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.AutentificacionServicio;
 import co.org.uniquindio.unilocal.utils.JWTUtils;
@@ -26,29 +28,30 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
     private final ClienteRepo clienteRepo;
     private final ModeradorRepo moderadorRepo;
     private final JWTUtils jwtUtils;
+    private final CuentaRepo cuentaRepo;
 
     // Metodo para iniciar sesion como cliente
     @Override
     public TokenDTO iniciarSesionCliente(SesionDTO sesionDTO) throws Exception {
 
-        Optional<Cliente> clienteOptional = clienteRepo.findByEmail(sesionDTO.email());
+        Optional<Cuenta> cuentaOptional = cuentaRepo.findByEmail(sesionDTO.email());
 
-        if (clienteOptional.isEmpty()) {
+        if (cuentaOptional.isEmpty()) {
             throw new Exception("El correo no se encuentra registrado en la Base de Datos");
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        Cliente cliente = clienteOptional.get();
+        Cuenta cuenta = cuentaOptional.get();
 
-        if (!passwordEncoder.matches(sesionDTO.password(), cliente.getPassword())) {
+        if (!passwordEncoder.matches(sesionDTO.password(), cuenta.getPassword())) {
             throw new Exception("La contraseña es incorrecta, inténtelo de nuevo");
         }
 
         Map<String, Object> map = new HashMap<>();
         map.put("rol", RolUsuario.CLIENTE);
-        map.put("nombre", cliente.getNombre());
-        map.put("codigo", cliente.getCodigo());
+        map.put("nombre", cuenta.getNombre());
+        map.put("codigo", cuenta.getCodigo());
 
-        return new TokenDTO(jwtUtils.generarToken(cliente.getEmail(), map));
+        return new TokenDTO(jwtUtils.generarToken(cuenta.getEmail(), map));
     }
 
     @Override

@@ -77,7 +77,7 @@ db.negocios.insertMany([
         telefonos: ['1234567', '7654321'],
         comentarios: [{
             _id: 'Comentario1',
-            fecha: new LocalDateTime.now(),
+            fecha: new Date(2024, 3, 18, 15, 30, 45),
             calificacion: 5,
             codigoCliente: 'Cliente1',
             mensaje: "Excelente sitio, muy buena atención",
@@ -87,7 +87,7 @@ db.negocios.insertMany([
         historialRevisiones: [{
             descripcion: 'Se realizó una revisión de la información del negocio',
             estado: 'APROBADO',
-            fecha: new LocalDate.now(),
+            fecha: new Date('2024-04-18'),
             codigoModerador: 'Moderador1',
             codigoNegocio: 'Negocio1'
 
@@ -95,8 +95,8 @@ db.negocios.insertMany([
         codigoCliente: 'Cliente1',
         estado: 'ACTIVO',
         listaReservas: [{
-            fecha: new LocalDate.now(),
-            horaInicio: new LocalTime.now(),
+            fecha: new Date('2024-04-18'),
+            horaInicio: new Date(2024, 3, 18, 15, 30, 45),
             cantidadPersonas: 5,
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio1'
@@ -127,7 +127,7 @@ db.negocios.insertMany([
         telefonos: ['1234567', '7654321'],
         comentarios: [{
             _id: 'Comentario1',
-            fecha: new LocalDateTime.now(),
+            fecha: new Date(2024, 3, 18, 15, 30, 45),
             calificacion: 5,
             codigoCliente: 'Cliente2',
             mensaje: "Excelente sitio, muy buena atención",
@@ -137,7 +137,7 @@ db.negocios.insertMany([
         historialRevisiones: [{
             descripcion: 'Se realizó una revisión de la información del negocio',
             estado: 'APROBADO',
-            fecha: new LocalDate.now(),
+            fecha: new Date('2024-04-18'),
             codigoModerador: 'Moderador1',
             codigoNegocio: 'Negocio2'
 
@@ -145,8 +145,8 @@ db.negocios.insertMany([
         codigoCliente: 'Cliente2',
         estado: 'ACTIVO',
         listaReservas: [{
-            fecha: new LocalDate.now(),
-            horaInicio: new LocalTime.now(),
+            fecha: new Date('2024-04-18'),
+            horaInicio:new Date(2024, 3, 18, 15, 30, 45),
             cantidadPersonas: 5,
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio1'
@@ -155,6 +155,7 @@ db.negocios.insertMany([
             tematica: 'Descanso',
             descripcion: 'Relajación',
         }],
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },{
         _id: 'Negocio3',
         nombre: 'CAFE',
@@ -175,7 +176,7 @@ db.negocios.insertMany([
         telefonos: ['1234567', '7654321'],
         comentarios: [{
             _id: 'Comentario1',
-            fecha: new LocalDateTime.now(),
+            fecha: new Date(2024, 3, 18, 15, 30, 45),
             calificacion: 5,
             codigoCliente: 'Cliente3',
             mensaje: "Excelente sitio, muy buena atención",
@@ -185,7 +186,7 @@ db.negocios.insertMany([
         historialRevisiones: [{
             descripcion: 'Se realizó una revisión de la información del negocio',
             estado: 'APROBADO',
-            fecha: new LocalDate.now(),
+            fecha: new Date('2024-04-18'),
             codigoModerador: 'Moderador1',
             codigoNegocio: 'Negocio3'
 
@@ -193,8 +194,8 @@ db.negocios.insertMany([
         codigoCliente: 'Cliente3',
         estado: 'ACTIVO',
         listaReservas: [{
-            fecha: new LocalDate.now(),
-            horaInicio: new LocalTime.now(),
+            fecha: new Date('2024-04-18'),
+            horaInicio: new Date(2024, 3, 18, 15, 30, 45),
             cantidadPersonas: 5,
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio3'
@@ -203,6 +204,7 @@ db.negocios.insertMany([
             tematica: 'Cafeteria',
             descripcion: 'Cafeteria',
         }],
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },{
         _id: 'Negocio4',
         nombre: 'Museo de Arte',
@@ -223,7 +225,7 @@ db.negocios.insertMany([
         telefonos: ['1234567', '7654321'],
         comentarios: [{
             _id: 'Comentario1',
-            fecha: new LocalDateTime.now(),
+            fecha: new Date(2024, 3, 18, 15, 30, 45),
             calificacion: 5,
             codigoCliente: 'Cliente4',
             mensaje: "Excelente sitio, muy buena atención",
@@ -233,7 +235,7 @@ db.negocios.insertMany([
         historialRevisiones: [{
             descripcion: 'Se realizó una revisión de la información del negocio',
             estado: 'APROBADO',
-            fecha: new LocalDate.now(),
+            fecha: new Date('2024-04-18'),
             codigoModerador: 'Moderador1',
             codigoNegocio: 'Negocio4'
 
@@ -241,8 +243,8 @@ db.negocios.insertMany([
         codigoCliente: 'Cliente4',
         estado: 'ACTIVO',
         listaReservas: [{
-            fecha: new LocalDate.now(),
-            horaInicio: new LocalTime.now(),
+            fecha: new Date('2024-04-18'),
+            horaInicio: new Date(2024, 3, 18, 15, 30, 45),
             cantidadPersonas: 5,
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio4'
@@ -251,6 +253,7 @@ db.negocios.insertMany([
             tematica: 'Arte',
             descripcion: 'Arte',
         }],
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },{
         _id: 'Negocio5',
         nombre: 'super perros calientes',
@@ -271,7 +274,7 @@ db.negocios.insertMany([
         telefonos: ['1234567', '7654321'],
         comentarios: [{
             _id: 'Comentario1',
-            fecha: new LocalDateTime.now(),
+            fecha: new Date(2024, 3, 18, 15, 30, 45),
             calificacion: 5,
             codigoCliente: 'Cliente5',
             mensaje: "Excelente sitio, muy buena atención",
@@ -281,7 +284,7 @@ db.negocios.insertMany([
         historialRevisiones: [{
             descripcion: 'Se realizó una revisión de la información del negocio',
             estado: 'APROBADO',
-            fecha: new LocalDate.now(),
+            fecha: new Date('2024-04-18'),
             codigoModerador: 'Moderador1',
             codigoNegocio: 'Negocio5'
 
@@ -289,8 +292,8 @@ db.negocios.insertMany([
         codigoCliente: 'Cliente5',
         estado: 'ACTIVO',
         listaReservas: [{
-            fecha: new LocalDate.now(),
-            horaInicio: new LocalTime.now(),
+            fecha: new Date('2024-04-18'),
+            horaInicio: new Date(2024, 3, 18, 15, 30, 45),
             cantidadPersonas: 5,
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio5'
@@ -299,6 +302,7 @@ db.negocios.insertMany([
             tematica: 'Comida Rapida',
             descripcion: 'Comida Rapida',
         }],
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     }
 
 
@@ -307,7 +311,7 @@ db.negocios.insertMany([
 db.comentarios.insertMany([
     {
         _id: 'Comentario1',
-        fecha: new LocalDateTime.now(),
+        fecha: new Date(2024, 3, 18, 15, 30, 45),
         calificacion: 5,
         codigoCliente: 'Cliente1',
         codigoNegocio: 'Negocio1',
@@ -316,7 +320,7 @@ db.comentarios.insertMany([
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     },{
         _id: 'Comentario2',
-        fecha: new LocalDateTime.now(),
+        fecha: new Date(2024, 3, 18, 15, 30, 45),
         calificacion: 5,
         codigoCliente: 'Cliente2',
         codigoNegocio: 'Negocio2',
@@ -325,7 +329,7 @@ db.comentarios.insertMany([
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     },{
         _id: 'Comentario3',
-        fecha: new LocalDateTime.now(),
+        fecha: new Date(2024, 3, 18, 15, 30, 45),
         calificacion: 5,
         codigoCliente: 'Cliente3',
         codigoNegocio: 'Negocio3',
@@ -334,7 +338,7 @@ db.comentarios.insertMany([
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     },{
         _id: 'Comentario4',
-        fecha: new LocalDateTime.now(),
+        fecha: new Date(2024, 3, 18, 15, 30, 45),
         calificacion: 5,
         codigoCliente: 'Cliente4',
         codigoNegocio: 'Negocio4',
@@ -343,7 +347,7 @@ db.comentarios.insertMany([
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     },{
         _id: 'Comentario5',
-        fecha: new LocalDateTime.now(),
+        fecha: new Date(2024, 3, 18, 15, 30, 45),
         calificacion: 5,
         codigoCliente: 'Cliente5',
         codigoNegocio: 'Negocio5',

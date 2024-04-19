@@ -18,8 +18,10 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -60,7 +62,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de iniciar sesion para el cliente
      */
-    //@Test
+    @Test
     public void iniciarSesionTestCliente() throws Exception {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
@@ -71,6 +73,8 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de iniciar sesion moderador
      */
+
+    @Test
     public void iniciarSesionTestModerador() throws Exception {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
@@ -581,7 +585,5 @@ public class ClienteTest {
         Assertions.assertNotNull(agenda);
 
     }
-
-
 }
 
