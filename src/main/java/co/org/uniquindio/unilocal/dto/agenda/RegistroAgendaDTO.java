@@ -5,7 +5,7 @@ import org.hibernate.validator.constraints.NotBlank;
 
 public record RegistroAgendaDTO(
         @NotBlank String codigoNegocio,
-        @NotBlank @Length(max = 20) String tematica,
-        @NotBlank @Length(max = 100) String descripcion
+        @NotBlank String tematica,
+        @NotBlank String descripcion
 ) {
 }

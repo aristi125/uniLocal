@@ -107,8 +107,6 @@ public class ReservaServicioImpl implements ReservaServicio {
         if (clienteOptional.isEmpty()) {
             throw new Exception("El cliente no existe");
         }
-
-
         Negocio negocio = negocioOptional.get();
 
         List<Reserva> listaReservas = negocio.getListaReservas();

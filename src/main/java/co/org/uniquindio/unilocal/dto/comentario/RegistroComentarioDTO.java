@@ -1,20 +1,23 @@
 package co.org.uniquindio.unilocal.dto.comentario;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 import java.time.LocalDateTime;
 
 //esta clase es para registrar un comentario
 public record RegistroComentarioDTO(
 
-    LocalDateTime fecha,
+    @NotNull LocalDateTime fecha,
 
-    int calificacion,
+    @NotNull int calificacion,
 
-    String codigoCliente,
+    @NotBlank String codigoCliente,
 
-    String codigoNegocio,
+    @NotBlank String codigoNegocio,
 
-    String mensaje,
+    @NotBlank String mensaje,
 
-    String respuesta
+    @NotBlank String respuesta
 ) {
 }

@@ -9,6 +9,7 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Optional;
 
 public interface NegocioServicio {
     String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception;
@@ -21,10 +22,10 @@ public interface NegocioServicio {
 
     List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception;
 
-    void cambiarEstado() throws Exception;
-
-    void registrarRevision() throws Exception;
-
     void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws IOException;
+
+    List<Negocio> listarNegociosEstado(EstadoNegocio estadoNegocio) throws Exception;
+
+    void eliminarNegocioRechazado() throws Exception;
 
 }

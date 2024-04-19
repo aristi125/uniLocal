@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum EstadoCuenta {
     ACTIVO("Activo"),
-    INACTIVO("Inactivo");
+    INACTIVO("Inactivo"),
+    BLOQUEADO("Bloqueado");
 
     private String nombreEstado;
 

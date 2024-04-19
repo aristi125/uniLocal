@@ -3,6 +3,9 @@ package co.org.uniquindio.unilocal.servicios.impl;
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoRevision;
+import co.org.uniquindio.unilocal.repositorios.HistorialRevisionRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -18,7 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
-import java.util.ArrayList;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -30,6 +33,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     private final ClienteRepo clienteRepo;
     private final NegocioRepo negocioRepo;
+    private final HistorialRevisionRepo historialRepo;
     @Override
     public String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception {
         // Obtener la información del usuario autenticado
@@ -52,6 +56,9 @@ public class NegocioServicioImpl implements NegocioServicio {
 
         // Asignar el cliente como propietario del negocio
         negocio.setCodigoCliente(registroNegocioDTO.codigoPropietario());
+
+        negocio.setEstadoNegocio(EstadoNegocio.PENDIENTE);
+
 
         // Guardar el negocio en la base de datos
         negocioRepo.save(negocio);
@@ -89,6 +96,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.setTelefonos(actualizarNegocioDTO.telefonos());
         negocio.setCategoriaNegocio(actualizarNegocioDTO.categoriaNegocio());
         negocio.setUrlfoto(Collections.singletonList(actualizarNegocioDTO.urlFoto()));
+        negocio.setEstadoNegocio(EstadoNegocio.PENDIENTE);
 
         // Guardar los cambios en la base de datos
         negocioRepo.save(negocio);
@@ -101,7 +109,6 @@ public class NegocioServicioImpl implements NegocioServicio {
         if (negocioOptional.isEmpty()){
             throw new Exception("No existe un negocio con el codigo: "+ idNegocio);
         }
-//PENDIENTE CORREGIR
         Negocio negocio = negocioOptional.get();
 
         if (negocio.getEstadoNegocio().equals(EstadoNegocio.ACTIVO)){
@@ -124,28 +131,40 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<Negocio> listarNegociosPropietario(String codigoPropietario) {
+    public List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception{
 
-        List<Negocio> negocios = negocioRepo.findAll();
-
-        List<Negocio> negociosAux = new ArrayList<>();
-        for (Negocio negocio : negocios) {
-            if (negocio.getCodigoCliente().equals(codigoPropietario)) {
-                negociosAux.add(negocio);
-            }
+        List<Negocio> optionalNegocios = negocioRepo.findAllByCodigoCliente(codigoPropietario);
+        if(optionalNegocios.isEmpty()){
+            throw new Exception("El usuario no tiene ningun negocio");
         }
-        return negociosAux;
+
+        return optionalNegocios;
+    }
+@Override
+    public List<Negocio> listarNegociosEstado(EstadoNegocio estado) throws Exception {
+
+    List<Negocio> negocios = negocioRepo.findAllByEstadoNegocio(estado);
+
+        if(negocios.isEmpty()){
+            throw new Exception("No existen negocios con ese estado");
+        }
+        return negocios;
     }
 
     @Override
-    public void cambiarEstado() {
-
+    public void eliminarNegocioRechazado() throws Exception {
+        List<HistorialRevision> revisionOptional = historialRepo.findAllByEstadoAndFechaBefore(EstadoRevision.RECHAZADO,LocalDateTime.now().minusDays(5));
+        if(revisionOptional.isEmpty()){
+            throw new Exception("No hay negocios por eliminar");
+        }
+        for (HistorialRevision revision : revisionOptional) {
+            Optional<Negocio> negocioOptional = negocioRepo.findById(revision.getCodigoNegocio());
+            Negocio negocio = negocioOptional.get();
+            negocio.setEstadoNegocio(EstadoNegocio.INACTIVO);
+            negocioRepo.save(negocio);
+        }
     }
 
-    @Override
-    public void registrarRevision() {
-
-    }
 
     @Override
     public void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws IOException {
@@ -184,4 +203,5 @@ public class NegocioServicioImpl implements NegocioServicio {
             }
         }
     }
+
 }

@@ -192,7 +192,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         Cliente cliente = optionalCliente.get();
 
-        cliente.getAgregarFavoritos().remove(idNegocio);
+        cliente.getAgregarFavoritos().remove(optionalNegocio.get());
 
         clienteRepo.save(cliente);
     }
@@ -201,7 +201,7 @@ public class ClienteServicioImpl implements ClienteServicio {
     public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception{
         Optional<Cliente> clientes = clienteRepo.findById(idCliente);
         List<Negocio> historialNegocio = negocioRepo.findAllByCodigo(idNegocio);
-        List<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
+        ArrayList<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
 
         if (clientes.isEmpty()) {
             throw new Exception("No ha creado una cuenta");

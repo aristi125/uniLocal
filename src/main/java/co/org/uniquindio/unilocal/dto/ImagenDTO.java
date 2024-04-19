@@ -1,7 +1,9 @@
 package co.org.uniquindio.unilocal.dto;
 
+import jakarta.validation.constraints.NotBlank;
+
 public record ImagenDTO(
-        String id,
-        String url
+        @NotBlank String id,
+        @NotBlank String url
 ) {
 }

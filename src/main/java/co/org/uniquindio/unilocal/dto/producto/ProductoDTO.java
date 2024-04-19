@@ -1,13 +1,16 @@
 package co.org.uniquindio.unilocal.dto.producto;
 
 import co.org.uniquindio.unilocal.modelo.enumeracion.TipoProducto;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.List;
 
 public record ProductoDTO (
-    String codigo,
-    String nombre,
-    List<TipoProducto> tipoProducto,
-    float precio
+    @NotBlank String codigo,
+    @NotBlank @Length(max = 30) String nombre,
+    @NotNull List<TipoProducto> tipoProducto,
+    @NotNull float precio
 ){
 }

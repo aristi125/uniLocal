@@ -1,7 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
 
-import co.org.uniquindio.unilocal.modelo.entidades.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.entidades.*;

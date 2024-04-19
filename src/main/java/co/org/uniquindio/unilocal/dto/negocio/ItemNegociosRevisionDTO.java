@@ -1,18 +1,23 @@
 package co.org.uniquindio.unilocal.dto.negocio;
 
+import co.org.uniquindio.unilocal.modelo.entidades.Horario;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import org.hibernate.validator.constraints.Length;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 public record ItemNegociosRevisionDTO(
-        @NotBlank String nombre,
+        @NotBlank @Length(max = 30) String nombre,
         @NotBlank String descripcion,
-        @NotBlank Set<String> telefonos,
-        @NotBlank String direccion,
-        //@NotBlank List<Horario>horarios,
-        //@NotBlank TipoNegocio tipoNegocio,
-        @NotBlank List<String>listaImagens
+        @NotNull List<String> telefonos,
+        @NotNull Ubicacion direccion,
+        @NotNull List<Horario>horarios,
+        @NotNull CategoriaNegocio tipoNegocio,
+        @NotNull List<String>listaImagenes
 ) {
 }

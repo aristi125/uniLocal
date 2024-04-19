@@ -84,8 +84,7 @@ public class ProductoServicioImpl implements ProductoServicio {
         // Verificar si el usuario autenticado existe en la base de datos
 
 
-        productoRepo
-                .delete(optionalProducto.get());
+        productoRepo.delete(optionalProducto.get());
 
     }
 

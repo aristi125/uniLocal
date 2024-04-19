@@ -1,6 +1,7 @@
 package co.org.uniquindio.unilocal.dto.comentario;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 
 import java.time.LocalDateTime;
 
@@ -9,7 +10,7 @@ import java.time.LocalDateTime;
 // es para listar en el historial
 public record ItemListaComentariosDTO (
         @NotBlank String id,
-        LocalDateTime fecha,
+        @NotNull LocalDateTime fecha,
         @NotBlank String mensaje
 
 ) {
