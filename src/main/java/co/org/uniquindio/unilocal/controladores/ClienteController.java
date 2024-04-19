@@ -186,20 +186,20 @@ public class ClienteController {
     }
 
     @PostMapping("/registrar-producto")
-    public ResponseEntity<MensajeDTO<String>> registrarProducto(@Valid @RequestBody ProductoDTO productoDTO, @PathVariable String id) throws Exception {
-        productoServicio.registrarProducto(productoDTO, id);
+    public ResponseEntity<MensajeDTO<String>> registrarProducto(@Valid @RequestBody ProductoDTO productoDTO) throws Exception {
+        productoServicio.registrarProducto(productoDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto creado exitosamente"));
     }
 
     @PutMapping("/actualizar-producto")
-    public ResponseEntity<MensajeDTO<String>> actualizarProducto(@Valid @RequestBody ProductoDTO productoDTO, @PathVariable String id) throws Exception {
-        productoServicio.actualizarProducto(productoDTO, id);
+    public ResponseEntity<MensajeDTO<String>> actualizarProducto(@Valid @RequestBody ProductoDTO productoDTO) throws Exception {
+        productoServicio.actualizarProducto(productoDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto actualizado exitosamente"));
     }
 
     @DeleteMapping("/eliminar-producto")
-    public ResponseEntity<MensajeDTO<String>> eliminarProducto(@PathVariable String codigoProducto, @PathVariable String id) throws Exception {
-        productoServicio.eliminarProducto(codigoProducto, id);
+    public ResponseEntity<MensajeDTO<String>> eliminarProducto(@PathVariable String codigoProducto) throws Exception {
+        productoServicio.eliminarProducto(codigoProducto);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto eliminado"));
     }
 

@@ -143,7 +143,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 @Override
     public List<Negocio> listarNegociosEstado(EstadoNegocio estado) throws Exception {
 
-    List<Negocio> negocios = negocioRepo.findAllByEstadoNegocio(estado);
+    List<Negocio> negocios = negocioRepo.findAllByEstado(estado);
 
         if(negocios.isEmpty()){
             throw new Exception("No existen negocios con ese estado");

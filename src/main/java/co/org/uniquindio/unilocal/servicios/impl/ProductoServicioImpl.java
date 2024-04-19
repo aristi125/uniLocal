@@ -23,15 +23,10 @@ public class ProductoServicioImpl implements ProductoServicio {
     private final ProductoRepo productoRepo;
     private final ClienteRepo clienteRepo;
     @Override
-    public void registrarProducto( ProductoDTO productoDTO,String id) throws Exception {
+    public void registrarProducto( ProductoDTO productoDTO) throws Exception {
         Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(productoDTO.codigo()));
         if (!optionalProducto.isEmpty()) {
             throw new RuntimeException("El producto ya existe");
-        }
-
-        Optional<Cliente> cliente = clienteRepo.findById(id);
-        if (cliente.isEmpty()) {
-            throw new RuntimeException("No existe cliente");
         }
 
         Producto producto = new Producto();
@@ -43,13 +38,9 @@ public class ProductoServicioImpl implements ProductoServicio {
     }
 
     @Override
-    public void actualizarProducto(ProductoDTO productoDTO,String id) throws Exception {
-        // Verificar si el usuario autenticado existe en la base de datos
-        Cliente cliente = clienteRepo.findById(id)
-                .orElseThrow(() -> new Exception("El usuario autenticado no está registrado"));
+    public void actualizarProducto(ProductoDTO productoDTO) throws Exception {
 
-        // Buscar el negocio por su ID
-        Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(id));
+        Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(productoDTO.codigo()));
 
         if (optionalProducto.isEmpty()) {
             throw new Exception("El usuario no existe");
@@ -67,13 +58,10 @@ public class ProductoServicioImpl implements ProductoServicio {
     }
 
     @Override
-    public void eliminarProducto(String codigoProducto,String id) throws Exception {
-        // Verificar si el usuario autenticado existe en la base de datos
-        Cliente cliente = clienteRepo.findById(id)
-                .orElseThrow(() -> new Exception("El usuario autenticado no está registrado"));
+    public void eliminarProducto(String codigoProducto) throws Exception {
 
         // Buscar el negocio por su ID
-        Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(id));
+        Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(codigoProducto));
 
         if (optionalProducto.isEmpty()) {
             throw new Exception("El producto no existe");

@@ -333,7 +333,7 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception {
-        List<Negocio> negocios =negocioRepo.findByEstadoNegocio(estadoNegocio);
+        List<Negocio> negocios =negocioRepo.findByEstado(estadoNegocio);
         if(negocios.isEmpty()){
             throw  new Exception("No existen negocios con ese estado");
         }
