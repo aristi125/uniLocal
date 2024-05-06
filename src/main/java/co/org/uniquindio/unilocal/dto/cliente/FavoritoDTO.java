@@ -9,6 +9,6 @@ public record FavoritoDTO(
         @NotBlank String idNegocio,
         @NotBlank String idCliente,
         @NotBlank String urlFoto,
-        @NotNull Ubicacion Lugar
+        @NotNull Ubicacion lugar
 ) {
 }

@@ -11,6 +11,7 @@ import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -26,17 +27,14 @@ import java.util.Optional;
 public class ComentarioServicioImpl implements ComentarioServicio {
 
     private final ClienteRepo clienteRepo; // Validar que el cliente exista
-    private final NegocioRepo negocioRepo;
+    private final NegocioServicio negocioServicio;
     private final ComentarioRepo comentarioRepo;
     private final EmailServicio emailServicio;
 
     @Override
     public void crearComentario(RegistroComentarioDTO comentario) throws Exception {
 
-        Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
-        if (negocioOptional.isEmpty()) {
-            throw new RuntimeException("No existe negocio");
-        }
+        Negocio negocio = negocioServicio.buscarNegocio(comentario.codigoNegocio());
 
         Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoCliente());
         if (clienteOptional.isEmpty()) {
@@ -48,14 +46,10 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         comentarioComentario.setFecha(comentario.fecha());
         comentarioComentario.setCalificacion(comentario.calificacion());
         comentarioComentario.setCodigoCliente(comentario.codigoCliente());
-        comentarioComentario.setCodigoNegocio(comentario.codigoNegocio());
+        comentarioComentario.setCodigoNegocio(comentario.codigoNegocio()); //Este código relaciona todos los comentarios con un negocio
         comentarioComentario.setMensaje(comentario.mensaje());
         comentarioComentario.setRespuesta("");
 
-        listaComentarios.add(comentarioComentario);
-        Negocio negocio = negocioOptional.get();
-        negocio.setComentarios(listaComentarios);
-        negocioRepo.save(negocio);
         comentarioRepo.save(comentarioComentario);
 
         String codigoPropietario = negocio.getCodigoCliente();
@@ -89,12 +83,9 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         if (clienteOptional.isEmpty()) {
             throw new RuntimeException("No existe cliente receptor");
         }
-        Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
-        if (negocioOptional.isEmpty()) {
-            throw new RuntimeException("No existe negocio");
-        }
 
-        Negocio negocio = negocioOptional.get();
+        Negocio negocio = negocioServicio.buscarNegocio(comentario.codigoNegocio());
+
         List<Comentario> listaComentarios = negocio.getComentarios();
         for (Comentario c : listaComentarios) {
             if (c.getCodigoComentario().equals(comentario.codigoComentario())) {
@@ -127,10 +118,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     @Override
     public List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception {
 
-        Optional<Negocio> negocio = negocioRepo.findById(codigoNegocio);
-        if (negocio.isEmpty()) {
-            throw new Exception("No existe negocio");
-        }
+        Negocio negocio = negocioServicio.buscarNegocio(codigoNegocio);
+
         List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (historialComentario.isEmpty()) {
             throw new Exception("No hay comentarios");
@@ -150,10 +139,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     @Override
     public int calcularPromedioCalificaciones (String codigoNegocio) throws Exception {
 
-        Optional<Negocio> negocio = negocioRepo.findById(codigoNegocio);
-        if (negocio.isEmpty()) {
-            throw new Exception("No existe negocio");
-        }
+        Negocio negocio = negocioServicio.buscarNegocio(codigoNegocio);
 
         List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (listaComentarios.isEmpty()) {

@@ -8,7 +8,8 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.ModeradorServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -23,29 +24,36 @@ import java.util.List;
 @RequiredArgsConstructor
 public class CuentaController {
 
-    private final CuentaServicio cuentaServicio;
     private final ClienteServicio clienteServicio;
     private final ComentarioServicio comentarioServicio;
+    private final NegocioServicio negocioServicio;
+    private final ModeradorServicio moderadorServicio;
 
-    @GetMapping("/enviar-link-recuperacion-password")
-    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacion(@PathVariable String email) throws Exception {
-        cuentaServicio.enviarLinkRecuperacion(email);
+    @GetMapping("/enviar-link-recuperacion-password-cliente/{email}")
+    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionCliente(@PathVariable String email) throws Exception {
+        clienteServicio.enviarLinkRecuperacion(email);
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
+    }
+
+    @GetMapping("/enviar-link-recuperacion-password-moderador/{email}")
+    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionModerador(@PathVariable String email) throws Exception {
+        moderadorServicio.enviarLinkRecuperacion(email);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
     }
 
     @GetMapping("/buscar-negocio-nombre")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@PathVariable String nombre) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, clienteServicio.buscarNegocioNombre(nombre)));
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
     }
 
     @GetMapping("/buscar-negocio-categoria")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoria) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, clienteServicio.buscarNegocioCategoria(categoria)));
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
     }
 
     @GetMapping("/buscar-negocio-distancia")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@PathVariable double distancia, @PathVariable Ubicacion ubicacionCliente) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, clienteServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
     }
 
     @GetMapping("/listar-comentarios-negocio")
@@ -55,6 +63,6 @@ public class CuentaController {
 
     @GetMapping("/filtar-estado")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> filtrarPorEstado(@PathVariable EstadoNegocio estadoNegocio)throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, clienteServicio.filtrarPorEstado(estadoNegocio)));
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }
 }

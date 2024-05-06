@@ -199,7 +199,7 @@ public class ClienteTest {
     //@Test
     public void listaLugaresCreadosTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.listaLugaresCreados("Cliente1", "Negocio1");
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listaLugaresCreados("Cliente1", "Negocio1");
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -212,7 +212,7 @@ public class ClienteTest {
     //@Test
     public void filtrarLugarPorNombreTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioNombre("Hotel");
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre("Hotel");
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -225,7 +225,7 @@ public class ClienteTest {
     //@Test
     public void filtrarLugarPorCategoriaTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -239,7 +239,7 @@ public class ClienteTest {
     public void filtrarLugarPorDistanciaTest() throws Exception {
         Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
         //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.buscarNegocioDistancia(5.0, ubicacion);
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(5.0, ubicacion);
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar
@@ -252,7 +252,7 @@ public class ClienteTest {
     //@Test
     public void filtrarRecomendacionesTest() throws Exception {
         //Obtenemos la lista de lugares recomendados
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.recomendarNegocio("comida");
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio("comida");
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar
@@ -265,7 +265,7 @@ public class ClienteTest {
     //@Test
     public void filtrarLugarPorEstadoTest() throws Exception {
         //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = clienteServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar
@@ -330,7 +330,7 @@ public class ClienteTest {
     //@Test
     public void enviarLinkRecuperacionTest() throws Exception {
         //Enviamos un link de recuperacion a un correo
-        cuentaServicio.enviarLinkRecuperacion("ana@gmail.com");
+        clienteServicio.enviarLinkRecuperacion("ana@gmail.com");
     }
 
     /**
@@ -340,7 +340,7 @@ public class ClienteTest {
     public void cambiarPasswordTest() throws Exception {
         //Cambiamos la contraseña de un cliente
         CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cliente1", "nuevaContraseña", "ana@gmail.com", "1" );
-        cuentaServicio.cambiarPassword(cambioPasswordDTO);
+        clienteServicio.cambiarPassword(cambioPasswordDTO);
     }
 
     //-------------------------Prueba unitaria de metodos en EmailServicioImpl-----------------------

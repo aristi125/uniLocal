@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
+import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -14,8 +15,11 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 @ToString
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Cliente extends Cuenta implements Serializable {
+
+    @Id
+    @EqualsAndHashCode.Include
+    private String codigo;
 
     private String nickname;
     private Ciudades ciudad;

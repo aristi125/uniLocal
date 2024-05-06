@@ -3,19 +3,21 @@ package co.org.uniquindio.unilocal.servicios.impl;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RevisarComentariosDTO;
+import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ItemNegociosRevisionDTO;
-import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
-import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
-import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
+import co.org.uniquindio.unilocal.modelo.documentos.*;
+import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioModerador;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
+import co.org.uniquindio.unilocal.repositorios.ModeradorRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ModeradorServicio;
+import co.org.uniquindio.unilocal.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +33,9 @@ public class ModeradorServicioImpl implements ModeradorServicio {
     private final ComentarioRepo comentarioRepo;
     private final ClienteRepo clienteRepo;
     private final EmailServicioImpl emailServicio;
+    private final ModeradorRepo moderadorRepo;
+    private final JWTUtils jwtUtils;
+
 
     @Override
     public List<HistorialRevision> obtenerHistorialRevisiones(String idNegocio) throws Exception{
@@ -181,5 +186,57 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         negocioRepo.save(negocio);
     }
 
+    @Override
+    public void enviarLinkRecuperacion(String email) throws Exception {
+        //Buscamos el cliente con el email
+        Optional<Moderador> optionalModerador = moderadorRepo.findByEmail(email);
+        //Si no se encontró el cliente, lanzamos una excepción
+        if(optionalModerador.isEmpty()){
+            throw new Exception("No se encontró el cliente con el email "+email);
+        }
+        //Obtenemos el cliente
+        Cuenta cuenta = optionalModerador.get();
+        String token = jwtUtils.generarToken(email, null);
 
+        EmailDTO emailDTO = new EmailDTO(
+                "Recuperación de contraseña",
+                "Hola "+cuenta.getNombre()+"! \n\n"+
+                        "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
+                        "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
+                        "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+
+                        "http://localhost:8081/recuperar-password?codigo="+token+"\n\n"+
+                        "Gracias por confiar en nosotros!",
+                email
+        );
+
+    }
+
+    @Override
+    public void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
+        Optional<Moderador> optional =moderadorRepo.findById(cambioPasswordDTO.id());
+
+        if(optional.isEmpty()){
+            throw new Exception("No existe el clienete con el codigo "+ cambioPasswordDTO.id());
+        }
+
+        //BUSCAMOS AL CLIENTE CON EL GET
+        Moderador registro = optional.get();
+
+        if( registro.getEstado() == EstadoCuenta.INACTIVO ){
+            throw new Exception("No existe el clienete con el codigo "+ cambioPasswordDTO.id());
+        }
+
+        String token = cambioPasswordDTO.token();
+        jwtUtils.parseJwt(token);
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // Encriptar la nueva contraseña
+        String nuevaPasswordEncriptada = passwordEncoder.encode(cambioPasswordDTO.passwordNueva());
+
+        // Asignar la nueva contraseña encriptada al cliente
+        registro.setPassword(nuevaPasswordEncriptada);
+
+        // Guardar el cliente actualizado en la base de datos
+        moderadorRepo.save(registro);
+    }
 }

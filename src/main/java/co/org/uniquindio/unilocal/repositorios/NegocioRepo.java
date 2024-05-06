@@ -12,7 +12,6 @@ import java.util.List;
 public interface NegocioRepo extends MongoRepository<Negocio, String> {
     Negocio findByCodigo(String codigo);
     List<Negocio> findAllByCodigoCliente(String codigoCliente);
-    List<Negocio> findAllByCodigo(String codigo);
     List<Negocio> findAllByEstado(EstadoNegocio estadoNegocio);
     List<Negocio> findByCategoriaNegocio(CategoriaNegocio categoria);
     List<Negocio> findByEstado(EstadoNegocio estadoNegocio);

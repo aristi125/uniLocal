@@ -1,8 +1,11 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
+import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
+import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
+import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
@@ -11,6 +14,9 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
+import co.org.uniquindio.unilocal.utils.JWTUtils;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -25,7 +31,10 @@ import java.util.Optional;
 public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepo clienteRepo;
-    private final NegocioRepo negocioRepo;
+    //private final NegocioRepo negocioRepo;
+    private final NegocioServicio negocioServicio;
+    private final JWTUtils jwtUtils;
+
 
     @Override
     public String registrarCliente(RegistroClienteDTO registroClienteDTO) throws Exception {
@@ -139,10 +148,8 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public void agregarFavoritos(String idNegocio, String idCliente) throws Exception{
-        Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio);
-        if(optionalNegocio.isEmpty()){
-            throw new Exception("No existe el negocio con el id "+idNegocio);
-        }
+
+        Negocio negocio = negocioServicio.buscarNegocio(idNegocio);
 
         Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
         if (optionalCliente.isEmpty()) {
@@ -150,7 +157,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         Cliente cliente = optionalCliente.get();
 
-        cliente.getAgregarFavoritos().add(optionalNegocio.get());
+        cliente.getAgregarFavoritos().add(negocio);
 
         clienteRepo.save(cliente);
     }
@@ -167,7 +174,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         Negocio negocio = null;
         FavoritoDTO favoritoDTO = null;
         for (Negocio favorito : favoritoCliente) {
-            negocio = negocioRepo.findByCodigo(favorito.getCodigo());
+            negocio = negocioServicio.buscarNegocio(favorito.getCodigo());
             favoritoDTO = new FavoritoDTO(
                     negocio.getCodigo(),
                     negocio.getImagenes().get(0),
@@ -181,10 +188,8 @@ public class ClienteServicioImpl implements ClienteServicio {
 
     @Override
     public void removerFavoritos(String idNegocio, String idCliente) throws Exception{
-        Optional<Negocio> optionalNegocio = negocioRepo.findById( idNegocio );
-        if(optionalNegocio.isEmpty()){
-            throw new Exception("No existe el negocio con el id "+idNegocio);
-        }
+
+        Negocio negocio = negocioServicio.buscarNegocio(idNegocio);
 
         Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
         if (optionalCliente.isEmpty()) {
@@ -192,167 +197,65 @@ public class ClienteServicioImpl implements ClienteServicio {
         }
         Cliente cliente = optionalCliente.get();
 
-        cliente.getAgregarFavoritos().remove(optionalNegocio.get());
+        cliente.getAgregarFavoritos().remove(negocio);
 
         clienteRepo.save(cliente);
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception{
-        Optional<Cliente> clientes = clienteRepo.findById(idCliente);
-        List<Negocio> historialNegocio = negocioRepo.findAllByCodigo(idNegocio);
-        ArrayList<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
+    public void enviarLinkRecuperacion(String email) throws Exception {
+        //Buscamos el cliente con el email
+        Optional<Cliente> optionalCliente = clienteRepo.findByEmail(email);
+        //Si no se encontró el cliente, lanzamos una excepción
+        if(optionalCliente.isEmpty()){
+            throw new Exception("No se encontró el cliente con el email "+email);
+        }
+        //Obtenemos el cliente
+        Cliente cliente = optionalCliente.get();
+        String token = jwtUtils.generarToken(email, null);
 
-        if (clientes.isEmpty()) {
-            throw new Exception("No ha creado una cuenta");
-        }
-        if (historialNegocio.isEmpty()){
-            throw new Exception("No ha creado ningun negocio");
-        }
-        for(Negocio n: historialNegocio){
-            respuesta.add( new ItemListaLugaresCreadosDTO(
-                            n.getCodigo(),
-                            n.getNombre(),
-                            n.getTelefonos(),
-                            n.getCategoriaNegocio(),
-                            n.getImagenes()
-                    )
-            );
-        }
-        return respuesta;
-    }
-
-    @Override
-    public List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception {
-
-        List<Negocio> negocios = negocioRepo.findAll();
-        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
-        if (negocios.isEmpty()) {
-            throw new Exception("No se encontraron negocios con el nombre " + nombre);
-        }
-        for (Negocio n : negocios) {
-
-            if (n.getNombre().toLowerCase().contains(nombre.toLowerCase()))
-                lugares.add(new ItemListaLugaresCreadosDTO(
-                                n.getCodigo(),
-                                n.getNombre(),
-                                n.getTelefonos(),
-                                n.getCategoriaNegocio(),
-                                n.getImagenes()
-                        )
-                );
-        }
-        return lugares;
+        EmailDTO emailDTO = new EmailDTO(
+                "Recuperación de contraseña",
+                "Hola "+cliente.getNombre()+"! \n\n"+
+                        "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
+                        "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
+                        "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+
+                        "http://localhost:8081/recuperar-password?codigo="+token+"\n\n"+
+                        "Gracias por confiar en nosotros!",
+                email
+        );
 
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
+    public void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
+        Optional<Cliente> optional =clienteRepo.findById(cambioPasswordDTO.id());
 
-        List<Negocio> negocios = negocioRepo.findByCategoriaNegocio(categoria);
-        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
-        if (negocios.isEmpty()) {
-            throw new Exception("No se encontraron negocios con la categoria " + categoria);
+        if(optional.isEmpty()){
+            throw new Exception("No existe el clienete con el codigo "+ cambioPasswordDTO.id());
         }
-        for (Negocio n : negocios) {
-            lugares.add(new ItemListaLugaresCreadosDTO(
-                            n.getCodigo(),
-                            n.getNombre(),
-                            n.getTelefonos(),
-                            n.getCategoriaNegocio(),
-                            n.getImagenes()
-                    )
-            );
+
+        //BUSCAMOS AL CLIENTE CON EL GET
+        Cliente registro = optional.get();
+
+        if( registro.getEstado() == EstadoCuenta.INACTIVO ){
+            throw new Exception("No existe el clienete con el codigo "+ cambioPasswordDTO.id());
         }
-        return lugares;
+
+        String token = cambioPasswordDTO.token();
+        jwtUtils.parseJwt(token);
+
+        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+        // Encriptar la nueva contraseña
+        String nuevaPasswordEncriptada = passwordEncoder.encode(cambioPasswordDTO.passwordNueva());
+
+        // Asignar la nueva contraseña encriptada al cliente
+        registro.setPassword(nuevaPasswordEncriptada);
+
+        // Guardar el cliente actualizado en la base de datos
+        clienteRepo.save(registro);
     }
 
-    @Override
-    public List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(double distancia, Ubicacion ubicacionCliente) throws Exception {
-
-        List<Negocio> negocios = negocioRepo.findAll();
-        List<ItemListaLugaresCreadosDTO> lugaresCercanos = new ArrayList<>();
-
-        for (Negocio negocio : negocios) {
-            double distanciaCalculada = calcularDistancia(ubicacionCliente, negocio.getUbicacion());
-
-            if (distanciaCalculada <= distancia) {
-                // Agregar el lugar a la lista de lugares dentro de la distancia especificada
-                lugaresCercanos.add(new ItemListaLugaresCreadosDTO(
-                        negocio.getCodigo(),
-                        negocio.getNombre(),
-                        negocio.getTelefonos(),
-                        negocio.getCategoriaNegocio(),
-                        negocio.getImagenes())
-                );
-            }
-        }
-
-        return lugaresCercanos;
-
-    }
-
-
-    public double calcularDistancia(Ubicacion ubicacionCliente, Ubicacion ubicacionNegocio) {
-        double radioTierra = 6371; //en kilómetros
-        double dLat = Math.toRadians(ubicacionNegocio.getLatitud() - ubicacionCliente.getLatitud());
-        double dLng = Math.toRadians(ubicacionNegocio.getLongitud() - ubicacionCliente.getLongitud());
-        double sindLat = Math.sin(dLat / 2);
-        double sindLng = Math.sin(dLng / 2);
-        double va1 = Math.pow(sindLat, 2) + Math.pow(sindLng, 2) * Math.cos(Math.toRadians(ubicacionCliente.getLatitud())) * Math.cos(Math.toRadians(ubicacionNegocio.getLatitud()));
-        double va2 = 2 * Math.atan2(Math.sqrt(va1), Math.sqrt(1 - va1));
-        double distancia = radioTierra * va2;
-        return distancia;
-    }
-
-    @Override
-    public List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception {
-
-        List<Negocio> negocios = negocioRepo.findAll();
-        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
-        if (negocios.isEmpty()) {
-            throw new Exception("No se encontraron negocios");
-        }
-        for (Negocio n : negocios) {
-            if (n.getNombre().toLowerCase().contains(busqueda) || n.getCategoriaNegocio().toString().toLowerCase().contains(busqueda)
-                    || n.getDescripcion().toLowerCase().contains(busqueda) || n.getEstado().toString().toLowerCase().contains(busqueda)) {
-
-                lugares.add(new ItemListaLugaresCreadosDTO(
-                                n.getCodigo(),
-                                n.getNombre(),
-                                n.getTelefonos(),
-                                n.getCategoriaNegocio(),
-                                n.getImagenes()
-                        )
-                );
-            }
-        }
-        return lugares;
-    }
-
-
-    @Override
-    public List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception {
-        List<Negocio> negocios =negocioRepo.findByEstado(estadoNegocio);
-        if(negocios.isEmpty()){
-            throw  new Exception("No existen negocios con ese estado");
-        }
-
-        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
-
-        for (Negocio n : negocios) {
-            lugares.add(new ItemListaLugaresCreadosDTO(
-                            n.getCodigo(),
-                            n.getNombre(),
-                            n.getTelefonos(),
-                            n.getCategoriaNegocio(),
-                            n.getImagenes()
-                    )
-            );
-        }
-
-        return lugares;
-    }
     // Validaciones
     private boolean existeEmail(String email){
         return clienteRepo.findByEmail(email).isPresent();

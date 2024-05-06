@@ -10,7 +10,6 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.CuentaServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ModeradorServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import jakarta.validation.Valid;
@@ -27,7 +26,6 @@ public class ModeradorController {
 
     private final ClienteServicio clienteServicio;
     private final ModeradorServicio moderadorServicio;
-    private final CuentaServicio cuentaServicio;
     private final NegocioServicio negocioServicio;
 
     @GetMapping("/listar-clientes")
@@ -75,7 +73,7 @@ public class ModeradorController {
 
     @PutMapping("/cambiar-password")
     public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambioPasswordDTO cambioPasswordDTO) throws Exception {
-        cuentaServicio.cambiarPassword(cambioPasswordDTO);
+        moderadorServicio.cambiarPassword(cambioPasswordDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha cambiado su contraseña" ));
     }
 

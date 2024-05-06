@@ -3,6 +3,7 @@ package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RevisarComentariosDTO;
+import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ItemNegociosRevisionDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
@@ -18,5 +19,7 @@ public interface ModeradorServicio  {
     void revisarNegocio(RevisionesModeradorDTO revisionesModeradorDTO)throws Exception;
     void rechazarNegocio(RevisionesModeradorDTO revisionesModeradorDTO)throws Exception;
     void aprobarNegocio(RevisionesModeradorDTO revisionesModeradorDTO)throws Exception;
+    void enviarLinkRecuperacion(String email)throws Exception;
+    void cambiarPassword(CambioPasswordDTO cambioPasswordDTO)throws Exception;
 
 }

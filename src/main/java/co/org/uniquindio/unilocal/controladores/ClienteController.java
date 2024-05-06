@@ -34,7 +34,6 @@ import java.util.List;
 public class ClienteController {
     private final ClienteServicio clienteServicio;
     private final AgendaServicio agendaServicio;
-    private final CuentaServicio cuentaServicio;
     private final ComentarioServicio comentarioServicio;
     private final NegocioServicio negocioServicio;
     private final ProductoServicio productoServicio;
@@ -63,7 +62,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Sitio agregado a favoritos"));
     }
 
-    @GetMapping("/obtener-favoritos-cliente")
+    @GetMapping("/obtener-favoritos-cliente/{idCliente}") // concatener el idCliente
     public ResponseEntity<MensajeDTO<List<FavoritoDTO>>> mostrarFavoritos(@PathVariable String idCliente) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.mostrarFavoritos(idCliente)));
     }
@@ -76,32 +75,32 @@ public class ClienteController {
 
     @GetMapping("lugares-creados-cliente")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@PathVariable String idCliente, @PathVariable String idNegocio) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listaLugaresCreados(idCliente, idNegocio)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listaLugaresCreados(idCliente, idNegocio)));
     }
 
     @GetMapping("/buscar-negocio-nombre")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@PathVariable String nombre) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.buscarNegocioNombre(nombre)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
     }
 
     @GetMapping("/buscar-negocio-categoria")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoria) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.buscarNegocioCategoria(categoria)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
     }
 
     @GetMapping("/buscar-negocio-distancia")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@PathVariable double distancia, @PathVariable Ubicacion ubicacionCliente) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
     }
 
     @GetMapping("/recomendar-negocio")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> recomendarNegocio(@PathVariable String busqueda) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.recomendarNegocio(busqueda)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.recomendarNegocio(busqueda)));
     }
 
     @GetMapping("/filtar-estado")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> filtrarPorEstado(@PathVariable EstadoNegocio estadoNegocio) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.filtrarPorEstado(estadoNegocio)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }
 
     @PostMapping("/registrar-agenda")
@@ -129,7 +128,7 @@ public class ClienteController {
 
     @PutMapping("/cambiar-password")
     public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambioPasswordDTO cambioPasswordDTO) throws Exception {
-        cuentaServicio.cambiarPassword(cambioPasswordDTO);
+        clienteServicio.cambiarPassword(cambioPasswordDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Se ha cambiado su contraseña"));
     }
 

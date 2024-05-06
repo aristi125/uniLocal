@@ -1,10 +1,13 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
 import java.io.IOException;
@@ -27,5 +30,18 @@ public interface NegocioServicio {
     List<Negocio> listarNegociosEstado(EstadoNegocio estadoNegocio) throws Exception;
 
     void eliminarNegocioRechazado() throws Exception;
+    List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
+
+
+    List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
+
+
+    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception;
+
+    List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(double distancia, Ubicacion ubicacionCliente) throws Exception;
+
+    List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception;
+
+    List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception;
 
 }
