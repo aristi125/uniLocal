@@ -1,7 +1,6 @@
 package co.org.uniquindio.unilocal.utils;
 
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
-import co.org.uniquindio.unilocal.modelo.enumeracion.RolUsuario;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;

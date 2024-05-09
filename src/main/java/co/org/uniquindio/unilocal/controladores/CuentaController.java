@@ -41,27 +41,27 @@ public class CuentaController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
     }
 
-    @GetMapping("/buscar-negocio-nombre")
+    @GetMapping("/buscar-negocio-nombre/{nombre}")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@PathVariable String nombre) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
     }
 
-    @GetMapping("/buscar-negocio-categoria")
+    @GetMapping("/buscar-negocio-categoria/{categoria}")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoria) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
     }
 
-    @GetMapping("/buscar-negocio-distancia")
+    @GetMapping("/buscar-negocio-distancia/{distancia}/{ubicacionCliente}")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@PathVariable double distancia, @PathVariable Ubicacion ubicacionCliente) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
     }
 
-    @GetMapping("/listar-comentarios-negocio")
+    @GetMapping("/listar-comentarios-negocio/{idNegocio}")
     public ResponseEntity<MensajeDTO<List<ItemListaComentariosDTO>>> listarComentariosNegocio(@PathVariable String idNegocio) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, comentarioServicio.listarComentariosNegocio(idNegocio)));
     }
 
-    @GetMapping("/filtar-estado")
+    @GetMapping("/filtar-estado/{estadoNegocio}")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> filtrarPorEstado(@PathVariable EstadoNegocio estadoNegocio)throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }

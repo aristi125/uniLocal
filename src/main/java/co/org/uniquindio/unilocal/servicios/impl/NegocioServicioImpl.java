@@ -7,7 +7,7 @@ import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoRevision;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioModerador;
 import co.org.uniquindio.unilocal.repositorios.HistorialRevisionRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
@@ -43,7 +43,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         // Obtener la información del usuario autenticado
 
         // Verificar si el usuario autenticado existe en la base de datos
-        Cliente cliente = clienteRepo.findByEmail(registroNegocioDTO.codigoPropietario())
+        Cliente cliente = clienteRepo.findById(registroNegocioDTO.codigoPropietario())
                 .orElseThrow(() -> new Exception("El usuario autenticado no está registrado"));
 
         // Crear un nuevo negocio con la información proporcionada en el DTO
@@ -55,14 +55,16 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.setCategoriaNegocio(registroNegocioDTO.categoriaNegocio());
         negocio.setImagenes((registroNegocioDTO.urlFoto()));
         //AGREGUA LA UBICACION O SEA LOS DATOS X y Y
-        negocio.getUbicacion().setLongitud(registroNegocioDTO.longitud());
-        negocio.getUbicacion().setLatitud(registroNegocioDTO.latitud());
+        Ubicacion ubicacion = new Ubicacion();
+        ubicacion.setLongitud(registroNegocioDTO.ubicacion().getLongitud());
+        ubicacion.setLatitud(registroNegocioDTO.ubicacion().getLatitud());
+        negocio.setUbicacion( ubicacion );
+
 
         // Asignar el cliente como propietario del negocio
         negocio.setCodigoCliente(registroNegocioDTO.codigoPropietario());
 
         negocio.setEstado(EstadoNegocio.PENDIENTE);
-
 
         // Guardar el negocio en la base de datos
         negocioRepo.save(negocio);
@@ -136,6 +138,11 @@ public class NegocioServicioImpl implements NegocioServicio {
             throw  new Exception("No existe negocio");
         }
 
+        int posicion = negocio.getHistorialRevisiones().size()-1;
+        EstadoNegocioModerador estadoNegocio = negocio.getHistorialRevisiones().get(posicion).getEstado();
+        if (estadoNegocio.equals(EstadoNegocio.PENDIENTE)){
+            throw new Exception("El negocio no esta aprobado");
+        }
         //El negocio debe estar aprobado, recorrer la lista del historial de revisiones y si el último registro No es Aprobado lanzar excepción
 
         return negocio;
@@ -164,7 +171,7 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public void eliminarNegocioRechazado() throws Exception {
-        List<HistorialRevision> revisionOptional = historialRepo.findAllByEstadoAndFechaBefore(EstadoRevision.RECHAZADO,LocalDateTime.now().minusDays(5));
+        List<HistorialRevision> revisionOptional = historialRepo.findAllByEstadoAndFechaBefore(EstadoNegocioModerador.RECHAZADO,LocalDateTime.now().minusDays(5));
         if(revisionOptional.isEmpty()){
             throw new Exception("No hay negocios por eliminar");
         }

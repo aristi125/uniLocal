@@ -87,14 +87,12 @@ public class ClienteServicioImpl implements ClienteServicio {
         }else throw new Exception("El nickname no se puede cambiar");
 
 
-        //miramos que no exte utilizado el email nuevo
-        if(existeEmail(actualizarClienteDTO.email())){
+        if(cliente.getEmail().equals(actualizarClienteDTO.email())){
+            cliente.setEmail(actualizarClienteDTO.email());
+        }else if (existeEmail(actualizarClienteDTO.email())){
             throw new Exception("El correo ya se encuentra registrado");
         }
 
-        if (cliente.getEmail().equals(actualizarClienteDTO.email())) {
-            cliente.setEmail(actualizarClienteDTO.email());
-        }
         //Asignamos el nuevo email
         cliente.setEmail( actualizarClienteDTO.email() );
         //Como el objeto cliente ya tiene un id, el save() no crea un nuevo registro sino que actualiza el que ya existe
