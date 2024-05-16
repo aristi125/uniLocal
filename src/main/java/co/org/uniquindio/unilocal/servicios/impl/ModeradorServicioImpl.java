@@ -4,6 +4,7 @@ import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RevisarComentariosDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
+import co.org.uniquindio.unilocal.dto.cuenta.LinkRecuperacionDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ItemNegociosRevisionDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.*;
 import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
@@ -39,6 +40,7 @@ public class ModeradorServicioImpl implements ModeradorServicio {
     // Cambiar los repos por servicios
 
 
+    // Este método debería estar en NegocioServicioImpl
     @Override
     public List<HistorialRevision> obtenerHistorialRevisiones(String idNegocio) throws Exception{
         List<HistorialRevision> historiales = negocioRepo.findByCodigo(idNegocio).getHistorialRevisiones();
@@ -78,27 +80,6 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         }
         return itemNegociosRevisionDTOSList;
 
-    }
-
-    @Override
-    public void bloquearUsuario(String codigo) throws Exception {
-    Optional<Cliente> clienteOptional = clienteRepo.findById(codigo);
-    if(clienteOptional.isEmpty()){
-        throw new Exception("No existe el cliente con el codigo " + codigo);
-    }
-    Cliente cliente = clienteOptional.get();
-    cliente.setEstado(EstadoCuenta.BLOQUEADO);
-        EmailDTO emailDTO = new EmailDTO(
-                "Bloqueo de cuenta",
-                "Hola " + cliente.getNombre() + "! \n\n" +
-                        "Su Cuenta fue bloqueada\n\n" +
-                        "La cuenta incumple con las politicas de la aplicacion." + "\n\n" +
-                        "Si se trata de un error, por favor comuníquese vía correo para solucionarlo. \n\n" +
-                        "Gracias por confiar en nosotros!",
-                cliente.getEmail()
-        );
-        emailServicio.enviarCorreo(emailDTO);
-        clienteRepo.save(cliente);
     }
 
 
@@ -185,44 +166,26 @@ public class ModeradorServicioImpl implements ModeradorServicio {
     }
 
     @Override
-    public void enviarLinkRecuperacion(String email) throws Exception {
-        //Buscamos el cliente con el email
-        Optional<Moderador> optionalModerador = moderadorRepo.findByEmail(email);
-        //Si no se encontró el cliente, lanzamos una excepción
-        if(optionalModerador.isEmpty()){
-            throw new Exception("No se encontró el cliente con el email "+email);
-        }
-        //Obtenemos el cliente
-        Cuenta cuenta = optionalModerador.get();
-        String token = jwtUtils.generarToken(email, null);
+    public void enviarLinkRecuperacionModerador(LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
+        Moderador moderador = buscarModerador(linkRecuperacionDTO.idCuenta());
+        String token = jwtUtils.generarToken(linkRecuperacionDTO.email(), null);
 
         EmailDTO emailDTO = new EmailDTO(
                 "Recuperación de contraseña",
-                "Hola "+cuenta.getNombre()+"! \n\n"+
+                "Hola "+moderador.getNombre()+"! \n\n"+
                         "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
                         "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
                         "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+
                         "http://localhost:8081/recuperar-password?codigo="+token+"\n\n"+
                         "Gracias por confiar en nosotros!",
-                email
+                linkRecuperacionDTO.email()
         );
 
     }
 
     @Override
     public void cambiarPassword(CambioPasswordDTO cambioPasswordDTO) throws Exception {
-        Optional<Moderador> optional =moderadorRepo.findById(cambioPasswordDTO.id());
-
-        if(optional.isEmpty()){
-            throw new Exception("No existe el clienete con el codigo "+ cambioPasswordDTO.id());
-        }
-
-        //BUSCAMOS AL CLIENTE CON EL GET
-        Moderador registro = optional.get();
-
-        if( registro.getEstado() == EstadoCuenta.INACTIVO ){
-            throw new Exception("No existe el clienete con el codigo "+ cambioPasswordDTO.id());
-        }
+        Moderador moderador = buscarModerador(cambioPasswordDTO.idCuenta());
 
         String token = cambioPasswordDTO.token();
         jwtUtils.parseJwt(token);
@@ -232,9 +195,24 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         String nuevaPasswordEncriptada = passwordEncoder.encode(cambioPasswordDTO.passwordNueva());
 
         // Asignar la nueva contraseña encriptada al cliente
-        registro.setPassword(nuevaPasswordEncriptada);
+        moderador.setPassword(nuevaPasswordEncriptada);
 
         // Guardar el cliente actualizado en la base de datos
-        moderadorRepo.save(registro);
+        moderadorRepo.save(moderador);
+    }
+
+    @Override
+    public Moderador buscarModerador(String idCuenta) throws Exception {
+        //Buscamos el moderador que se quiere por su id
+        Optional<Moderador> optionalModerador = moderadorRepo.findById( idCuenta );
+        if(optionalModerador.isEmpty()){
+            throw new Exception("No se encontró el moderador a con el id "+idCuenta);
+        }
+        Moderador moderador = optionalModerador.get();
+
+        if(moderador.getEstado() == EstadoCuenta.INACTIVO){
+            throw  new Exception("El moderador está inactivo");
+        }
+        return moderador;
     }
 }

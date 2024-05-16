@@ -10,6 +10,7 @@ import co.org.uniquindio.unilocal.dto.comentario.RegistroComentarioDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RespuestaComentarioDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.EliminacionNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.dto.producto.ProductoDTO;
@@ -124,7 +125,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.obtenerAgenda(codigoNegocio)));
     }
 
-    @PutMapping("/cambiar-password/{codigoNegocio}")
+    @PutMapping("/cambiar-password")
     public ResponseEntity<MensajeDTO<String>> cambiarPassword(@Valid @RequestBody CambioPasswordDTO cambioPasswordDTO) throws Exception {
         clienteServicio.cambiarPassword(cambioPasswordDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Se ha cambiado su contraseña"));
@@ -166,8 +167,8 @@ public class ClienteController {
     }
 
     @DeleteMapping("/eliminar-negocio/{idNegocio}")
-    public ResponseEntity<MensajeDTO<String>> eliminarNegocio(@PathVariable String idNegocio) throws Exception {
-        negocioServicio.eliminarNegocio(idNegocio);
+    public ResponseEntity<MensajeDTO<String>> eliminarNegocio(@Valid @RequestBody EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception {
+        negocioServicio.eliminarNegocio(eliminacionNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado satisfactoriamente"));
     }
 

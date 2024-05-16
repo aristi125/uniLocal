@@ -14,4 +14,5 @@ public interface ProductoServicio {
 
     List<Producto> listarProductos(ProductoDTO productoDTO)throws Exception;
 
+    Producto buscarProducto(String codigoProducto) throws Exception;
 }

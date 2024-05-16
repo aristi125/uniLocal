@@ -323,9 +323,9 @@ public class ClienteTest {
      * Test que prueba el metodo de enviar link de recuperacion
      */
     //@Test
-    public void enviarLinkRecuperacionTest() throws Exception {
+    public void enviarLinkRecuperacionTest(LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
         //Enviamos un link de recuperacion a un correo
-        clienteServicio.enviarLinkRecuperacion("ana@gmail.com");
+        clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
     }
 
     /**
@@ -411,11 +411,11 @@ public class ClienteTest {
      * Test que prueba el metodo de eliminar negocio
      */
     //@Test
-    public void eliminarNegocioTest() throws Exception {
-        //cambiamos el estado del negocio con el id creado anteriormente
-        //de activo a inactivo
-        negocioServicio.eliminarNegocio("Negocio5");
-    }
+//    public void eliminarNegocioTest() throws Exception {
+//        //cambiamos el estado del negocio con el id creado anteriormente
+//        //de activo a inactivo
+//        negocioServicio.eliminarNegocio("Negocio5");
+//    }
 
     /**
      * Test que prueba el metodo de obtener negocio

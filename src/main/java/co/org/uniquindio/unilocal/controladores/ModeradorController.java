@@ -50,7 +50,7 @@ public class ModeradorController {
 
     @PutMapping("/bloquear-usuario/{codigo}")
         public ResponseEntity<MensajeDTO<String>> bloquearUsuario(@PathVariable String codigo) throws Exception {
-        moderadorServicio.bloquearUsuario(codigo);
+        clienteServicio.bloquearUsuario(codigo);
         return ResponseEntity.ok().body(new MensajeDTO<>(true, "El Usuario ha sido bloqueado"));
     }
 

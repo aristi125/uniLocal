@@ -28,42 +28,37 @@ import java.util.Optional;
 public class ComentarioServicioImpl implements ComentarioServicio {
 
     private final NegocioServicio negocioServicio;
-    private final ComentarioRepo comentarioRepo;
+    private final ComentarioRepo comentarioRepo; // Repositorio de la propia clase
     private final EmailServicio emailServicio;
     private final ClienteServicio clienteServicio;
 
     @Override
-    public void crearComentario(RegistroComentarioDTO comentario) throws Exception {
+    public void crearComentario(RegistroComentarioDTO registroComentarioDTO) throws Exception {
+        Cliente propietario = clienteServicio.buscarCliente(registroComentarioDTO.codigoCliente());
+        Negocio negocio = negocioServicio.buscarNegocio(registroComentarioDTO.codigoNegocio());
 
-        Negocio negocio = negocioServicio.buscarNegocio(comentario.codigoNegocio());
-        Cliente propietario = clienteServicio.buscarCliente(comentario.codigoCliente());
+        // consultar sobre esta línea
+        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(registroComentarioDTO.codigoNegocio());
+        Comentario comentario = new Comentario();
+        comentario.setFecha(registroComentarioDTO.fecha());
+        comentario.setCalificacion(registroComentarioDTO.calificacion());
+        comentario.setCodigoCliente(registroComentarioDTO.codigoCliente());
+        comentario.setCodigoNegocio(registroComentarioDTO.codigoNegocio()); //Este código relaciona todos los comentarios con un negocio
+        comentario.setMensaje(registroComentarioDTO.mensaje());
 
-        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(comentario.codigoNegocio());
-        Comentario comentarioComentario = new Comentario();
-        comentarioComentario.setFecha(comentario.fecha());
-        comentarioComentario.setCalificacion(comentario.calificacion());
-        comentarioComentario.setCodigoCliente(comentario.codigoCliente());
-        comentarioComentario.setCodigoNegocio(comentario.codigoNegocio()); //Este código relaciona todos los comentarios con un negocio
-        comentarioComentario.setMensaje(comentario.mensaje());
-        comentarioComentario.setRespuesta("");
-
-        comentarioRepo.save(comentarioComentario);
+        comentarioRepo.save(comentario);
 
         // Enviar correo al propietario
         EmailDTO emailDTO = new EmailDTO(
                 "Nuevo comentario",
                 "Hola " + propietario.getNombre() + "! \n\n" +
                         "Tu negocio " + negocio.getNombre() + " ha recibido un nuevo comentario. \n\n" +
-                        comentario.mensaje() + "\n\n" +
+                        registroComentarioDTO.mensaje() + "\n\n" +
                         "Ingresa a la plataforma para responderlo. \n\n" +
                         "Gracias por confiar en nosotros!",
                 propietario.getEmail()
         );
-
         emailServicio.enviarCorreo(emailDTO);
-
-
-
     }
 
     @Override

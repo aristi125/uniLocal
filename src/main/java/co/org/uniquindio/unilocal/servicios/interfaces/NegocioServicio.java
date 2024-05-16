@@ -4,6 +4,7 @@ import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
+import co.org.uniquindio.unilocal.dto.negocio.EliminacionNegocioDTO;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 
@@ -16,14 +17,13 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 
 public interface NegocioServicio {
     String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception;
 
     void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception;
 
-    void eliminarNegocio(String idNegocio) throws Exception;
+    void eliminarNegocio(EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception;
 
     Negocio buscarNegocio(String codigoNegocio) throws Exception;
 

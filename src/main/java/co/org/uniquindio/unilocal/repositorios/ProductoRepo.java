@@ -5,6 +5,5 @@ import co.org.uniquindio.unilocal.modelo.documentos.Producto;
 import java.util.List;
 public interface ProductoRepo extends MongoRepository<Producto, String> {
    List<Producto> findAll();
-    Producto findByCodigo(String codigoProducto);
 
 }

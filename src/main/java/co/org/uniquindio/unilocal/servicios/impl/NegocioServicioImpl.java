@@ -2,10 +2,10 @@ package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
-import co.org.uniquindio.unilocal.dto.cliente.DetalleClienteDTO;
 import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.EliminacionNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
@@ -21,14 +21,12 @@ import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
-import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
-import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -115,12 +113,11 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void eliminarNegocio(String idNegocio) throws Exception{
-        Optional<Negocio> negocioOptional = negocioRepo.findById(idNegocio);
-        if (negocioOptional.isEmpty()){
-            throw new Exception("No existe un negocio con el codigo: "+ idNegocio);
-        }
-        Negocio negocio = negocioOptional.get();
+    public void eliminarNegocio(EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception{
+        clienteServicio.buscarCliente(eliminacionNegocioDTO.idCliente());
+        buscarNegocio(eliminacionNegocioDTO.idNegocio());
+
+        Negocio negocio = new Negocio();
 
         if (negocio.getEstado().equals(EstadoNegocio.ACTIVO)){
             negocio.setEstado(EstadoNegocio.INACTIVO);
@@ -128,6 +125,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         else {
             throw new Exception(("No se que esta pasando"));
         }
+        negocioRepo.save(negocio);
     }
 
     @Override

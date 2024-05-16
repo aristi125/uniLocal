@@ -16,8 +16,6 @@ public record RegistroComentarioDTO(
 
     @NotBlank String codigoNegocio,
 
-    @NotBlank String mensaje,
-
-    @NotBlank String respuesta
+    @NotBlank String mensaje
 ) {
 }

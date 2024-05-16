@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoProducto;
 import co.org.uniquindio.unilocal.modelo.enumeracion.TipoProducto;
 import lombok.*;
 import org.springframework.data.annotation.Id;
@@ -23,4 +24,5 @@ public class Producto implements Serializable {
     private String nombre;
     private List<TipoProducto> tipoProducto = new ArrayList<>(); // Se inicia la variable para evitar una excepción
     private float precio;
+    private EstadoProducto estadoProducto;
 }

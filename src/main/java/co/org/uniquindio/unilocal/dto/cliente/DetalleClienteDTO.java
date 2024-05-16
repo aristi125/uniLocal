@@ -14,7 +14,6 @@ public record DetalleClienteDTO(
         @NotBlank @Length(max = 30) String nombre,
         @NotBlank String fotoPerfil,
         @NotBlank @Length(max = 30) String nickname,
-        @NotBlank @Length(min = 8) String password,
         @NotBlank @Email String email,
         @NotNull Ciudades ciudadResidencia
 ) {
