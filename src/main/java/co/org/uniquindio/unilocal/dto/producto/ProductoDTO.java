@@ -11,6 +11,9 @@ public record ProductoDTO (
     @NotBlank String codigo,
     @NotBlank @Length(max = 30) String nombre,
     @NotNull List<TipoProducto> tipoProducto,
-    @NotNull float precio
+    @NotNull float precio,
+    @NotNull String idCliente,
+    @NotNull String idNegocio
 ){
+
 }

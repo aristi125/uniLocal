@@ -9,6 +9,7 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
@@ -26,20 +27,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ComentarioServicioImpl implements ComentarioServicio {
 
-    private final ClienteRepo clienteRepo; // Validar que el cliente exista
     private final NegocioServicio negocioServicio;
     private final ComentarioRepo comentarioRepo;
     private final EmailServicio emailServicio;
+    private final ClienteServicio clienteServicio;
 
     @Override
     public void crearComentario(RegistroComentarioDTO comentario) throws Exception {
 
         Negocio negocio = negocioServicio.buscarNegocio(comentario.codigoNegocio());
-
-        Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoCliente());
-        if (clienteOptional.isEmpty()) {
-            throw new RuntimeException("No existe cliente");
-        }
+        Cliente propietario = clienteServicio.buscarCliente(comentario.codigoCliente());
 
         List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(comentario.codigoNegocio());
         Comentario comentarioComentario = new Comentario();
@@ -52,14 +49,6 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
         comentarioRepo.save(comentarioComentario);
 
-        String codigoPropietario = negocio.getCodigoCliente();
-        Optional<Cliente> propietarioOptional = clienteRepo.findById(codigoPropietario);
-        if (propietarioOptional.isEmpty()) {
-            throw new RuntimeException("No existe propietario");
-        }
-        Cliente propietario = propietarioOptional.get();
-        String email = propietario.getEmail();
-
         // Enviar correo al propietario
         EmailDTO emailDTO = new EmailDTO(
                 "Nuevo comentario",
@@ -68,7 +57,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
                         comentario.mensaje() + "\n\n" +
                         "Ingresa a la plataforma para responderlo. \n\n" +
                         "Gracias por confiar en nosotros!",
-                email
+                propietario.getEmail()
         );
 
         emailServicio.enviarCorreo(emailDTO);
@@ -79,11 +68,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
 
     @Override
     public void responderComentario(RespuestaComentarioDTO comentario) throws Exception{
-        Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoClienteReceptor());
-        if (clienteOptional.isEmpty()) {
-            throw new RuntimeException("No existe cliente receptor");
-        }
 
+        Cliente cliente = clienteServicio.buscarCliente(comentario.codigoClienteReceptor());
         Negocio negocio = negocioServicio.buscarNegocio(comentario.codigoNegocio());
 
         List<Comentario> listaComentarios = negocio.getComentarios();
@@ -98,17 +84,13 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         aux.setRespuesta(comentario.respuesta());
         comentarioRepo.save(aux);
 
-        Cliente cliente = clienteOptional.get();
-        String email = cliente.getEmail();
-        // Enviar correo al cliente
-
         EmailDTO emailDTO = new EmailDTO(
                 "Respuesta a tu comentario",
                 "Hola " + cliente.getNombre() + "! \n\n" +
                         "Tu comentario ha sido respondido. \n\n" +
                         comentario.respuesta() + "\n\n" +
                         "Gracias por confiar en nosotros!",
-                email
+                cliente.getEmail()
         );
 
         emailServicio.enviarCorreo(emailDTO);

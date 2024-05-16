@@ -1,18 +1,15 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.producto.ProductoDTO;
-import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
-import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
-import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.documentos.Producto;
-import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.ProductoRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ProductoServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -21,9 +18,16 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ProductoServicioImpl implements ProductoServicio {
     private final ProductoRepo productoRepo;
-    private final ClienteRepo clienteRepo;
+    private final ClienteServicio clienteServicio;
+    private final NegocioServicio negocioServicio;
+
+
     @Override
     public void registrarProducto( ProductoDTO productoDTO) throws Exception {
+
+        clienteServicio.buscarCliente(productoDTO.idCliente());
+        // También se debe llamar al NegocioServicio y verificar que el negocio exista
+        negocioServicio.buscarNegocio(productoDTO.idNegocio());
         Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(productoDTO.codigo()));
         if (!optionalProducto.isEmpty()) {
             throw new RuntimeException("El producto ya existe");
@@ -40,6 +44,9 @@ public class ProductoServicioImpl implements ProductoServicio {
     @Override
     public void actualizarProducto(ProductoDTO productoDTO) throws Exception {
 
+        clienteServicio.buscarCliente(productoDTO.idCliente());
+        // También se debe llamar al NegocioServicio y verificar que el negocio exista
+        negocioServicio.buscarNegocio(productoDTO.idNegocio());
         Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(productoDTO.codigo()));
 
         if (optionalProducto.isEmpty()) {
@@ -57,11 +64,15 @@ public class ProductoServicioImpl implements ProductoServicio {
         productoRepo.save(producto);
     }
 
+    // Consultar con el profesor sobre este método
     @Override
-    public void eliminarProducto(String codigoProducto) throws Exception {
+    public void eliminarProducto(ProductoDTO productoDTO) throws Exception {
 
+        clienteServicio.buscarCliente(productoDTO.idCliente());
+        // También se debe llamar al NegocioServicio y verificar que el negocio exista
+        negocioServicio.buscarNegocio(productoDTO.idNegocio());
         // Buscar el negocio por su ID
-        Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(codigoProducto));
+        Optional<Producto> optionalProducto = Optional.ofNullable(productoRepo.findByCodigo(productoDTO.codigo()));
 
         if (optionalProducto.isEmpty()) {
             throw new Exception("El producto no existe");
@@ -71,17 +82,21 @@ public class ProductoServicioImpl implements ProductoServicio {
         //productoRepo.save(producto);
         // Verificar si el usuario autenticado existe en la base de datos
 
-
         productoRepo.delete(optionalProducto.get());
 
     }
 
    @Override
-    public List<Producto> listarProductos()throws Exception {
+    public List<Producto> listarProductos(ProductoDTO productoDTO)throws Exception {
+       clienteServicio.buscarCliente(productoDTO.idCliente());
+       // También se debe llamar al NegocioServicio y verificar que el negocio exista
+       negocioServicio.buscarNegocio(productoDTO.idNegocio());
         List<Producto> productos = productoRepo.findAll();
         if(productos.isEmpty()){
             throw  new Exception("No existen historiales para este negocio");
         }
         return productos;
     }
+
+    // Obtener todos los productos de un negocio dado su Id (Hacer Metodo)
 }

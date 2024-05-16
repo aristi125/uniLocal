@@ -33,11 +33,9 @@ import java.util.List;
 @RequiredArgsConstructor
 public class ClienteController {
     private final ClienteServicio clienteServicio;
-    private final AgendaServicio agendaServicio;
     private final ComentarioServicio comentarioServicio;
     private final NegocioServicio negocioServicio;
     private final ProductoServicio productoServicio;
-    private final ReservaServicio reservaServicio;
 
     @PutMapping("/actualizar-perfil-cliente")
     public ResponseEntity<MensajeDTO<String>> actualizarCliente(@Valid @RequestBody ActualizarClienteDTO actualizarClienteDTO) throws Exception {
@@ -58,18 +56,18 @@ public class ClienteController {
 
     @PostMapping("/sitios-favoritos")
     public ResponseEntity<MensajeDTO<String>> agregarFavoritos(@Valid @RequestBody String idNegocio, String idCliente) throws Exception {
-        clienteServicio.agregarFavoritos(idNegocio, idCliente);
+        negocioServicio.agregarFavoritos(idNegocio, idCliente);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Sitio agregado a favoritos"));
     }
 
     @GetMapping("/obtener-favoritos-cliente/{idCliente}") // concatener el idCliente
     public ResponseEntity<MensajeDTO<List<FavoritoDTO>>> mostrarFavoritos(@PathVariable String idCliente) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.mostrarFavoritos(idCliente)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.mostrarFavoritos(idCliente)));
     }
 
     @DeleteMapping("eliminar-favoritos/{idNegocio}/{idCliente}")
     public ResponseEntity<MensajeDTO<String>> removerFavoritos(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
-        clienteServicio.removerFavoritos(idNegocio, idCliente);
+        negocioServicio.removerFavoritos(idNegocio, idCliente);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado de favoritos"));
     }
 
@@ -105,25 +103,25 @@ public class ClienteController {
 
     @PostMapping("/registrar-agenda")
     public ResponseEntity<MensajeDTO<String>> registroAgenda(@Valid @RequestBody RegistroAgendaDTO registroAgendaDTO) throws Exception {
-        agendaServicio.registrarAgenda(registroAgendaDTO);
+        negocioServicio.registrarAgenda(registroAgendaDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "La agenda ha sido registrada"));
     }
 
     @PutMapping("/actualizar-agenda")
     public ResponseEntity<MensajeDTO<String>> actualizarAgenda(@Valid @RequestBody RegistroAgendaDTO registroAgendaDTO) throws Exception {
-        agendaServicio.actualizarAgenda(registroAgendaDTO);
+        negocioServicio.actualizarAgenda(registroAgendaDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Agenda actualiza correctamente"));
     }
 
     @DeleteMapping("/eliminar-agenda/{codigoNegocio}")
     public ResponseEntity<MensajeDTO<String>> eliminarAgenda(@PathVariable String codigoNegocio) throws Exception {
-        agendaServicio.eliminarAgenda(codigoNegocio);
+        negocioServicio.eliminarAgenda(codigoNegocio);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Agenda eliminada satisfactoriamente"));
     }
 
     @GetMapping("/obtener-agenda")
     public ResponseEntity<MensajeDTO<DetalleAgendaDTO>> obtenerAgenda(@PathVariable String codigoNegocio) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, agendaServicio.obtenerAgenda(codigoNegocio)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.obtenerAgenda(codigoNegocio)));
     }
 
     @PutMapping("/cambiar-password/{codigoNegocio}")
@@ -196,43 +194,43 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto actualizado exitosamente"));
     }
 
-    @DeleteMapping("/eliminar-producto/{codigoProducto}")
-    public ResponseEntity<MensajeDTO<String>> eliminarProducto(@PathVariable String codigoProducto) throws Exception {
-        productoServicio.eliminarProducto(codigoProducto);
+    @DeleteMapping("/eliminar-producto")
+    public ResponseEntity<MensajeDTO<String>> eliminarProducto(@RequestBody ProductoDTO productoDTO) throws Exception {
+        productoServicio.eliminarProducto(productoDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto eliminado"));
     }
 
     @GetMapping("/listar-productos")
-    public ResponseEntity<MensajeDTO<List<Producto>>> listarProductos() throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, productoServicio.listarProductos()));
+    public ResponseEntity<MensajeDTO<List<Producto>>> listarProductos(@RequestBody ProductoDTO productoDTO) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, productoServicio.listarProductos(productoDTO)));
     }
 
     @PostMapping("/registrar-reserva")
     public ResponseEntity<MensajeDTO<String>> registrarReserva(@Valid @RequestBody DetalleReservaDTO detalleReservaDTO) throws Exception {
-        reservaServicio.registrarReserva(detalleReservaDTO);
+        negocioServicio.registrarReserva(detalleReservaDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Reserva creada satisfactoriamente"));
     }
 
     @PutMapping("/actualizar-reserva")
     public ResponseEntity<MensajeDTO<String>> actualizarReserva(@Valid @RequestBody DetalleReservaDTO detalleReservaDTO) throws Exception {
-        reservaServicio.actualizarReserva(detalleReservaDTO);
+        negocioServicio.actualizarReserva(detalleReservaDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Reserva actualizada con éxito"));
     }
 
     @GetMapping("/obtener-reserva/{idNegocio}/{idCliente}")
     public ResponseEntity<MensajeDTO<DetalleReservaDTO>> obtenerReserva(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO(false, reservaServicio.obtenerReserva(idNegocio, idCliente)));
+        return ResponseEntity.ok().body( new MensajeDTO(false, negocioServicio.obtenerReserva(idNegocio, idCliente)));
     }
 
     @DeleteMapping("/eliminar-reserva/{idNegocio}/{idCliente}")
     public ResponseEntity<MensajeDTO<String>> eliminarReserva(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
-        reservaServicio.eliminarReserva(idNegocio, idCliente);
+        negocioServicio.eliminarReserva(idNegocio, idCliente);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Reserva eliminada correctamente"));
     }
 
     @GetMapping("/listar-reservas/{idNegocio}")
-    public ResponseEntity<MensajeDTO<List<DetalleReservaDTO>>> listarReservas(@PathVariable String idNegocio) {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, reservaServicio.listarReservas(idNegocio)));
+    public ResponseEntity<MensajeDTO<List<DetalleReservaDTO>>> listarReservas(@PathVariable String idNegocio) throws Exception{
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.listarReservas(idNegocio)));
     }
 
     @GetMapping("/listar-negocio-propietario/{codigoPropietario}")

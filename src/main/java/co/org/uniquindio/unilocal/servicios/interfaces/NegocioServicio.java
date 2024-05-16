@@ -1,6 +1,10 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
+import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
+import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
@@ -43,5 +47,30 @@ public interface NegocioServicio {
     List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception;
+
+    void registrarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
+
+    void actualizarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
+
+    void eliminarAgenda(String codigoNegocio) throws Exception;
+
+    DetalleAgendaDTO obtenerAgenda(String codigoNegocio) throws Exception;
+
+    void agregarFavoritos(String idNegocio, String idCliente) throws Exception;
+
+    List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception;
+
+    void removerFavoritos(String idNegocio, String idCliente) throws Exception;
+
+    void registrarReserva(DetalleReservaDTO registroReservaDTO) throws Exception;
+
+    void actualizarReserva(DetalleReservaDTO actualizarReservaDTO) throws Exception;
+
+    DetalleReservaDTO obtenerReserva(String idNegocio, String idCliente) throws Exception;
+
+    void eliminarReserva(String idNegocio, String idCliente) throws Exception;
+
+    List<DetalleReservaDTO> listarReservas(String idNegocio) throws Exception;
+
 
 }

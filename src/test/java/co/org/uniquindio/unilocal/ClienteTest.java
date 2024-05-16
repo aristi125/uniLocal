@@ -45,15 +45,10 @@ public class ClienteTest {
     private AutentificacionServicio autentificacionServicio;
 
     @Autowired
-    private CuentaServicio cuentaServicio;
-
-    @Autowired
     private NegocioServicio negocioServicio;
 
     @Autowired
     private ReservaServicio reservaServicio;
-
-   AgendaServicio agendaServicio;
 
 
     //-------------------------Prueba unitaria de metodos en AutentificacionServicioIMPL-----------------------
@@ -166,7 +161,7 @@ public class ClienteTest {
     //@Test
     public void agregarFavoritosTest() throws Exception {
         //Agregamos un negocio a favoritos
-        clienteServicio.agregarFavoritos("Negocio1", "Cliente1");
+        negocioServicio.agregarFavoritos("Negocio1", "Cliente1");
     }
 
     /**
@@ -176,7 +171,7 @@ public class ClienteTest {
     //@Test
     public void removerFavoritosTest() throws Exception {
         //Removemos un negocio de favoritos
-        clienteServicio.removerFavoritos("Negocio1", "Cliente1");
+        negocioServicio.removerFavoritos("Negocio1", "Cliente1");
     }
 
     /**
@@ -185,7 +180,7 @@ public class ClienteTest {
     //@Test
     public void mostrarFavoritosTest() throws Exception {
         //Obtenemos la lista de favoritos de un cliente
-        List<FavoritoDTO> favoritos = clienteServicio.mostrarFavoritos("Cliente1");
+        List<FavoritoDTO> favoritos = negocioServicio.mostrarFavoritos("Cliente1");
         //Imprimimos los favoritos
         favoritos.forEach(System.out::println);
         //Verificamos que solo exista un favorito
@@ -376,8 +371,7 @@ public class ClienteTest {
                 telefonos,
                 CategoriaNegocio.HOTEL,
                 urlFotos,
-                4.5,
-                4.5,
+                new Ubicacion(12,12),
                 "Cliente1"
         );
 
@@ -476,7 +470,7 @@ public class ClienteTest {
                 "Negocio1"
         );
         //Registramos la reserva
-        reservaServicio.registrarReserva(registroReservaDTO);
+        negocioServicio.registrarReserva(registroReservaDTO);
     }
 
     /**
@@ -493,7 +487,7 @@ public class ClienteTest {
                 "Negocio1"
         );
         //Actualizamos la reserva
-        reservaServicio.actualizarReserva(actualizarReservaDTO);
+        negocioServicio.actualizarReserva(actualizarReservaDTO);
     }
 
     /**
@@ -502,7 +496,7 @@ public class ClienteTest {
     //@Test
     public void obtenerReservaTest() throws Exception {
         //Obtenemos la reserva
-        DetalleReservaDTO reserva = reservaServicio.obtenerReserva("Negocio1", "Cliente1");
+        DetalleReservaDTO reserva = negocioServicio.obtenerReserva("Negocio1", "Cliente1");
         //Imprimimos la reserva
         System.out.println(reserva);
         //Verificamos que la reserva no sea nula
@@ -515,7 +509,7 @@ public class ClienteTest {
     //@Test
     public void eliminarReservaTest() throws Exception {
         //Eliminamos la reserva
-        reservaServicio.eliminarReserva("Negocio1", "Cliente1");
+        negocioServicio.eliminarReserva("Negocio1", "Cliente1");
     }
 
     /**
@@ -524,7 +518,7 @@ public class ClienteTest {
     //@Test
     public void listarReservasTest() throws Exception {
         //Listamos las reservas
-        List<DetalleReservaDTO> reservas = reservaServicio.listarReservas("Negocio1");
+        List<DetalleReservaDTO> reservas = negocioServicio.listarReservas("Negocio1");
         //Imprimimos las reservas
         reservas.forEach(System.out::println);
         //Verificamos que solo exista una reserva
@@ -545,7 +539,7 @@ public class ClienteTest {
                 "Descripcion"
         );
         //Registramos la agenda
-        agendaServicio.registrarAgenda(registroAgendaDTO);
+        negocioServicio.registrarAgenda(registroAgendaDTO);
     }
 
     /**
@@ -560,7 +554,7 @@ public class ClienteTest {
                 "Descripcion"
         );
         //Actualizamos la agenda
-        agendaServicio.actualizarAgenda(registroAgendaDTO);
+        negocioServicio.actualizarAgenda(registroAgendaDTO);
     }
 
     /**
@@ -569,7 +563,7 @@ public class ClienteTest {
     //@Test
     public void eliminarAgendaTest() throws Exception {
         //Eliminamos la agenda
-        agendaServicio.eliminarAgenda("Negocio1");
+        negocioServicio.eliminarAgenda("Negocio1");
     }
 
     /**
@@ -578,7 +572,7 @@ public class ClienteTest {
     //@Test
     public void obtenerAgendaTest() throws Exception {
         //Obtenemos la agenda
-        DetalleAgendaDTO agenda = agendaServicio.obtenerAgenda("Negocio1");
+        DetalleAgendaDTO agenda = negocioServicio.obtenerAgenda("Negocio1");
         //Imprimimos la agenda
         System.out.println(agenda);
         //Verificamos que la agenda no sea nula

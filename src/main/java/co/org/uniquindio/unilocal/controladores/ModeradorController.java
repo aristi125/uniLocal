@@ -54,12 +54,6 @@ public class ModeradorController {
         return ResponseEntity.ok().body(new MensajeDTO<>(true, "El Usuario ha sido bloqueado"));
     }
 
-    @GetMapping("/revisar-negocio")
-    public ResponseEntity<MensajeDTO<String>> revisarNegocio(@Valid @RequestBody RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
-        moderadorServicio.revisarNegocio(revisionesModeradorDTO);
-        return ResponseEntity.ok().body( new MensajeDTO<>(true, "El Negocio ha sido revisado"));
-    }
-
     @PutMapping("/rechazar-negocio")
     public ResponseEntity<MensajeDTO<String>> rechazarNegocio(@Valid @RequestBody RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
         moderadorServicio.rechazarNegocio(revisionesModeradorDTO);

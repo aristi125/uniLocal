@@ -11,6 +11,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document("negocios")
@@ -29,15 +30,15 @@ public class Negocio implements Serializable {
     private String descripcion;
     private CategoriaNegocio categoriaNegocio;
     private Ubicacion ubicacion;
-    private List<String> imagenes;
-    private List<Horario> horarios;
-    private List<String> telefonos;
+    private List<String> imagenes = new ArrayList<>();
+    private List<Horario> horarios = new ArrayList<>();
+    private List<String> telefonos = new ArrayList<>();
     private List<Comentario> comentarios;
     private int calificaciones;
-    private List<HistorialRevision> historialRevisiones;
+    private List<HistorialRevision> historialRevisiones = new ArrayList<>();
     private String codigoCliente;
     private EstadoNegocio estado;
-    private List<Reserva> listaReservas;
+    private List<Reserva> listaReservas = new ArrayList<>();
     private Agenda agenda;
 
 }

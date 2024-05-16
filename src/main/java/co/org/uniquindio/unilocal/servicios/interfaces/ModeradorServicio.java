@@ -16,7 +16,6 @@ public interface ModeradorServicio  {
     List<RevisarComentariosDTO> revisarComentarios(String codigo)throws Exception;
     List<ItemNegociosRevisionDTO>listarRevisiones(EstadoNegocio estadoNegocio)throws Exception;
     void bloquearUsuario(String codigo)throws Exception;
-    void revisarNegocio(RevisionesModeradorDTO revisionesModeradorDTO)throws Exception;
     void rechazarNegocio(RevisionesModeradorDTO revisionesModeradorDTO)throws Exception;
     void aprobarNegocio(RevisionesModeradorDTO revisionesModeradorDTO)throws Exception;
     void enviarLinkRecuperacion(String email)throws Exception;

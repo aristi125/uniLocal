@@ -7,10 +7,7 @@ import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Cuenta;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
-import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
-import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoCuenta;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
+import co.org.uniquindio.unilocal.modelo.enumeracion.*;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
@@ -31,13 +28,11 @@ import java.util.Optional;
 public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepo clienteRepo;
-    //private final NegocioRepo negocioRepo;
-    private final NegocioServicio negocioServicio;
     private final JWTUtils jwtUtils;
-
 
     @Override
     public String registrarCliente(RegistroClienteDTO registroClienteDTO) throws Exception {
+
         if( existeEmail(registroClienteDTO.email())){
             throw new Exception("El correo ya se encuentra registrado");
         }
@@ -103,15 +98,33 @@ public class ClienteServicioImpl implements ClienteServicio {
     public DetalleClienteDTO obtenerCliente(String idCuenta) throws Exception {
         //Buscamos el cliente que se quiere eliminar
         Optional<Cliente> optionalCliente = clienteRepo.findById( idCuenta );
-        //Si no se encontró el cliente, lanzamos una excepción
         if(optionalCliente.isEmpty()){
             throw new Exception("No se encontró el cliente a con el id "+idCuenta);
         }
-        //Obtenemos el cliente
         Cliente cliente = optionalCliente.get();
-        //Retornamos el cliente en formato DTO
+
+        if(cliente.getEstado() == EstadoCuenta.INACTIVO || cliente.getEstado() == EstadoCuenta.BLOQUEADO){
+            throw  new Exception("El cliente no se encuentra en uso");
+        }
+
         return new DetalleClienteDTO(cliente.getCodigo(), cliente.getNombre(),
                 cliente.getFotoPerfil(), cliente.getNickname(), cliente.getPassword(), cliente.getEmail(), cliente.getCiudad());
+    }
+
+    @Override
+    public Cliente buscarCliente(String idCuenta) throws Exception {
+        //Buscamos el cliente que se quiere eliminar
+        Optional<Cliente> optionalCliente = clienteRepo.findById( idCuenta );
+        if(optionalCliente.isEmpty()){
+            throw new Exception("No se encontró el cliente a con el id "+idCuenta);
+        }
+        Cliente cliente = optionalCliente.get();
+
+        if(cliente.getEstado() == EstadoCuenta.INACTIVO || cliente.getEstado() == EstadoCuenta.BLOQUEADO){
+            throw  new Exception("El cliente no se encuentra en uso");
+        }
+
+        return cliente;
     }
 
     @Override
@@ -119,6 +132,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         //Buscamos el cliente que se quiere eliminar
         Optional<Cliente> optionalCliente = clienteRepo.findById( idCuenta );
         //Si no se encontró el cliente, lanzamos una excepción
+
         if(optionalCliente.isEmpty()){
             throw new Exception("No se encontró el cliente a eliminar");
         }
@@ -141,63 +155,6 @@ public class ClienteServicioImpl implements ClienteServicio {
                     cliente.getFotoPerfil(),cliente.getEmail(), cliente.getCiudad()));
         }
         return items;
-    }
-
-
-    @Override
-    public void agregarFavoritos(String idNegocio, String idCliente) throws Exception{
-
-        Negocio negocio = negocioServicio.buscarNegocio(idNegocio);
-
-        Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
-        if (optionalCliente.isEmpty()) {
-            throw new Exception("No existe el cliente con el ID " + idCliente);
-        }
-        Cliente cliente = optionalCliente.get();
-
-        cliente.getAgregarFavoritos().add(negocio);
-
-        clienteRepo.save(cliente);
-    }
-
-    @Override
-    public List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception{
-        Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
-        if (optionalCliente.isEmpty()) {
-            throw new Exception("No existe el cliente con el ID " + idCliente);
-        }
-        Cliente cliente = optionalCliente.get();
-        List<Negocio> favoritoCliente = cliente.getAgregarFavoritos();
-        List<FavoritoDTO> favoritos = new ArrayList<>();
-        Negocio negocio = null;
-        FavoritoDTO favoritoDTO = null;
-        for (Negocio favorito : favoritoCliente) {
-            negocio = negocioServicio.buscarNegocio(favorito.getCodigo());
-            favoritoDTO = new FavoritoDTO(
-                    negocio.getCodigo(),
-                    negocio.getImagenes().get(0),
-                    negocio.getNombre(),
-                    negocio.getUbicacion()
-            );
-            favoritos.add(favoritoDTO);
-        }
-        return favoritos;
-    }
-
-    @Override
-    public void removerFavoritos(String idNegocio, String idCliente) throws Exception{
-
-        Negocio negocio = negocioServicio.buscarNegocio(idNegocio);
-
-        Optional<Cliente> optionalCliente = clienteRepo.findById(idCliente);
-        if (optionalCliente.isEmpty()) {
-            throw new Exception("No existe el cliente con el ID " + idCliente);
-        }
-        Cliente cliente = optionalCliente.get();
-
-        cliente.getAgregarFavoritos().remove(negocio);
-
-        clienteRepo.save(cliente);
     }
 
     @Override

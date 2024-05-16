@@ -6,6 +6,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document("productos")
@@ -20,6 +21,6 @@ public class Producto implements Serializable {
     @EqualsAndHashCode.Include
     private String codigo;
     private String nombre;
-    private List<TipoProducto> tipoProducto;
+    private List<TipoProducto> tipoProducto = new ArrayList<>(); // Se inicia la variable para evitar una excepción
     private float precio;
 }

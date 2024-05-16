@@ -36,6 +36,8 @@ public class ModeradorServicioImpl implements ModeradorServicio {
     private final ModeradorRepo moderadorRepo;
     private final JWTUtils jwtUtils;
 
+    // Cambiar los repos por servicios
+
 
     @Override
     public List<HistorialRevision> obtenerHistorialRevisiones(String idNegocio) throws Exception{
@@ -99,10 +101,6 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         clienteRepo.save(cliente);
     }
 
-    @Override
-    public void revisarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
-
-    }
 
     @Override
     public void rechazarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {

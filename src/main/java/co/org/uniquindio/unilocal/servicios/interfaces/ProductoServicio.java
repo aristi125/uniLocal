@@ -2,7 +2,6 @@ package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.producto.ProductoDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Producto;
-import co.org.uniquindio.unilocal.repositorios.ProductoRepo;
 
 import java.util.List;
 public interface ProductoServicio {
@@ -11,8 +10,8 @@ public interface ProductoServicio {
 
     void actualizarProducto(ProductoDTO productoDTO)throws Exception;
 
-    void eliminarProducto(String codigoProducto)throws Exception;
+    void eliminarProducto(ProductoDTO productoDTO)throws Exception;
 
-    List<Producto> listarProductos()throws Exception;
+    List<Producto> listarProductos(ProductoDTO productoDTO)throws Exception;
 
 }
