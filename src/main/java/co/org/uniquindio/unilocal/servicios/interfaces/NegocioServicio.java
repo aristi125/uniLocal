@@ -1,16 +1,16 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
-import co.org.uniquindio.unilocal.dto.negocio.EliminacionNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
+import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 
-import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
@@ -29,7 +29,7 @@ public interface NegocioServicio {
 
     List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception;
 
-    void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws IOException;
+    void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws Exception;
 
     List<Negocio> listarNegociosEstado(EstadoNegocio estadoNegocio) throws Exception;
 
@@ -72,5 +72,11 @@ public interface NegocioServicio {
 
     List<DetalleReservaDTO> listarReservas(String idNegocio) throws Exception;
 
+    List<HistorialRevision> obtenerHistorialRevisiones(String idNegocio) throws Exception;
 
+    void rechazarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception;
+
+    void aprobarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception;
+
+    Cliente obtenerClienteNegocio (String idNegocio) throws Exception;
 }

@@ -15,7 +15,8 @@ public interface NegocioRepo extends MongoRepository<Negocio, String> {
     Negocio findByCodigo(String codigo);
     List<Negocio> findAllByCodigoCliente(String codigoCliente);
     List<Negocio> findAllByEstado(EstadoNegocio estadoNegocio);
-    List<Negocio> findByCategoriaNegocio(CategoriaNegocio categoria);
+    List<Negocio> findAllByCategoriaNegocio(CategoriaNegocio categoriaNegocio);
     List<Negocio> findByEstado(EstadoNegocio estadoNegocio);
-    List<Negocio> findByTelefonos(List<String> telefono);
+    List<Negocio> findAllByNombre(String nombre);
+
 }

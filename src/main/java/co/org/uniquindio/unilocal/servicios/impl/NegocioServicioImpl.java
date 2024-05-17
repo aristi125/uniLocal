@@ -1,15 +1,15 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
+import co.org.uniquindio.unilocal.dto.EmailDTO;
+import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.EliminacionNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
+import co.org.uniquindio.unilocal.modelo.documentos.Moderador;
 import co.org.uniquindio.unilocal.modelo.entidades.Agenda;
 import co.org.uniquindio.unilocal.modelo.entidades.Reserva;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
@@ -17,6 +17,8 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioModerador;
 import co.org.uniquindio.unilocal.repositorios.HistorialRevisionRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.ModeradorServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -43,7 +45,9 @@ import java.util.Optional;
 public class NegocioServicioImpl implements NegocioServicio {
 
     private final ClienteServicio clienteServicio;
+    private final ModeradorServicio moderadorServicio;
     private final NegocioRepo negocioRepo;
+    private final EmailServicio emailServicio;
     private final HistorialRevisionRepo historialRepo;
 
 
@@ -80,18 +84,8 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception {
         // Verificar si el usuario autenticado existe en la base de datos
-
         clienteServicio.obtenerCliente(actualizarNegocioDTO.codigoCliente());
-
-        // Buscar el negocio por su ID
-        Optional<Negocio> optionalNegocio = negocioRepo.findById(actualizarNegocioDTO.id());
-
-        if (optionalNegocio.isEmpty()) {
-            throw new Exception("El usuario no existe");
-        }
-
-        Negocio negocio = optionalNegocio.get();
-
+        Negocio negocio = buscarNegocio(actualizarNegocioDTO.id());
         // Verificar si el usuario autenticado es propietario del negocio
         if (!negocio.getCodigoCliente().equals(actualizarNegocioDTO.codigoCliente())) {
             throw new Exception("El negocio no pertenece al usuario autenticado");
@@ -183,8 +177,7 @@ public class NegocioServicioImpl implements NegocioServicio {
             throw new Exception("No hay negocios por eliminar");
         }
         for (HistorialRevision revision : revisionOptional) {
-            Optional<Negocio> negocioOptional = negocioRepo.findById(revision.getCodigoNegocio());
-            Negocio negocio = negocioOptional.get();
+            Negocio negocio = buscarNegocio(revision.getCodigoNegocio());
             negocio.setEstado(EstadoNegocio.INACTIVO);
             negocioRepo.save(negocio);
         }
@@ -192,7 +185,10 @@ public class NegocioServicioImpl implements NegocioServicio {
 
 
     @Override
-    public void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws IOException {
+    public void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws Exception {
+        Cliente cliente = clienteServicio.buscarCliente(reporteDTO.codigoPropietario());
+        buscarNegocio(reporteDTO.codigoNegocio());
+
         PDDocument document = null;
         try {
             // Crear un nuevo documento PDF
@@ -206,11 +202,17 @@ public class NegocioServicioImpl implements NegocioServicio {
                 contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
                 contentStream.newLineAtOffset(100, 700);
                 // Agregar los datos del ReporteDTO al PDF
+                contentStream.showText("Fecha: " + (LocalDateTime.now()));
+                contentStream.newLine();
+                contentStream.showText("Código Propietario: " + cliente.getCodigo());
+                contentStream.newLine();
+                contentStream.showText("Nombre Propietario: " + cliente.getNombre());
+                contentStream.newLine();
+                contentStream.showText("Email Propietario: " + cliente.getEmail());
+                contentStream.newLine();
                 contentStream.showText("Código de Negocio: " + reporteDTO.codigoNegocio());
                 contentStream.newLine();
                 contentStream.showText("Nombre del Negocio: " + reporteDTO.nombreNegocio());
-                contentStream.newLine();
-                contentStream.showText("Fecha: " + reporteDTO.fecha());
                 contentStream.newLine();
                 contentStream.showText("Número de Resevas: " + reporteDTO.numReservas());
                 contentStream.endText();
@@ -259,7 +261,7 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception {
 
-        List<Negocio> negocios = negocioRepo.findAll();
+        List<Negocio> negocios = negocioRepo.findAllByNombre(nombre);
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con el nombre " + nombre);
@@ -287,9 +289,9 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
+        public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
 
-        List<Negocio> negocios = negocioRepo.findByCategoriaNegocio(categoria);
+        List<Negocio> negocios = negocioRepo.findAllByCategoriaNegocio(categoria);
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con la categoria " + categoria);
@@ -523,8 +525,6 @@ public class NegocioServicioImpl implements NegocioServicio {
                 return;
             }
         }
-
-
     }
 
     @Override
@@ -576,8 +576,89 @@ public class NegocioServicioImpl implements NegocioServicio {
             respuesta.add(new DetalleReservaDTO(reserva.getFecha(), reserva.getHora(), reserva.getCantidadPersonas(), reserva.getCodigoCliente(), reserva.getCodigoNegocio()));
         }
         return respuesta;
-
-
     }
 
+    @Override
+    public List<HistorialRevision> obtenerHistorialRevisiones(String idNegocio) throws Exception{
+        buscarNegocio(idNegocio);
+        List<HistorialRevision> historiales = negocioRepo.findByCodigo(idNegocio).getHistorialRevisiones();
+        if(historiales.isEmpty()){
+            throw  new Exception("No existen historiales para este negocio");
+        }
+        return historiales;
+    }
+
+
+    @Override
+    public void rechazarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
+        Negocio negocio = buscarNegocio(revisionesModeradorDTO.codigoNegocio());
+
+        HistorialRevision revision = new HistorialRevision();
+
+        revision.setDescripcion(revisionesModeradorDTO.descripcion());
+        revision.setCodigoModerador(revisionesModeradorDTO.codigoModerador());
+        revision.setCodigoNegocio(revisionesModeradorDTO.codigoNegocio());
+        revision.setEstado(EstadoNegocioModerador.RECHAZADO);
+
+
+        negocio.setEstado(EstadoNegocio.INACTIVO);
+        negocio.getHistorialRevisiones().add(revision);
+
+        Cliente cliente = obtenerClienteNegocio(negocio.getCodigo());
+
+        EmailDTO emailDTO = new EmailDTO(
+                "Negocio Rechazado",
+                "Hola " + cliente.getNombre() + "! \n\n" +
+                        "Su negocio : "+negocio.getNombre()+"\n\n"+
+                        "Identificado con: "+negocio.getCodigo()+"\n\n" +
+                        "Fue rechazado debido a que no cumple con nuestras politicas" + "\n\n" +
+                        "Por favor haz cambios y vuelve a hacer la solicitud antes de 5 dias habiles" + "\n\n" +
+                        "Si se trata de un error, por favor comuníquese vía correo para solucionarlo. \n\n" +
+                        "Gracias por confiar en nosotros!",
+                cliente.getEmail()
+        );
+        emailServicio.enviarCorreo(emailDTO);
+        negocioRepo.save(negocio);
+    }
+
+    @Override
+    public void aprobarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
+
+        Negocio negocio = buscarNegocio(revisionesModeradorDTO.codigoNegocio());
+
+        HistorialRevision revision = new HistorialRevision();
+
+        revision.setDescripcion(revisionesModeradorDTO.descripcion());
+        revision.setCodigoModerador(revisionesModeradorDTO.codigoModerador());
+        revision.setCodigoNegocio(revisionesModeradorDTO.codigoNegocio());
+        revision.setEstado(EstadoNegocioModerador.APROBADO);
+
+
+        negocio.setEstado(EstadoNegocio.ACTIVO);
+        negocio.getHistorialRevisiones().add(revision);
+
+        Cliente cliente = obtenerClienteNegocio(negocio.getCodigo());
+
+        EmailDTO emailDTO = new EmailDTO(
+                "Negocio Aceptado",
+                "Hola " + cliente.getNombre() + "! \n\n" +
+                        "Su negocio : "+negocio.getNombre()+"\n\n"+
+                        "Identificado con: "+negocio.getCodigo()+"\n\n" +
+                        "Fue aceptado debido a que cumple con nuestras politicas" + "\n\n" +
+                        "Felicidades!" + "\n\n" +
+                        "Si se trata de un error, porfavor comuniquese via correo para solucionarlo. \n\n" +
+                        "Gracias por confiar en nosotros!",
+                cliente.getEmail()
+        );
+        emailServicio.enviarCorreo(emailDTO);
+        negocioRepo.save(negocio);
+    }
+
+
+    @Override
+    public Cliente obtenerClienteNegocio (String idNegocio) throws Exception {
+        Negocio negocio = buscarNegocio(idNegocio);
+
+        return clienteServicio.buscarCliente(negocio.getCodigoCliente());
+    }
 }

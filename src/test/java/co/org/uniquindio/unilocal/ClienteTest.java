@@ -274,12 +274,12 @@ public class ClienteTest {
      * Test que prueba el metodo de crear comentario
      */
     //@Test
-    public void crearComentarioTest() throws Exception {
-        //Creamos un comentario
-        RegistroComentarioDTO registroComentarioDTO = new RegistroComentarioDTO(LocalDateTime.now(), 5, "Cliente1", "Negocio1", "Excelente", "" );
-        //Creamos el comentario
-        comentarioServicio.crearComentario(registroComentarioDTO);
-    }
+//    public void crearComentarioTest() throws Exception {
+//        //Creamos un comentario
+//        RegistroComentarioDTO registroComentarioDTO = new RegistroComentarioDTO( 5, "Cliente1", "Negocio1", "Excelente", "" );
+//        //Creamos el comentario
+//        comentarioServicio.crearComentario(registroComentarioDTO);
+//    }
 
     /**
      * Test que prueba el metodo de responder comentario
@@ -446,13 +446,13 @@ public class ClienteTest {
      * Test que prueba el metodo de generar pdf
      */
     //@Test
-    public void generarPDFTest() throws Exception {
-        LocalDateTime fecha = LocalDateTime.of(2024, 4, 18, 15, 30, 45);
-        //Creamos un objeto de tipo ReporteDTO
-        ReporteDTO reporteDTO = new ReporteDTO("Negocio1", "Hotel Premium",fecha,4);
-        //Generamos el pdf
-        negocioServicio.generarPDF(reporteDTO, "rutaArchivo");
-    }
+//    public void generarPDFTest() throws Exception {
+//        LocalDateTime fecha = LocalDateTime.of(2024, 4, 18, 15, 30, 45);
+//        //Creamos un objeto de tipo ReporteDTO
+//        ReporteDTO reporteDTO = new ReporteDTO(""""Negocio1", "Hotel Premium",);
+//        //Generamos el pdf
+//        negocioServicio.generarPDF(reporteDTO, "rutaArchivo");
+//    }
 
 
     //-------------------------Prueba unitaria de metodos en ReservaServicioIMPL-----------------------

@@ -73,9 +73,9 @@ public class ProductoServicioImpl implements ProductoServicio {
        clienteServicio.buscarCliente(productoDTO.idCliente());
        // También se debe llamar al NegocioServicio y verificar que el negocio exista
        negocioServicio.buscarNegocio(productoDTO.idNegocio());
-        List<Producto> productos = productoRepo.findAll();
+        List<Producto> productos = productoRepo.findByCodigoNegocio(productoDTO.idNegocio());
         if(productos.isEmpty()){
-            throw  new Exception("No existen historiales para este negocio");
+            throw  new Exception("No existen productos para este negocio");
         }
         return productos;
     }

@@ -113,11 +113,10 @@ public class ClienteServicioImpl implements ClienteServicio {
         clienteRepo.save(cliente);
     }
 
-    // Ver qué validaciones se podrías agregar en este método
     @Override
     public List<ItemDetalleClienteDTO> listarClientes( ) {
         //Obtenemos todos los clientes de la base de datos
-        List<Cliente> clientes = clienteRepo.findAll();
+        List<Cliente> clientes = clienteRepo.findAllByEstado(EstadoCuenta.ACTIVO);
         //Creamos una lista de DTOs de clientes
         List<ItemDetalleClienteDTO> items = new ArrayList<>();
         //Recorremos la lista de clientes y por cada uno creamos un DTO y lo agregamos a la lista
@@ -143,6 +142,8 @@ public class ClienteServicioImpl implements ClienteServicio {
                         "Gracias por confiar en nosotros!",
                 linkRecuperacionDTO.email()
         );
+
+        emailServicio.enviarCorreo(emailDTO);
 
     }
 

@@ -6,4 +6,5 @@ import java.util.List;
 public interface ProductoRepo extends MongoRepository<Producto, String> {
    List<Producto> findAll();
 
+    List<Producto> findByCodigoNegocio(String codigoNegocio);
 }

@@ -1,6 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.comentario.*;
+import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 
 import java.util.List;
 
@@ -12,5 +14,6 @@ public interface ComentarioServicio {
     List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception;
 
     int calcularPromedioCalificaciones(String codigoNegocio) throws Exception;
-    
+
+    List<Comentario> listarComentariosTipoNegocio(CategoriaNegocio categoriaNegocio) throws Exception;
 }

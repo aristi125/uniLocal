@@ -8,8 +8,6 @@ import java.time.LocalDateTime;
 //esta clase es para registrar un comentario
 public record RegistroComentarioDTO(
 
-    @NotNull LocalDateTime fecha,
-
     @NotNull int calificacion,
 
     @NotBlank String codigoCliente,

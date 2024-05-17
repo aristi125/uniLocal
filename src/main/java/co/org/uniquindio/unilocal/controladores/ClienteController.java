@@ -177,8 +177,8 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocio(codigoNegocio)));
     }
 
-    @PostMapping("/generar.PDF/{rutaArchivo}")
-    public ResponseEntity<MensajeDTO<String>> generarPDF(@Valid @RequestBody ReporteDTO reporteDTO, @PathVariable String rutaArchivo) throws IOException {
+    @PostMapping("/generar-PDF")
+    public ResponseEntity<MensajeDTO<String>> generarPDF(@Valid @RequestBody ReporteDTO reporteDTO, @Valid String rutaArchivo) throws Exception {
         negocioServicio.generarPDF(reporteDTO, rutaArchivo);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "PDF generado exitosamente"));
     }

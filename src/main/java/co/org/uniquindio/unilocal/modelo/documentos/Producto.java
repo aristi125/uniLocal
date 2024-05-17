@@ -25,4 +25,5 @@ public class Producto implements Serializable {
     private List<TipoProducto> tipoProducto = new ArrayList<>(); // Se inicia la variable para evitar una excepción
     private float precio;
     private EstadoProducto estadoProducto;
+    private String codigoNegocio;
 }

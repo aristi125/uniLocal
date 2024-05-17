@@ -6,6 +6,7 @@ import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
@@ -17,6 +18,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -37,10 +39,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         Cliente propietario = clienteServicio.buscarCliente(registroComentarioDTO.codigoCliente());
         Negocio negocio = negocioServicio.buscarNegocio(registroComentarioDTO.codigoNegocio());
 
-        // consultar sobre esta línea
-        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(registroComentarioDTO.codigoNegocio());
         Comentario comentario = new Comentario();
-        comentario.setFecha(registroComentarioDTO.fecha());
+        comentario.setFecha(LocalDateTime.now());
         comentario.setCalificacion(registroComentarioDTO.calificacion());
         comentario.setCodigoCliente(registroComentarioDTO.codigoCliente());
         comentario.setCodigoNegocio(registroComentarioDTO.codigoNegocio()); //Este código relaciona todos los comentarios con un negocio
@@ -122,12 +122,27 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         if (listaComentarios.isEmpty()) {
             throw new Exception("No hay comentarios");
         }
-
         int suma = 0;
         for (Comentario c : listaComentarios) {
             suma += c.getCalificacion();
         }
         return suma / listaComentarios.size();
+    }
 
+    @Override
+    public List<Comentario> listarComentariosTipoNegocio(CategoriaNegocio categoriaNegocio) throws Exception {
+        List<ItemListaComentariosDTO> negocio = negocioServicio.buscarNegocioCategoria(categoriaNegocio);
+        Cliente cliente = clienteServicio.buscarCliente();
+
+        // Obtenemos todos los tipos de negocio de la enumeración CategoriaNegocio
+        CategoriaNegocio[] tiposNegocio = CategoriaNegocio.values();
+
+        List<ItemDetalleTipoNegocioDTO> items = new ArrayList<>();
+
+        for (CategoriaNegocio tipo : tiposNegocio) {
+            items.add(new ItemDetalleTipoNegocioDTO(tipo.name(), tipo.getNombre()));
+        }
+
+        return items;
     }
 }
