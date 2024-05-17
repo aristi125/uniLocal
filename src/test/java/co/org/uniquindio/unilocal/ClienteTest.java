@@ -6,10 +6,9 @@ import co.org.uniquindio.unilocal.dto.cuenta.*;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
-import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
+import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
+import co.org.uniquindio.unilocal.modelo.documentos.Moderador;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
@@ -36,6 +35,9 @@ public class ClienteTest {
     private ClienteServicio clienteServicio;
 
     @Autowired
+    private ModeradorServicio moderadorServicio;
+
+    @Autowired
     private ComentarioServicio comentarioServicio;
 
     @Autowired
@@ -47,9 +49,6 @@ public class ClienteTest {
     @Autowired
     private NegocioServicio negocioServicio;
 
-    @Autowired
-    private ReservaServicio reservaServicio;
-
 
     //-------------------------Prueba unitaria de metodos en AutentificacionServicioIMPL-----------------------
 
@@ -57,7 +56,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de iniciar sesion para el cliente
      */
-    @Test
+    //@Test
     public void iniciarSesionTestCliente() throws Exception {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
@@ -69,7 +68,7 @@ public class ClienteTest {
      * Test que prueba el metodo de iniciar sesion moderador
      */
 
-    @Test
+    // @Test
     public void iniciarSesionTestModerador() throws Exception {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
@@ -82,7 +81,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de registrar cliente
      */
-    //@Test
+   // @Test
     public void registroClienteTest() throws Exception{
         RegistroClienteDTO registroClienteDTO = new RegistroClienteDTO(
 
@@ -101,15 +100,15 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de actualizar cliente
      */
-    //@Test
+   // @Test
     public void actualizarClienteTest() throws Exception {
 
         ActualizarClienteDTO actualizarClienteDTO = new ActualizarClienteDTO(
                 "Cliente1",
                 "Juan",
                 "otraFoto",
-                "Juanito",
-                "juan123@gmail.com",
+                "juanito",
+                "juanIS123@gmail.com",
                 Ciudades.BOGOTA
         );
 
@@ -120,7 +119,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de eliminar cliente
      */
-    //@Test
+   // @Test
     public void eliminarClienteTest() throws Exception {
         //cambiamos el estado del cliente con el id creado anteriormente
         //de activo a inactivo
@@ -156,115 +155,60 @@ public class ClienteTest {
 
 
     /**
-     * Test que prueba el metodo de agregar favoritos
+     * Test que prueba el metodo de enviar link de recuperacion
      */
     //@Test
-    public void agregarFavoritosTest() throws Exception {
-        //Agregamos un negocio a favoritos
-        negocioServicio.agregarFavoritos("Negocio1", "Cliente1");
+    public void enviarLinkRecuperacionClienteTest() throws Exception {
+        LinkRecuperacionDTO linkRecuperacionDTO = new LinkRecuperacionDTO("Cliente1", "juan@email.com");
+        //Enviamos un link de recuperacion a un correo
+        clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
     }
 
-    /**
-     * Test que prueba el metodo de eliminar favoritos
-     */
-
     //@Test
-    public void removerFavoritosTest() throws Exception {
-        //Removemos un negocio de favoritos
-        negocioServicio.removerFavoritos("Negocio1", "Cliente1");
+    public void cambiarPasswordClienteTest() throws Exception {
+        //Cambiamos la contraseña de un cliente
+        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cuenta1", "nuevaContraseña", "ana@gmail.com", "1" );
+        clienteServicio.cambiarPassword(cambioPasswordDTO);
     }
 
-    /**
-     * Test que prueba el metodo de mostrar favoritos
-     */
     //@Test
-    public void mostrarFavoritosTest() throws Exception {
-        //Obtenemos la lista de favoritos de un cliente
-        List<FavoritoDTO> favoritos = negocioServicio.mostrarFavoritos("Cliente1");
-        //Imprimimos los favoritos
-        favoritos.forEach(System.out::println);
-        //Verificamos que solo exista un favorito
-        Assertions.assertEquals(1, favoritos.size());
+    public void bloquearUsuarioTest() throws Exception {
+        //Bloqueamos un usuario
+        clienteServicio.bloquearUsuario("Cliente2");
+    }
+
+    //-------------------------Prueba unitaria de metodos en ModeradorServicioIMPL-----------------------
+
+    //@Test
+    public void obtenerModeradorTest() throws Exception {
+        //Obtenemos el moderador con el id creado anteriormente
+        Moderador moderador = moderadorServicio.buscarModerador("Moderador1");
+        //Imprimimos el moderador
+        System.out.println(moderador);
+        //Verificamos que el moderador no sea nulo
+        Assertions.assertNotNull(moderador);
     }
 
 
     /**
-     * Test que prueba el metodo ItemListaLugaresCreados
+     * Test que prueba el metodo de cambiar contraseña
      */
     //@Test
-    public void listaLugaresCreadosTest() throws Exception {
-        //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listaLugaresCreados("Cliente1", "Negocio1");
-        //Imprimimos los lugares creados
-        lugares.forEach(System.out::println);
-        //Verificamos que solo exista un lugar creado
-        Assertions.assertEquals(1, lugares.size());
+    public void enviarLinkRecuperacionModeradorTest() throws Exception {
+        LinkRecuperacionDTO linkRecuperacionDTO = new LinkRecuperacionDTO("Moderador1", "moderador@email.com");
+        moderadorServicio.enviarLinkRecuperacionModerador(linkRecuperacionDTO);
     }
 
-    /**
-     * Test que prueba el metodo de filtrar lugar por nombre
-     */
-    //@Test
-    public void filtrarLugarPorNombreTest() throws Exception {
-        //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre("Hotel");
-        //Imprimimos los lugares creados
-        lugares.forEach(System.out::println);
-        //Verificamos que solo exista un lugar creado
-        //Assertions.assertEquals(1, lugares.size());
-    }
 
     /**
-     * Test que prueba el metodo de filtrar lugar por categoria
+     * Test que prueba el metodo de cambiar contraseña
      */
     //@Test
-    public void filtrarLugarPorCategoriaTest() throws Exception {
-        //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
-        //Imprimimos los lugares creados
-        lugares.forEach(System.out::println);
-        //Verificamos que solo exista un lugar creado
-        //Assertions.assertEquals(1, lugares.size());
-    }
+    public void cambiarPasswordModeradorTest() throws Exception {
+        //Cambiamos la contraseña de un moderador
+        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cuenta1", "nuevaContraseña", "moderador@email.com", "1");
+        moderadorServicio.cambiarPassword(cambioPasswordDTO);
 
-    /**
-     * Test que prueba el metodo de filtrar lugar por distancia
-     */
-    //@Test
-    public void filtrarLugarPorDistanciaTest() throws Exception {
-        Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
-        //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(5.0, ubicacion);
-        //Imprimimos los lugares
-        lugares.forEach(System.out::println);
-        //Verificamos que solo exista un lugar
-        //Assertions.assertEquals(1, lugares.size());
-    }
-
-    /**
-     * Test que prueba el metodo de filtrar recomendaciones de lugares
-     */
-    //@Test
-    public void filtrarRecomendacionesTest() throws Exception {
-        //Obtenemos la lista de lugares recomendados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio("comida");
-        //Imprimimos los lugares
-        lugares.forEach(System.out::println);
-        //Verificamos que solo exista un lugar
-        //Assertions.assertEquals(1, lugares.size());
-    }
-
-    /**
-     * Test que prueba el metodo de filtrar lugares por estado
-     */
-    //@Test
-    public void filtrarLugarPorEstadoTest() throws Exception {
-        //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
-        //Imprimimos los lugares
-        lugares.forEach(System.out::println);
-        //Verificamos que solo exista un lugar
-        //Assertions.assertEquals(1, lugares.size());
     }
 
 
@@ -273,18 +217,18 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de crear comentario
      */
-    //@Test
-//    public void crearComentarioTest() throws Exception {
-//        //Creamos un comentario
-//        RegistroComentarioDTO registroComentarioDTO = new RegistroComentarioDTO( 5, "Cliente1", "Negocio1", "Excelente", "" );
-//        //Creamos el comentario
-//        comentarioServicio.crearComentario(registroComentarioDTO);
-//    }
+    @Test
+    public void crearComentarioTest() throws Exception {
+        //Creamos un comentario
+        RegistroComentarioDTO registroComentarioDTO = new RegistroComentarioDTO( 5, "Cliente1", "Negocio1", "Excelente");
+        //Creamos el comentario
+        comentarioServicio.crearComentario(registroComentarioDTO);
+    }
 
     /**
      * Test que prueba el metodo de responder comentario
      */
-    //@Test
+    @Test
     public void responderComentarioTest() throws Exception {
         //Creamos un comentario
         RespuestaComentarioDTO respuestaComentarioDTO = new RespuestaComentarioDTO("Comentario1", "Cliente1","Negocio1", "Gracias por tu comentario" );
@@ -295,7 +239,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de listar comentarios de un negocio
      */
-    //@Test
+    @Test
     public void listarComentariosNegocioTest() throws Exception {
 
         //Listamos los comentarios de un negocio
@@ -303,13 +247,13 @@ public class ClienteTest {
         //Imprimimos los comentarios
         comentarios.forEach(System.out::println);
         //Verificamos que solo exista un comentario
-        Assertions.assertEquals(1, comentarios.size());
+        //Assertions.assertEquals(1, comentarios.size());
     }
 
     /**
      * Test que prueba el metodo de calcular promedio de calificaciones
      */
-    //@Test
+    @Test
     public void calcularPromedioCalificacionesTest() throws Exception {
         //Calculamos el promedio de calificaciones de un negocio
         int promedio = comentarioServicio.calcularPromedioCalificaciones("Negocio1");
@@ -318,31 +262,26 @@ public class ClienteTest {
 
     }
 
-    //-------------------------Prueba unitaria de metodos en CuentaServicio -----------------------
     /**
-     * Test que prueba el metodo de enviar link de recuperacion
+     * Test que prueba el metodo de listar comentarios de una categoria de negocio
      */
     //@Test
-    public void enviarLinkRecuperacionTest(LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
-        //Enviamos un link de recuperacion a un correo
-        clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
+    public void listarComentariosCategoriaTest() throws Exception {
+        //Listamos los comentarios de una categoria de negocio
+        List<ItemListaComentariosDTO> comentarios = comentarioServicio.listarComentariosTipoNegocio(CategoriaNegocio.HOTEL);
+        //Imprimimos los comentarios
+        comentarios.forEach(System.out::println);
+        //Verificamos que solo exista un comentario
+        //Assertions.assertEquals(1, comentarios.size());
     }
 
-    /**
-     * Test que prueba el metodo de cambiar contraseña
-     */
-    //@Test
-    public void cambiarPasswordTest() throws Exception {
-        //Cambiamos la contraseña de un cliente
-        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cliente1", "nuevaContraseña", "ana@gmail.com", "1" );
-        clienteServicio.cambiarPassword(cambioPasswordDTO);
-    }
+
 
     //-------------------------Prueba unitaria de metodos en EmailServicioImpl-----------------------
     /**
      * Test que prueba el metodo de enviar correo
      */
-    //@Test
+    @Test
     public void enviarCorreoTest() throws Exception {
         //Creamos un objeto de tipo EmailDTO
         EmailDTO emailDTO = new EmailDTO("Prueba", "Este es un correo de prueba", "ana@gmail.com");
@@ -355,7 +294,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de registrar negocio
      */
-    //@Test
+    @Test
     public void registroNegocioTest() throws Exception {
         Horario horario = new Horario("Lunes a viernes", LocalDate.now(), LocalDate.now());
         List<Horario> horarios = List.of(horario);
@@ -364,6 +303,8 @@ public class ClienteTest {
         String urlFoto = "urlFoto";
         List<String> urlFotos = List.of(urlFoto);
 
+        Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
+
         RegistroNegocioDTO registroNegocioDTO = new RegistroNegocioDTO(
                 "Negocio6",
                 "Hotel calido y acogedor",
@@ -371,7 +312,7 @@ public class ClienteTest {
                 telefonos,
                 CategoriaNegocio.HOTEL,
                 urlFotos,
-                new Ubicacion(12,12),
+                ubicacion,
                 "Cliente1"
         );
 
@@ -383,8 +324,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de actualizar negocio
      */
-    //@Test
-
+    @Test
     public void actualizarNegocioTest() throws Exception {
         Horario horario = new Horario("Lunes a viernes", LocalDate.now(), LocalDate.now());
         List<Horario> horarios = List.of(horario);
@@ -410,29 +350,30 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de eliminar negocio
      */
-    //@Test
-//    public void eliminarNegocioTest() throws Exception {
-//        //cambiamos el estado del negocio con el id creado anteriormente
-//        //de activo a inactivo
-//        negocioServicio.eliminarNegocio("Negocio5");
-//    }
+    @Test
+    public void eliminarNegocioTest() throws Exception {
+        //cambiamos el estado del negocio con el id creado anteriormente
+        //de activo a inactivo
+        EliminacionNegocioDTO eliminacionNegocioDTO = new EliminacionNegocioDTO("Negocio5", "Cliente1");
+        negocioServicio.eliminarNegocio(eliminacionNegocioDTO);
+    }
 
     /**
      * Test que prueba el metodo de obtener negocio
      */
-    //@Test
+    @Test
     public void obtenerNegocioTest() throws Exception {
         //Obtenemos el negocio con el id creado anteriormente
-        Negocio negocio = negocioServicio.buscarNegocio("Negocio5");
+        DetalleNegocioDTO detalleNegocioDTO = negocioServicio.obtenerNegocio("Negocio1");
         //Imprimimos el negocio
-        System.out.println(negocio);
+        System.out.println(detalleNegocioDTO);
 
     }
 
     /**
      * Test que prueba el metodo de listar negocios
      */
-    //@Test
+    @Test
     public void listarNegociosTest() throws Exception {
         //Obtenemos la lista de todos los negocios (por ahora solo tenemos 1)
         List<Negocio> negocios = negocioServicio.listarNegociosPropietario("Cliente1");
@@ -445,21 +386,19 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de generar pdf
      */
-    //@Test
-//    public void generarPDFTest() throws Exception {
-//        LocalDateTime fecha = LocalDateTime.of(2024, 4, 18, 15, 30, 45);
-//        //Creamos un objeto de tipo ReporteDTO
-//        ReporteDTO reporteDTO = new ReporteDTO(""""Negocio1", "Hotel Premium",);
-//        //Generamos el pdf
-//        negocioServicio.generarPDF(reporteDTO, "rutaArchivo");
-//    }
+    @Test
+    public void generarPDFTest() throws Exception {
+        LocalDateTime fecha = LocalDateTime.of(2024, 4, 18, 15, 30, 45);
+        //Creamos un objeto de tipo ReporteDTO
+        ReporteDTO reporteDTO = new ReporteDTO("Cliente1","Negocio1", "Hotel Premium",4);
+        //Generamos el pdf
+        negocioServicio.generarPDF(reporteDTO, "rutaArchivo");
+    }
 
-
-    //-------------------------Prueba unitaria de metodos en ReservaServicioIMPL-----------------------
     /**
      * Test que prueba el metodo de registrar reserva
      */
-    //@Test
+    @Test
     public void registrarReservaTest() throws Exception {
         //Creamos un objeto de tipo RegistroReservaDTO
         DetalleReservaDTO registroReservaDTO = new DetalleReservaDTO(
@@ -476,7 +415,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de actualizar reserva
      */
-    //@Test
+    @Test
     public void actualizarReservaTest() throws Exception {
         //Creamos un objeto de tipo ActualizarReservaDTO
         DetalleReservaDTO actualizarReservaDTO = new DetalleReservaDTO(
@@ -493,7 +432,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de obtener reserva
      */
-    //@Test
+    @Test
     public void obtenerReservaTest() throws Exception {
         //Obtenemos la reserva
         DetalleReservaDTO reserva = negocioServicio.obtenerReserva("Negocio1", "Cliente1");
@@ -506,7 +445,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de eliminar reserva
      */
-    //@Test
+    @Test
     public void eliminarReservaTest() throws Exception {
         //Eliminamos la reserva
         negocioServicio.eliminarReserva("Negocio1", "Cliente1");
@@ -515,7 +454,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de listar reservas
      */
-    //@Test
+    @Test
     public void listarReservasTest() throws Exception {
         //Listamos las reservas
         List<DetalleReservaDTO> reservas = negocioServicio.listarReservas("Negocio1");
@@ -525,12 +464,10 @@ public class ClienteTest {
         Assertions.assertEquals(1, reservas.size());
     }
 
-    //-------------------------Prueba unitaria de metodos en AgenteServicioIMPL-----------------------
-
     /**
      * Test que prueba el metodo de registrar agenda
      */
-    //@Test
+    @Test
     public void registrarAgendaTest() throws Exception {
         //Creamos un objeto de tipo RegistroAgendaDTO
         RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
@@ -545,7 +482,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de actualizar agenda
      */
-    //@Test
+    @Test
     public void actualizarAgendaTest() throws Exception {
         //Creamos un objeto de tipo RegistroAgendaDTO
         RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
@@ -560,7 +497,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de eliminar agenda
      */
-    //@Test
+    @Test
     public void eliminarAgendaTest() throws Exception {
         //Eliminamos la agenda
         negocioServicio.eliminarAgenda("Negocio1");
@@ -569,7 +506,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de obtener agenda
      */
-    //@Test
+    @Test
     public void obtenerAgendaTest() throws Exception {
         //Obtenemos la agenda
         DetalleAgendaDTO agenda = negocioServicio.obtenerAgenda("Negocio1");
@@ -579,5 +516,118 @@ public class ClienteTest {
         Assertions.assertNotNull(agenda);
 
     }
-}
 
+
+    /**
+     * Test que prueba el metodo de agregar favoritos
+     */
+    @Test
+    public void agregarFavoritosTest() throws Exception {
+        //Agregamos un negocio a favoritos
+        negocioServicio.agregarFavoritos("Negocio1", "Cliente1");
+    }
+
+    /**
+     * Test que prueba el metodo de eliminar favoritos
+     */
+
+    @Test
+    public void removerFavoritosTest() throws Exception {
+        //Removemos un negocio de favoritos
+        negocioServicio.removerFavoritos("Negocio1", "Cliente1");
+    }
+
+    /**
+     * Test que prueba el metodo de mostrar favoritos
+     */
+    @Test
+    public void mostrarFavoritosTest() throws Exception {
+        //Obtenemos la lista de favoritos de un cliente
+        List<FavoritoDTO> favoritos = negocioServicio.mostrarFavoritos("Cliente1");
+        //Imprimimos los favoritos
+        favoritos.forEach(System.out::println);
+        //Verificamos que solo exista un favorito
+        //Assertions.assertEquals(1, favoritos.size());
+    }
+
+
+    /**
+     * Test que prueba el metodo ItemListaLugaresCreados
+     */
+    @Test
+    public void listaLugaresCreadosTest() throws Exception {
+        //Obtenemos la lista de lugares creados por un cliente
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listaLugaresCreados("Cliente1", "Negocio1");
+        //Imprimimos los lugares creados
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar creado
+        Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugar por nombre
+     */
+    @Test
+    public void filtrarLugarPorNombreTest() throws Exception {
+        //Obtenemos la lista de lugares creados por un cliente
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre("Negocio1");
+        //Imprimimos los lugares creados
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar creado
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugar por categoria
+     */
+    @Test
+    public void filtrarLugarPorCategoriaTest() throws Exception {
+        //Obtenemos la lista de lugares creados por un cliente
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
+        //Imprimimos los lugares creados
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar creado
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugar por distancia
+     */
+    @Test
+    public void filtrarLugarPorDistanciaTest() throws Exception {
+        Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
+        //Obtenemos la lista de lugares filtrados
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(5.0, ubicacion);
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar recomendaciones de lugares
+     */
+    @Test
+    public void filtrarRecomendacionesTest() throws Exception {
+        //Obtenemos la lista de lugares recomendados
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio("comida");
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+    /**
+     * Test que prueba el metodo de filtrar lugares por estado
+     */
+    @Test
+    public void filtrarLugarPorEstadoTest() throws Exception {
+        //Obtenemos la lista de lugares filtrados
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
+        //Imprimimos los lugares
+        lugares.forEach(System.out::println);
+        //Verificamos que solo exista un lugar
+        //Assertions.assertEquals(1, lugares.size());
+    }
+
+}

@@ -15,5 +15,5 @@ public interface ComentarioServicio {
 
     int calcularPromedioCalificaciones(String codigoNegocio) throws Exception;
 
-    List<Comentario> listarComentariosTipoNegocio(CategoriaNegocio categoriaNegocio) throws Exception;
+    List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoriaNegocio) throws Exception;
 }

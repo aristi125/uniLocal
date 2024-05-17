@@ -27,6 +27,8 @@ public interface NegocioServicio {
 
     Negocio buscarNegocio(String codigoNegocio) throws Exception;
 
+    DetalleNegocioDTO obtenerNegocio(String codigoNegocio) throws Exception;
+
     List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception;
 
     void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws Exception;

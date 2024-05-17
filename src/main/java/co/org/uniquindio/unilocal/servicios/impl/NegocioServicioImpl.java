@@ -123,6 +123,24 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
+    public DetalleNegocioDTO obtenerNegocio(String codigoNegocio) throws Exception {
+        Negocio negocio = buscarNegocio(codigoNegocio);
+
+        return new DetalleNegocioDTO(
+                negocio.getNombre(),
+                negocio.getDescripcion(),
+                negocio.getTelefonos(),
+                negocio.getUbicacion(),
+                negocio.getHorarios(),
+                negocio.getCategoriaNegocio(),
+                negocio.getImagenes(),
+                negocio.getAgenda(),
+                negocio.getCalificaciones()
+        );
+    }
+
+
+    @Override
     public Negocio buscarNegocio(String codigoNegocio) throws Exception{
         Optional<Negocio> negocioOptional = negocioRepo.findById(codigoNegocio);
         if(negocioOptional.isEmpty()){
