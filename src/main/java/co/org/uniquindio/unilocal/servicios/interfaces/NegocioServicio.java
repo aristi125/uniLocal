@@ -36,11 +36,10 @@ public interface NegocioServicio {
     List<Negocio> listarNegociosEstado(EstadoNegocio estadoNegocio) throws Exception;
 
     void eliminarNegocioRechazado() throws Exception;
+
     List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
 
-
     List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
-
 
     List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception;
 

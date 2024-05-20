@@ -14,5 +14,6 @@ public record RevisionesModeradorDTO(
         @NotBlank String respuesta
 
 
+
 ) {
 }

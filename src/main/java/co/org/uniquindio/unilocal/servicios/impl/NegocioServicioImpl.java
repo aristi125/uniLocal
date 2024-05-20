@@ -9,7 +9,6 @@ import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
-import co.org.uniquindio.unilocal.modelo.documentos.Moderador;
 import co.org.uniquindio.unilocal.modelo.entidades.Agenda;
 import co.org.uniquindio.unilocal.modelo.entidades.Reserva;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
@@ -18,7 +17,6 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioModerador;
 import co.org.uniquindio.unilocal.repositorios.HistorialRevisionRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.ModeradorServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -34,10 +32,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.IOException;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 @Transactional
@@ -45,11 +40,9 @@ import java.util.Optional;
 public class NegocioServicioImpl implements NegocioServicio {
 
     private final ClienteServicio clienteServicio;
-    private final ModeradorServicio moderadorServicio;
     private final NegocioRepo negocioRepo;
     private final EmailServicio emailServicio;
     private final HistorialRevisionRepo historialRepo;
-
 
     @Override
     public String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception {
@@ -84,7 +77,7 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception {
         // Verificar si el usuario autenticado existe en la base de datos
-        clienteServicio.obtenerCliente(actualizarNegocioDTO.codigoCliente());
+        clienteServicio.buscarCliente(actualizarNegocioDTO.codigoCliente());
         Negocio negocio = buscarNegocio(actualizarNegocioDTO.id());
         // Verificar si el usuario autenticado es propietario del negocio
         if (!negocio.getCodigoCliente().equals(actualizarNegocioDTO.codigoCliente())) {
@@ -109,23 +102,16 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void eliminarNegocio(EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception{
         clienteServicio.buscarCliente(eliminacionNegocioDTO.idCliente());
-        buscarNegocio(eliminacionNegocioDTO.idNegocio());
-
-        Negocio negocio = new Negocio();
-
-        if (negocio.getEstado().equals(EstadoNegocio.ACTIVO)){
-            negocio.setEstado(EstadoNegocio.INACTIVO);
-        }
-        else {
-            throw new Exception(("No se que esta pasando"));
-        }
+        Negocio negocio = buscarNegocio(eliminacionNegocioDTO.idNegocio());
+        negocio.setEstado(EstadoNegocio.INACTIVO);
         negocioRepo.save(negocio);
     }
 
     @Override
     public DetalleNegocioDTO obtenerNegocio(String codigoNegocio) throws Exception {
-        Negocio negocio = buscarNegocio(codigoNegocio);
 
+        Negocio negocio = buscarNegocio(codigoNegocio);
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
         return new DetalleNegocioDTO(
                 negocio.getNombre(),
                 negocio.getDescripcion(),
@@ -138,7 +124,6 @@ public class NegocioServicioImpl implements NegocioServicio {
                 negocio.getCalificaciones()
         );
     }
-
 
     @Override
     public Negocio buscarNegocio(String codigoNegocio) throws Exception{
@@ -162,33 +147,47 @@ public class NegocioServicioImpl implements NegocioServicio {
         if (estadoNegocio == EstadoNegocioModerador.PENDIENTE || estadoNegocio == EstadoNegocioModerador.RECHAZADO){
             throw new Exception("El negocio no esta aprobado");
         }
-        //El negocio debe estar aprobado, recorrer la lista del historial de revisiones y si el último registro No es Aprobado lanzar excepción
-
         return negocio;
     }
 
     @Override
     public List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception{
-
         List<Negocio> optionalNegocios = negocioRepo.findAllByCodigoCliente(codigoPropietario);
+
         if(optionalNegocios.isEmpty()){
-            throw new Exception("El usuario no tiene ningun negocio");
+            throw new Exception("El usuario no tiene ningún negocio");
+        }
+        List<Negocio> negociosaux = new ArrayList<>();
+
+        for(Negocio negocio: optionalNegocios){
+            if(negocio.getEstado() == EstadoNegocio.ACTIVO){
+                negociosaux.add(negocio);
+            }
+        }
+        if(negociosaux.isEmpty()){
+            throw new Exception("El usuario no tiene ningún negocio activos");
         }
 
         return optionalNegocios;
     }
-@Override
+
+    @Override
     public List<Negocio> listarNegociosEstado(EstadoNegocio estado) throws Exception {
+        List<Negocio> negocios = negocioRepo.findAllByEstado(estado);
+        List<Negocio> negociosaux = new ArrayList<>();
 
-    List<Negocio> negocios = negocioRepo.findAllByEstado(estado);
-
-        if(negocios.isEmpty()){
+        for(Negocio negocio: negocios){
+            if(negocio.getEstado() == EstadoNegocio.ACTIVO){
+                negociosaux.add(negocio);
+            }
+        }
+        if(negociosaux.isEmpty()){
             throw new Exception("No existen negocios con ese estado");
         }
         return negocios;
     }
 
-    @Override
+    ////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     public void eliminarNegocioRechazado() throws Exception {
         List<HistorialRevision> revisionOptional = historialRepo.findAllByEstadoAndFechaBefore(EstadoNegocioModerador.RECHAZADO,LocalDateTime.now().minusDays(5));
         if(revisionOptional.isEmpty()){
@@ -200,13 +199,14 @@ public class NegocioServicioImpl implements NegocioServicio {
             negocioRepo.save(negocio);
         }
     }
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 
     @Override
     public void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws Exception {
         Cliente cliente = clienteServicio.buscarCliente(reporteDTO.codigoPropietario());
-        buscarNegocio(reporteDTO.codigoNegocio());
-
+        Negocio negocio = buscarNegocio(reporteDTO.codigoNegocio());
+        System.out.println("hasta el momento sirve");
         PDDocument document = null;
         try {
             // Crear un nuevo documento PDF
@@ -214,7 +214,7 @@ public class NegocioServicioImpl implements NegocioServicio {
             PDPage page = new PDPage();
             document.addPage(page);
 
-            // Inicia el flujo de contenido en la pagina
+            // Inicia el flujo de contenido en la página
             try (PDPageContentStream contentStream = new PDPageContentStream(document, page)) {
                 contentStream.beginText();
                 contentStream.setFont(PDType1Font.TIMES_ROMAN, 12);
@@ -228,11 +228,11 @@ public class NegocioServicioImpl implements NegocioServicio {
                 contentStream.newLine();
                 contentStream.showText("Email Propietario: " + cliente.getEmail());
                 contentStream.newLine();
-                contentStream.showText("Código de Negocio: " + reporteDTO.codigoNegocio());
+                contentStream.showText("Código de Negocio: " + negocio.getCodigo());
                 contentStream.newLine();
-                contentStream.showText("Nombre del Negocio: " + reporteDTO.nombreNegocio());
+                contentStream.showText("Nombre del Negocio: " + negocio.getNombre());
                 contentStream.newLine();
-                contentStream.showText("Número de Resevas: " + reporteDTO.numReservas());
+                contentStream.showText("Número de Resevas: " + negocio.getListaReservas().size());
                 contentStream.endText();
             }
             // Guardar el documento PDF en la ruta especifica
@@ -250,10 +250,10 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception{
+    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados( String idCliente, String idNegocio) throws Exception{
 
         clienteServicio.obtenerCliente(idCliente);
-        Negocio negocio = buscarNegocio(idNegocio);
+        buscarNegocio(idNegocio);
 
         List<Negocio> historialNegocio = negocioRepo.findAllByCodigoCliente(idCliente);
 
@@ -278,13 +278,22 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception {
-
         List<Negocio> negocios = negocioRepo.findAllByNombre(nombre);
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con el nombre " + nombre);
         }
-        for (Negocio n : negocios) {
+
+        List<Negocio> negociosaux = new ArrayList<>();
+        for(Negocio n: negocios){
+            if (n.getEstado()==EstadoNegocio.ACTIVO){
+                negociosaux.add(n);
+            }
+        }
+        if (negociosaux.isEmpty()) {
+            throw new Exception("No se encontraron negocios con el nombre " + nombre+" que se encuentren activos");
+        }
+        for (Negocio n : negociosaux) {
 
             if (n.getNombre().toLowerCase().contains(nombre.toLowerCase()))
                 lugares.add(new ItemListaLugaresCreadosDTO(
@@ -314,7 +323,17 @@ public class NegocioServicioImpl implements NegocioServicio {
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con la categoria " + categoria);
         }
-        for (Negocio n : negocios) {
+
+        List<Negocio>  negociosaux = new ArrayList<>();
+        for(Negocio negocio: negocios){
+            if(negocio.getEstado()==EstadoNegocio.ACTIVO){
+                negociosaux.add(negocio);
+            }
+        }
+        if(negociosaux.isEmpty()){
+            throw new Exception("No se encontraron negocios con la categoria " +categoria+" que se encuentra activos");
+        }
+        for (Negocio n : negociosaux) {
             lugares.add(new ItemListaLugaresCreadosDTO(
                             n.getCodigo(),
                             n.getNombre(),
@@ -346,6 +365,9 @@ public class NegocioServicioImpl implements NegocioServicio {
                         negocio.getImagenes())
                 );
             }
+        }
+        if(lugaresCercanos.isEmpty()){
+            throw new Exception("No se encontraron lugares cercanos a la ubicacion" + ubicacionCliente);
         }
 
         return lugaresCercanos;
@@ -598,8 +620,14 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public List<HistorialRevision> obtenerHistorialRevisiones(String idNegocio) throws Exception{
-        buscarNegocio(idNegocio);
-        List<HistorialRevision> historiales = negocioRepo.findByCodigo(idNegocio).getHistorialRevisiones();
+        Negocio negocio = negocioRepo.findByCodigo(idNegocio);
+        List<HistorialRevision> historiales = negocioRepo.findByCodigo(negocio.getCodigo()).getHistorialRevisiones();
+        List<HistorialRevision> historialRevisionsaux = new ArrayList<HistorialRevision>();
+        for(HistorialRevision historialRevision: historiales){
+            historialRevision.setFecha(LocalDateTime.now());
+            historialRevisionsaux.add(historialRevision);
+        }
+
         if(historiales.isEmpty()){
             throw  new Exception("No existen historiales para este negocio");
         }
@@ -609,8 +637,13 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public void rechazarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
-        Negocio negocio = buscarNegocio(revisionesModeradorDTO.codigoNegocio());
+        
+        Negocio negocio = negocioRepo.findByCodigo(revisionesModeradorDTO.codigoNegocio());
 
+
+        if(negocio.getEstado()==EstadoNegocio.ACTIVO||negocio.getEstado()==EstadoNegocio.INACTIVO){
+            throw new Exception("El negocio no se encuentra en estado PENDIENTE");
+        }
         HistorialRevision revision = new HistorialRevision();
 
         revision.setDescripcion(revisionesModeradorDTO.descripcion());
@@ -622,7 +655,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocio.setEstado(EstadoNegocio.INACTIVO);
         negocio.getHistorialRevisiones().add(revision);
 
-        Cliente cliente = obtenerClienteNegocio(negocio.getCodigo());
+        Cliente cliente = clienteServicio.buscarCliente(negocio.getCodigoCliente());
 
         EmailDTO emailDTO = new EmailDTO(
                 "Negocio Rechazado",
@@ -642,8 +675,11 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void aprobarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception {
 
-        Negocio negocio = buscarNegocio(revisionesModeradorDTO.codigoNegocio());
+        Negocio negocio = negocioRepo.findByCodigo(revisionesModeradorDTO.codigoNegocio());
 
+        if(negocio.getEstado()==EstadoNegocio.ACTIVO || negocio.getEstado()==EstadoNegocio.INACTIVO){
+            throw new Exception("El negocio no se encuentra en estado PENDIENTE");
+        }
         HistorialRevision revision = new HistorialRevision();
 
         revision.setDescripcion(revisionesModeradorDTO.descripcion());
@@ -651,11 +687,10 @@ public class NegocioServicioImpl implements NegocioServicio {
         revision.setCodigoNegocio(revisionesModeradorDTO.codigoNegocio());
         revision.setEstado(EstadoNegocioModerador.APROBADO);
 
-
         negocio.setEstado(EstadoNegocio.ACTIVO);
         negocio.getHistorialRevisiones().add(revision);
 
-        Cliente cliente = obtenerClienteNegocio(negocio.getCodigo());
+        Cliente cliente = clienteServicio.buscarCliente(negocio.getCodigoCliente());
 
         EmailDTO emailDTO = new EmailDTO(
                 "Negocio Aceptado",

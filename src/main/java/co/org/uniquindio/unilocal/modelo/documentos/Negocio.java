@@ -33,7 +33,7 @@ public class Negocio implements Serializable {
     private List<String> imagenes = new ArrayList<>();
     private List<Horario> horarios = new ArrayList<>();
     private List<String> telefonos = new ArrayList<>();
-    private List<Comentario> comentarios;
+    private List<Comentario> comentarios = new ArrayList<>();
     private int calificaciones;
     private List<HistorialRevision> historialRevisiones = new ArrayList<>();
     private String codigoCliente;

@@ -21,8 +21,10 @@ import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
+import co.org.uniquindio.unilocal.utils.FilePermissionChecker;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -66,13 +68,13 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.mostrarFavoritos(idCliente)));
     }
 
-    @DeleteMapping("eliminar-favoritos/{idNegocio}/{idCliente}")
+    @DeleteMapping("/eliminar-favoritos/{idNegocio}/{idCliente}")
     public ResponseEntity<MensajeDTO<String>> removerFavoritos(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
         negocioServicio.removerFavoritos(idNegocio, idCliente);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado de favoritos"));
     }
 
-    @GetMapping("lugares-creados-cliente/{idCliente}/{idNegocio}")
+    @GetMapping("/lugares-creados-cliente/{idCliente}/{idNegocio}")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@PathVariable String idCliente, @PathVariable String idNegocio) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listaLugaresCreados(idCliente, idNegocio)));
     }
@@ -178,9 +180,19 @@ public class ClienteController {
     }
 
     @PostMapping("/generar-PDF")
-    public ResponseEntity<MensajeDTO<String>> generarPDF(@Valid @RequestBody ReporteDTO reporteDTO, @Valid String rutaArchivo) throws Exception {
+    public ResponseEntity<MensajeDTO<String>> generarPDF(@Valid @RequestBody ReporteDTO reporteDTO, @RequestParam String rutaArchivo) throws Exception {
         negocioServicio.generarPDF(reporteDTO, rutaArchivo);
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, "PDF generado exitosamente"));
+        try {
+            FilePermissionChecker.checkWritePermission(rutaArchivo);
+            negocioServicio.generarPDF(reporteDTO, rutaArchivo);
+            return ResponseEntity.ok().body(new MensajeDTO<>(false, "PDF generado exitosamente"));
+        } catch (IOException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MensajeDTO<>(true, "Error de permisos: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new MensajeDTO<>(true, "Error inesperado: " + e.getMessage()));
+        }
     }
 
     @PostMapping("/registrar-producto")

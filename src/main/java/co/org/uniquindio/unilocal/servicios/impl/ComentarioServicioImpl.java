@@ -37,6 +37,9 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         Cliente propietario = clienteServicio.buscarCliente(registroComentarioDTO.codigoCliente());
         Negocio negocio = negocioServicio.buscarNegocio(registroComentarioDTO.codigoNegocio());
 
+        if(registroComentarioDTO.calificacion()<0 || registroComentarioDTO.calificacion()>5){
+            throw new Exception("Calificacion excede el rango");
+        }
         Comentario comentario = new Comentario();
         comentario.setFecha(LocalDateTime.now());
         comentario.setCalificacion(registroComentarioDTO.calificacion());
@@ -94,7 +97,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     public List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception {
 
         Negocio negocio = negocioServicio.buscarNegocio(codigoNegocio);
-
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
         List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (historialComentario.isEmpty()) {
             throw new Exception("No hay comentarios");
