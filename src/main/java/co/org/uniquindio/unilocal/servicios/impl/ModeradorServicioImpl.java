@@ -77,7 +77,7 @@ public class ModeradorServicioImpl implements ModeradorServicio {
         moderadorRepo.save(moderador);
     }
 
-    @Override
+
     public Moderador buscarModerador(String idCuenta) throws Exception {
         //Buscamos el moderador que se quiere por su id
         Optional<Moderador> optionalModerador = moderadorRepo.findById( idCuenta );

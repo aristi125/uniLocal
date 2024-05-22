@@ -1,9 +1,12 @@
 package co.org.uniquindio.unilocal.controladores;
 
+import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.LinkRecuperacionDTO;
+import co.org.uniquindio.unilocal.dto.negocio.BusquedaNombreDTO;
+import co.org.uniquindio.unilocal.dto.negocio.DetalleNegocioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
@@ -41,9 +44,9 @@ public class PublicoController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
     }
 
-    @GetMapping("/buscar-negocio-nombre/{nombre}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@PathVariable String nombre) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
+    @GetMapping("/buscar-negocio-nombre")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@Valid @RequestBody BusquedaNombreDTO busquedaNombreDTO) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(busquedaNombreDTO)));
     }
 
     @GetMapping("/buscar-negocio-categoria/{categoria}")
@@ -51,9 +54,9 @@ public class PublicoController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
     }
 
-    @GetMapping("/buscar-negocio-distancia/{distancia}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@PathVariable double distancia, @PathVariable Ubicacion ubicacionCliente) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
+    @GetMapping("/buscar-negocio-distancia")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@Valid @RequestBody BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(busquedaDistanciaDTO)));
     }
 
     @GetMapping("/listar-comentarios-negocio/{idNegocio}")
@@ -62,7 +65,7 @@ public class PublicoController {
     }
 
     @GetMapping("/filtar-estado")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocio estadoNegocio)throws Exception {
+    public ResponseEntity<MensajeDTO<List<DetalleNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocio estadoNegocio)throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }
 

@@ -1,6 +1,5 @@
 package co.org.uniquindio.unilocal.dto.producto;
 
-import co.org.uniquindio.unilocal.modelo.enumeracion.TipoProducto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;

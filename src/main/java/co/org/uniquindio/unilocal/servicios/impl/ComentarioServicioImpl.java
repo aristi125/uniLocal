@@ -60,31 +60,32 @@ public class ComentarioServicioImpl implements ComentarioServicio {
                 propietario.getEmail()
         );
         emailServicio.enviarCorreo(emailDTO);
+        calcularPromedioCalificaciones(registroComentarioDTO.codigoNegocio());
     }
 
     @Override
-    public void responderComentario(RespuestaComentarioDTO comentario) throws Exception{
+    public void responderComentario(RespuestaComentarioDTO respuestaComentarioDTO) throws Exception{
 
-        Cliente cliente = clienteServicio.buscarCliente(comentario.codigoClienteReceptor());
-        Negocio negocio = negocioServicio.buscarNegocio(comentario.codigoNegocio());
+        Cliente cliente = clienteServicio.buscarCliente(respuestaComentarioDTO.codigoClienteReceptor());
+        Negocio negocio = negocioServicio.buscarNegocio(respuestaComentarioDTO.codigoNegocio());
 
         List<Comentario> listaComentarios = negocio.getComentarios();
         for (Comentario c : listaComentarios) {
-            if (c.getCodigoComentario().equals(comentario.codigoComentario())) {
-                c.setRespuesta(comentario.respuesta());
+            if (c.getCodigoComentario().equals(respuestaComentarioDTO.codigoComentario())) {
+                c.setRespuesta(respuestaComentarioDTO.respuesta());
                 break;
             }
         }
 
-        Comentario aux = comentarioRepo.findByCodigoComentario(comentario.codigoComentario());
-        aux.setRespuesta(comentario.respuesta());
+        Comentario aux = comentarioRepo.findByCodigoComentario(respuestaComentarioDTO.codigoComentario());
+        aux.setRespuesta(respuestaComentarioDTO.respuesta());
         comentarioRepo.save(aux);
 
         EmailDTO emailDTO = new EmailDTO(
                 "Respuesta a tu comentario",
                 "Hola " + cliente.getNombre() + "! \n\n" +
                         "Tu comentario ha sido respondido. \n\n" +
-                        comentario.respuesta() + "\n\n" +
+                        respuestaComentarioDTO.respuesta() + "\n\n" +
                         "Gracias por confiar en nosotros!",
                 cliente.getEmail()
         );
@@ -114,11 +115,9 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         return respuesta;
     }
 
-    @Override
+
     public int calcularPromedioCalificaciones (String codigoNegocio) throws Exception {
-
-        Negocio negocio = negocioServicio.buscarNegocio(codigoNegocio);
-
+        negocioServicio.buscarNegocio(codigoNegocio);
         List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (listaComentarios.isEmpty()) {
             throw new Exception("No hay comentarios");

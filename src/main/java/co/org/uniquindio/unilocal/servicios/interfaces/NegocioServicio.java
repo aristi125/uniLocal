@@ -1,6 +1,8 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
+import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
@@ -10,7 +12,6 @@ import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
@@ -18,6 +19,7 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import java.util.List;
 
 public interface NegocioServicio {
+
     String crearNegocio(RegistroNegocioDTO registroNegocioDTO) throws Exception;
 
     void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception;
@@ -30,21 +32,17 @@ public interface NegocioServicio {
 
     List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception;
 
-    void generarPDF(ReporteDTO reporteDTO, String rutaArchivo) throws Exception;
+    void generarPDF(ReporteDTO reporteDTO) throws Exception;
 
-    List<Negocio> listarNegociosEstado(EstadoNegocio estadoNegocio) throws Exception;
+    List<ItemListaLugaresCreadosDTO> listarLugaresCreados(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
-    void eliminarNegocioRechazado() throws Exception;
-
-    List<ItemListaLugaresCreadosDTO> listaLugaresCreados(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
-
-    List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
+    List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
 
     List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(double distancia, Ubicacion ubicacionCliente) throws Exception;
+    List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception;
+    List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(BusquedaNombreDTO busquedaNombreDTO) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> recomendarNegocio(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
@@ -52,11 +50,11 @@ public interface NegocioServicio {
 
     void actualizarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
 
-    void eliminarAgenda(String codigoNegocio) throws Exception;
+    void eliminarAgenda(AgendaDTO agendaDTO) throws Exception;
 
     DetalleAgendaDTO obtenerAgenda(String codigoNegocio) throws Exception;
 
-    void agregarFavoritos(String idNegocio, String idCliente) throws Exception;
+    void agregarFavoritos(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
     List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception;
 

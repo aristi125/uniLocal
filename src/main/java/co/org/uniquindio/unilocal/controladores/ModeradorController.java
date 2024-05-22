@@ -1,12 +1,12 @@
 package co.org.uniquindio.unilocal.controladores;
 
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
+import co.org.uniquindio.unilocal.dto.Moderador.DetalleModeradorDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemDetalleClienteDTO;
-import co.org.uniquindio.unilocal.dto.comentario.DetalleComentarioDTO;
-import co.org.uniquindio.unilocal.dto.comentario.RevisarComentariosDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ItemNegociosRevisionDTO;
+import co.org.uniquindio.unilocal.dto.negocio.IDClienteYNegocioDTO;
+import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
@@ -65,11 +65,6 @@ public class ModeradorController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha cambiado su contraseña" ));
     }
 
-    @GetMapping("/listar-negocio-estado")
-    public ResponseEntity<MensajeDTO<List<Negocio>>> listarNegociosEstado(@Valid @RequestBody EstadoNegocio estadoNegocio) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.listarNegociosEstado(estadoNegocio)));
-    }
-
     @GetMapping("/listar-negocio-propietario/{codigoPropietario}")
     public ResponseEntity<MensajeDTO<List<Negocio>>> listarNegociosPropietario(@PathVariable String codigoPropietario) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.listarNegociosPropietario(codigoPropietario)));
@@ -78,5 +73,20 @@ public class ModeradorController {
     @GetMapping("/buscar-negocio/{codigoNegocio}")
     public ResponseEntity<MensajeDTO<Negocio>> buscarNegocio(@PathVariable String codigoNegocio) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocio(codigoNegocio)));
+    }
+
+    @GetMapping("/buscar-cliente/{idCuenta}")
+    public ResponseEntity<MensajeDTO<Cliente>> buscarCliente(@PathVariable String idCuenta) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.buscarCliente(idCuenta)));
+    }
+
+    @GetMapping("/obtener-moderador/{idCuenta}")
+    public ResponseEntity<MensajeDTO<DetalleModeradorDTO>> obtenerModerador(@PathVariable String idCuenta) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, moderadorServicio.obtenerModerador(idCuenta)));
+    }
+
+    @GetMapping("/obtener-cliente-por-idNegocio/{idNegocio}")
+    public ResponseEntity<MensajeDTO<Cliente>> ontenerClienteIdNegocio(@PathVariable String idNegocio) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.obtenerClienteNegocio(idNegocio)));
     }
 }

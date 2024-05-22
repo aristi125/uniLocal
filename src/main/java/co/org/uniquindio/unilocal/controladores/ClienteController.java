@@ -1,7 +1,9 @@
 package co.org.uniquindio.unilocal.controladores;
 
 
+import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
+import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
@@ -9,26 +11,17 @@ import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RegistroComentarioDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RespuestaComentarioDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.IDClienteYNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
-import co.org.uniquindio.unilocal.dto.producto.ProductoDTO;
+import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-import co.org.uniquindio.unilocal.modelo.documentos.Producto;
-import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
-import co.org.uniquindio.unilocal.utils.FilePermissionChecker;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.io.IOException;
 import java.util.List;
 
 @RestController
@@ -38,7 +31,6 @@ public class ClienteController {
     private final ClienteServicio clienteServicio;
     private final ComentarioServicio comentarioServicio;
     private final NegocioServicio negocioServicio;
-    private final ProductoServicio productoServicio;
 
     @PutMapping("/actualizar-perfil-cliente")
     public ResponseEntity<MensajeDTO<String>> actualizarCliente(@Valid @RequestBody ActualizarClienteDTO actualizarClienteDTO) throws Exception {
@@ -46,7 +38,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Cliente actualizado exitosamente"));
     }
 
-    @GetMapping("/obtener/{idCuenta}")
+    @GetMapping("/obtener-cliente/{idCuenta}")
     public ResponseEntity<MensajeDTO<DetalleClienteDTO>> obtenerCliente(@PathVariable String idCuenta) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.obtenerCliente(idCuenta)));
     }
@@ -58,8 +50,8 @@ public class ClienteController {
     }
 
     @PostMapping("/sitios-favoritos")
-    public ResponseEntity<MensajeDTO<String>> agregarFavoritos(@Valid @RequestBody String idNegocio, String idCliente) throws Exception {
-        negocioServicio.agregarFavoritos(idNegocio, idCliente);
+    public ResponseEntity<MensajeDTO<String>> agregarFavoritos(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        negocioServicio.agregarFavoritos(idClienteYNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Sitio agregado a favoritos"));
     }
 
@@ -75,13 +67,13 @@ public class ClienteController {
     }
 
     @GetMapping("/lugares-creados-cliente/{idCliente}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listaLugaresCreados(idClienteYNegocioDTO)));
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listarLugaresCreados(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listarLugaresCreados(idClienteYNegocioDTO)));
     }
 
-    @GetMapping("/buscar-negocio-nombre/{nombre}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@PathVariable String nombre) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
+    @GetMapping("/buscar-negocio-nombre")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@Valid @RequestBody BusquedaNombreDTO busquedaNombreDTO) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(busquedaNombreDTO)));
     }
 
     @GetMapping("/buscar-negocio-categoria/{categoria}")
@@ -89,9 +81,9 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
     }
 
-    @GetMapping("/buscar-negocio-distancia/{distancia}/{ubicacionCliente}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@PathVariable double distancia, @PathVariable Ubicacion ubicacionCliente) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
+    @GetMapping("/buscar-negocio-distancia")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@Valid @RequestBody BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(busquedaDistanciaDTO)));
     }
 
     @GetMapping("/recomendar-negocio")
@@ -100,7 +92,7 @@ public class ClienteController {
     }
 
     @GetMapping("/filtar-estado/")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> filtrarPorEstado(@PathVariable EstadoNegocio estadoNegocio) throws Exception {
+    public ResponseEntity<MensajeDTO<List<DetalleNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocio estadoNegocio) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }
 
@@ -116,9 +108,9 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Agenda actualiza correctamente"));
     }
 
-    @DeleteMapping("/eliminar-agenda/{codigoNegocio}")
-    public ResponseEntity<MensajeDTO<String>> eliminarAgenda(@PathVariable String codigoNegocio) throws Exception {
-        negocioServicio.eliminarAgenda(codigoNegocio);
+    @DeleteMapping("/eliminar-agenda")
+    public ResponseEntity<MensajeDTO<String>> eliminarAgenda(@Valid @RequestBody AgendaDTO agendaDTO) throws Exception {
+        negocioServicio.eliminarAgenda(agendaDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Agenda eliminada satisfactoriamente"));
     }
 
@@ -150,12 +142,6 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, comentarioServicio.listarComentariosNegocio(idNegocio)));
     }
 
-    @GetMapping("/calcular-promedio-negocio/{codigoNegocio}")
-    public ResponseEntity<MensajeDTO<Integer>> calcularPromedioCalificaciones(@PathVariable String codigoNegocio) throws Exception {
-        comentarioServicio.calcularPromedioCalificaciones(codigoNegocio);
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, comentarioServicio.calcularPromedioCalificaciones(codigoNegocio)));
-    }
-
     @PostMapping("/crear-negocio")
     public ResponseEntity<MensajeDTO<String>> crearNegocio(@Valid @RequestBody RegistroNegocioDTO registroNegocioDTO) throws Exception {
         negocioServicio.crearNegocio(registroNegocioDTO);
@@ -180,42 +166,9 @@ public class ClienteController {
     }
 
     @PostMapping("/generar-PDF")
-    public ResponseEntity<MensajeDTO<String>> generarPDF(@Valid @RequestBody ReporteDTO reporteDTO, @RequestParam String rutaArchivo) throws Exception {
-        negocioServicio.generarPDF(reporteDTO, rutaArchivo);
-        try {
-            FilePermissionChecker.checkWritePermission(rutaArchivo);
-            negocioServicio.generarPDF(reporteDTO, rutaArchivo);
-            return ResponseEntity.ok().body(new MensajeDTO<>(false, "PDF generado exitosamente"));
-        } catch (IOException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MensajeDTO<>(true, "Error de permisos: " + e.getMessage()));
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new MensajeDTO<>(true, "Error inesperado: " + e.getMessage()));
-        }
-    }
-
-    @PostMapping("/registrar-producto")
-    public ResponseEntity<MensajeDTO<String>> registrarProducto(@Valid @RequestBody ProductoDTO productoDTO) throws Exception {
-        productoServicio.registrarProducto(productoDTO);
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto creado exitosamente"));
-    }
-
-    @PutMapping("/actualizar-producto")
-    public ResponseEntity<MensajeDTO<String>> actualizarProducto(@Valid @RequestBody ProductoDTO productoDTO) throws Exception {
-        productoServicio.actualizarProducto(productoDTO);
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto actualizado exitosamente"));
-    }
-
-    @DeleteMapping("/eliminar-producto")
-    public ResponseEntity<MensajeDTO<String>> eliminarProducto(@RequestBody ProductoDTO productoDTO) throws Exception {
-        productoServicio.eliminarProducto(productoDTO);
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Producto eliminado"));
-    }
-
-    @GetMapping("/listar-productos")
-    public ResponseEntity<MensajeDTO<List<Producto>>> listarProductos(@RequestBody ProductoDTO productoDTO) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, productoServicio.listarProductos(productoDTO)));
+    public ResponseEntity<MensajeDTO<String>> generarPDF(@Valid @RequestBody ReporteDTO reporteDTO) throws Exception {
+        negocioServicio.generarPDF(reporteDTO);
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, "El PDF se ha enviado a su correo"));
     }
 
     @PostMapping("/registrar-reserva")

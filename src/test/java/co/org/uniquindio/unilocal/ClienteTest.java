@@ -1,5 +1,7 @@
 package co.org.uniquindio.unilocal;
 
+import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
+import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.*;
@@ -14,6 +16,7 @@ import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoAgenda;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
@@ -251,18 +254,6 @@ public class ClienteTest {
     }
 
     /**
-     * Test que prueba el metodo de calcular promedio de calificaciones
-     */
-    //@Test
-    public void calcularPromedioCalificacionesTest() throws Exception {
-        //Calculamos el promedio de calificaciones de un negocio
-        int promedio = comentarioServicio.calcularPromedioCalificaciones("Negocio1");
-        //Imprimimos el promedio
-        System.out.println("El promedio de calificacion del negocio es: "+ promedio);
-
-    }
-
-    /**
      * Test que prueba el metodo de listar comentarios de una categoria de negocio
      */
     //@Test
@@ -391,7 +382,7 @@ public class ClienteTest {
         //Creamos un objeto de tipo ReporteDTO
         ReporteDTO reporteDTO = new ReporteDTO("Cliente1","Negocio1", "Hotel Premium",4);
         //Generamos el pdf
-        negocioServicio.generarPDF(reporteDTO, "C:\\Users\\marce\\OneDrive\\Documents\\MARCELA");
+        negocioServicio.generarPDF(reporteDTO);
     }
 
     /**
@@ -468,9 +459,10 @@ public class ClienteTest {
     public void registrarAgendaTest() throws Exception {
         //Creamos un objeto de tipo RegistroAgendaDTO
         RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
-                "Negocio1",
-                "Tematica",
-                "Descripcion"
+                "cliente1",
+                "negocio1",
+                "Historia",
+                "Viaje por la historia del hombre"
         );
         //Registramos la agenda
         negocioServicio.registrarAgenda(registroAgendaDTO);
@@ -483,9 +475,10 @@ public class ClienteTest {
     public void actualizarAgendaTest() throws Exception {
         //Creamos un objeto de tipo RegistroAgendaDTO
         RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
-                "Negocio1",
-                "Tematica",
-                "Descripcion"
+                "cliente1",
+                "negocio1",
+                "Historia de América",
+                "Viaje por la historia del hombre en el continente americano"
         );
         //Actualizamos la agenda
         negocioServicio.actualizarAgenda(registroAgendaDTO);
@@ -497,7 +490,7 @@ public class ClienteTest {
     //@Test
     public void eliminarAgendaTest() throws Exception {
         //Eliminamos la agenda
-        negocioServicio.eliminarAgenda("Negocio1");
+        negocioServicio.eliminarAgenda(new AgendaDTO("123", "123", EstadoAgenda.ACTIVA));
     }
 
     /**
@@ -521,12 +514,12 @@ public class ClienteTest {
     //@Test
     public void agregarFavoritosTest() throws Exception {
         //Agregamos un negocio a favoritos
-        negocioServicio.agregarFavoritos("Negocio1", "Cliente1");
+        negocioServicio.agregarFavoritos(new IDClienteYNegocioDTO("negocio1", "cliente1"));
     }
 
     /**
      * Test que prueba el metodo de eliminar favoritos
-     */
+     *
 
     //@Test
     public void removerFavoritosTest() throws Exception {
@@ -552,9 +545,9 @@ public class ClienteTest {
      * Test que prueba el metodo ItemListaLugaresCreados
      */
     //@Test
-    public void listaLugaresCreadosTest() throws Exception {
+    public void listarLugaresCreadosTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listaLugaresCreados(new IDClienteYNegocioDTO("123", "123"));
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listarLugaresCreados(new IDClienteYNegocioDTO("123", "123"));
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -567,7 +560,7 @@ public class ClienteTest {
     //@Test
     public void filtrarLugarPorNombreTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre("Negocio1");
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre(new BusquedaNombreDTO("123", "Las delicias"));
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -594,7 +587,7 @@ public class ClienteTest {
     public void filtrarLugarPorDistanciaTest() throws Exception {
         Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
         //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(5.0, ubicacion);
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(new BusquedaDistanciaDTO(new Ubicacion(12.4, 23.8), 200));
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar
@@ -620,7 +613,7 @@ public class ClienteTest {
     //@Test
     public void filtrarLugarPorEstadoTest() throws Exception {
         //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
+        List<DetalleNegocioDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar

@@ -18,8 +18,9 @@ import java.util.List;
 public interface ModeradorServicio  {
 
     DetalleModeradorDTO obtenerModerador(String idCuenta) throws Exception;
+
     void enviarLinkRecuperacionModerador(LinkRecuperacionDTO linkRecuperacionDTO)throws Exception;
+
     void cambiarPassword(CambioPasswordDTO cambioPasswordDTO)throws Exception;
-    Moderador buscarModerador(String idCuenta) throws Exception;
 
 }
