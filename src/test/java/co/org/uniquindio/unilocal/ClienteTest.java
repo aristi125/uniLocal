@@ -354,7 +354,7 @@ public class ClienteTest {
     public void eliminarNegocioTest() throws Exception {
         //cambiamos el estado del negocio con el id creado anteriormente
         //de activo a inactivo
-        EliminacionNegocioDTO eliminacionNegocioDTO = new EliminacionNegocioDTO("Negocio5", "Cliente1");
+        IDClienteYNegocioDTO eliminacionNegocioDTO = new IDClienteYNegocioDTO("Negocio5", "Cliente1");
         negocioServicio.eliminarNegocio(eliminacionNegocioDTO);
     }
 
@@ -557,7 +557,7 @@ public class ClienteTest {
     @Test
     public void listaLugaresCreadosTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listaLugaresCreados("Cliente1", "Negocio1");
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listaLugaresCreados(new IDClienteYNegocioDTO("123", "123"));
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -610,7 +610,7 @@ public class ClienteTest {
     @Test
     public void filtrarRecomendacionesTest() throws Exception {
         //Obtenemos la lista de lugares recomendados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio("comida");
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio(new IDClienteYNegocioDTO("123", "123"));
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar

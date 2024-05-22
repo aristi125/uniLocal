@@ -10,7 +10,7 @@ import co.org.uniquindio.unilocal.dto.comentario.RegistroComentarioDTO;
 import co.org.uniquindio.unilocal.dto.comentario.RespuestaComentarioDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ActualizarNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.EliminacionNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.IDClienteYNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.dto.negocio.ReporteDTO;
 import co.org.uniquindio.unilocal.dto.producto.ProductoDTO;
@@ -74,9 +74,9 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado de favoritos"));
     }
 
-    @GetMapping("/lugares-creados-cliente/{idCliente}/{idNegocio}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@PathVariable String idCliente, @PathVariable String idNegocio) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listaLugaresCreados(idCliente, idNegocio)));
+    @GetMapping("/lugares-creados-cliente/{idCliente}")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listaLugaresCreados(idClienteYNegocioDTO)));
     }
 
     @GetMapping("/buscar-negocio-nombre/{nombre}")
@@ -94,12 +94,12 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(distancia, ubicacionCliente)));
     }
 
-    @GetMapping("/recomendar-negocio/{busqueda}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> recomendarNegocio(@PathVariable String busqueda) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.recomendarNegocio(busqueda)));
+    @GetMapping("/recomendar-negocio")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> recomendarNegocio(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.recomendarNegocio(idClienteYNegocioDTO)));
     }
 
-    @GetMapping("/filtar-estado/{estadoNegocio}")
+    @GetMapping("/filtar-estado/")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> filtrarPorEstado(@PathVariable EstadoNegocio estadoNegocio) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }
@@ -168,8 +168,8 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio actualizado de forma correcta"));
     }
 
-    @DeleteMapping("/eliminar-negocio/{idNegocio}")
-    public ResponseEntity<MensajeDTO<String>> eliminarNegocio(@Valid @RequestBody EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception {
+    @DeleteMapping("/eliminar-negocio")
+    public ResponseEntity<MensajeDTO<String>> eliminarNegocio(@Valid @RequestBody IDClienteYNegocioDTO eliminacionNegocioDTO) throws Exception {
         negocioServicio.eliminarNegocio(eliminacionNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado satisfactoriamente"));
     }

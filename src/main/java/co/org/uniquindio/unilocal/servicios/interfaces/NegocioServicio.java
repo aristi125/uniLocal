@@ -15,7 +15,6 @@ import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 
-import java.io.IOException;
 import java.util.List;
 
 public interface NegocioServicio {
@@ -23,7 +22,7 @@ public interface NegocioServicio {
 
     void actualizarNegocio(ActualizarNegocioDTO actualizarNegocioDTO) throws Exception;
 
-    void eliminarNegocio(EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception;
+    void eliminarNegocio(IDClienteYNegocioDTO eliminacionNegocioDTO) throws Exception;
 
     Negocio buscarNegocio(String codigoNegocio) throws Exception;
 
@@ -37,7 +36,7 @@ public interface NegocioServicio {
 
     void eliminarNegocioRechazado() throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> listaLugaresCreados(String idCliente, String idNegocio) throws Exception;
+    List<ItemListaLugaresCreadosDTO> listaLugaresCreados(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
 
@@ -47,7 +46,7 @@ public interface NegocioServicio {
 
     List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(String nombre) throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception;
+    List<ItemListaLugaresCreadosDTO> recomendarNegocio(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
     void registrarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
 

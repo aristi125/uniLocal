@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
+import co.org.uniquindio.unilocal.dto.EmailArchivoDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
 import jakarta.mail.internet.MimeMessage;
@@ -30,6 +31,20 @@ public class EmailServicioImpl implements EmailServicio {
         helper.setText(emailDTO.cuerpo(), true);
         helper.setTo(emailDTO.destinatario());
         helper.setFrom("no_reply@dominio.com");
+
+        javaMailSender.send(mensaje);
+    }
+
+    @Override
+    public void enviarCorreoArchivo(EmailArchivoDTO emailDTO) throws Exception {
+        MimeMessage mensaje = javaMailSender.createMimeMessage();
+        MimeMessageHelper helper = new MimeMessageHelper(mensaje, true);
+
+        helper.setSubject(emailDTO.asunto());
+        helper.setText(emailDTO.cuerpo(), true);
+        helper.setTo(emailDTO.destinatario());
+        helper.setFrom("no_reply@dominio.com");
+        helper.addAttachment("Reporte.pdf", emailDTO.archivo());
 
         javaMailSender.send(mensaje);
     }

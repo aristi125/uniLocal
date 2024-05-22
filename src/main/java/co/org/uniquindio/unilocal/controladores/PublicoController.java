@@ -66,4 +66,9 @@ public class PublicoController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
     }
 
+    @GetMapping("/buscar-negocio/{codigoNegocio}")
+    public ResponseEntity<MensajeDTO<Negocio>> buscarNegocio(@PathVariable String codigoNegocio) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocio(codigoNegocio)));
+    }
+
 }

@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
+import co.org.uniquindio.unilocal.dto.EmailArchivoDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
@@ -17,6 +18,7 @@ import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocioModerador;
 import co.org.uniquindio.unilocal.repositorios.HistorialRevisionRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.ModeradorServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
@@ -30,8 +32,11 @@ import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.File;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.*;
 
 @Service
@@ -40,6 +45,7 @@ import java.util.*;
 public class NegocioServicioImpl implements NegocioServicio {
 
     private final ClienteServicio clienteServicio;
+    private final ModeradorServicio moderadorServicio;
     private final NegocioRepo negocioRepo;
     private final EmailServicio emailServicio;
     private final HistorialRevisionRepo historialRepo;
@@ -100,7 +106,7 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void eliminarNegocio(EliminacionNegocioDTO eliminacionNegocioDTO) throws Exception{
+    public void eliminarNegocio(IDClienteYNegocioDTO eliminacionNegocioDTO) throws Exception{
         clienteServicio.buscarCliente(eliminacionNegocioDTO.idCliente());
         Negocio negocio = buscarNegocio(eliminacionNegocioDTO.idNegocio());
         negocio.setEstado(EstadoNegocio.INACTIVO);
@@ -152,14 +158,14 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public List<Negocio> listarNegociosPropietario(String codigoPropietario) throws Exception{
-        List<Negocio> optionalNegocios = negocioRepo.findAllByCodigoCliente(codigoPropietario);
+        List<Negocio> negocios = negocioRepo.findAllByCodigoCliente(codigoPropietario);
 
-        if(optionalNegocios.isEmpty()){
+        if(negocios.isEmpty()){
             throw new Exception("El usuario no tiene ningún negocio");
         }
         List<Negocio> negociosaux = new ArrayList<>();
 
-        for(Negocio negocio: optionalNegocios){
+        for(Negocio negocio: negocios){
             if(negocio.getEstado() == EstadoNegocio.ACTIVO){
                 negociosaux.add(negocio);
             }
@@ -168,7 +174,7 @@ public class NegocioServicioImpl implements NegocioServicio {
             throw new Exception("El usuario no tiene ningún negocio activos");
         }
 
-        return optionalNegocios;
+        return negocios;
     }
 
     @Override
@@ -208,6 +214,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         Negocio negocio = buscarNegocio(reporteDTO.codigoNegocio());
         System.out.println("hasta el momento sirve");
         PDDocument document = null;
+        final float LEADING = 21.5f;
         try {
             // Crear un nuevo documento PDF
             document = new PDDocument();
@@ -221,22 +228,31 @@ public class NegocioServicioImpl implements NegocioServicio {
                 contentStream.newLineAtOffset(100, 700);
                 // Agregar los datos del ReporteDTO al PDF
                 contentStream.showText("Fecha: " + (LocalDateTime.now()));
-                contentStream.newLine();
+                contentStream.newLineAtOffset(0, -LEADING);
                 contentStream.showText("Código Propietario: " + cliente.getCodigo());
-                contentStream.newLine();
+                contentStream.newLineAtOffset(0, -LEADING);
                 contentStream.showText("Nombre Propietario: " + cliente.getNombre());
-                contentStream.newLine();
+                contentStream.newLineAtOffset(0, -LEADING);
                 contentStream.showText("Email Propietario: " + cliente.getEmail());
-                contentStream.newLine();
+                contentStream.newLineAtOffset(0, -LEADING);
                 contentStream.showText("Código de Negocio: " + negocio.getCodigo());
-                contentStream.newLine();
+                contentStream.newLineAtOffset(0, -LEADING);
                 contentStream.showText("Nombre del Negocio: " + negocio.getNombre());
-                contentStream.newLine();
+                contentStream.newLineAtOffset(0, -LEADING);
                 contentStream.showText("Número de Resevas: " + negocio.getListaReservas().size());
-                contentStream.endText();
+                contentStream.newLineAtOffset(0, -LEADING);
             }
-            // Guardar el documento PDF en la ruta especifica
-            document.save(rutaArchivo);
+
+            File file = File.createTempFile("Reporte", null);
+            document.save(file);
+
+            emailServicio.enviarCorreoArchivo(new EmailArchivoDTO(
+                    "Reporte",
+                    "Reporte",
+                    "juanquinrod@gmail.com",
+                    file
+            ));
+
         } catch (IOException e)  {
             // Manejar errores al crear el PDF
             System.out.println("Error al crear el archivo PDF: " + e.getMessage());
@@ -250,12 +266,12 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados( String idCliente, String idNegocio) throws Exception{
+    public List<ItemListaLugaresCreadosDTO> listaLugaresCreados(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception{
 
-        clienteServicio.obtenerCliente(idCliente);
-        buscarNegocio(idNegocio);
+        clienteServicio.obtenerCliente(idClienteYNegocioDTO.idCliente());
+        buscarNegocio(idClienteYNegocioDTO.idNegocio());
 
-        List<Negocio> historialNegocio = negocioRepo.findAllByCodigoCliente(idCliente);
+        List<Negocio> historialNegocio = negocioRepo.findAllByCodigoCliente(idClienteYNegocioDTO.idCliente());
 
         ArrayList<ItemListaLugaresCreadosDTO> respuesta = new ArrayList<>();
 
@@ -310,7 +326,9 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> recomendarNegocio(String busqueda) throws Exception {
+    public List<ItemListaLugaresCreadosDTO> recomendarNegocio(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        buscarNegocio(idClienteYNegocioDTO.idNegocio());
+        clienteServicio.obtenerCliente(idClienteYNegocioDTO.idCliente());
         //Cada que el usuario busque, guardar el término en una lista. con base en la lista recomendar negocios
         return List.of();
     }
@@ -517,23 +535,23 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void registrarReserva(DetalleReservaDTO detalleReservaDTO) throws Exception {
 
-        Cliente cliente = clienteServicio.buscarCliente(detalleReservaDTO.codigoCliente());
         Negocio negocio = buscarNegocio(detalleReservaDTO.codigoNegocio());
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
 
         List<Reserva> listaReservas =  negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getFecha().equals(detalleReservaDTO.fecha()) && reserva.getHora().equals(detalleReservaDTO.hora())) {
+            if (reserva.getFecha().equals(LocalDate.now()) && reserva.getHora().equals(LocalTime.now())) {
                 throw new Exception("Ya existe una reserva para esa fecha y hora");
             }
         }
 
         Reserva reserva = new Reserva();
-        reserva.setFecha(detalleReservaDTO.fecha());
-        reserva.setHora(detalleReservaDTO.hora());
-        reserva.setCantidadPersonas(detalleReservaDTO.cantidadPersonas());
-        reserva.setCodigoCliente(detalleReservaDTO.codigoCliente());
+        reserva.setFecha(LocalDate.now());
+        reserva.setHora(LocalTime.now());
         reserva.setCodigoNegocio(detalleReservaDTO.codigoNegocio());
+        reserva.setCodigoCliente(detalleReservaDTO.codigoCliente());
+        reserva.setCantidadPersonas(detalleReservaDTO.cantidadPersonas());
 
         negocio.getListaReservas().add(reserva);
         negocioRepo.save(negocio);
@@ -542,27 +560,31 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public void actualizarReserva(DetalleReservaDTO detalleReservaDTO) throws Exception {
 
-        Cliente cliente = clienteServicio.buscarCliente(detalleReservaDTO.codigoCliente());
         Negocio negocio = buscarNegocio(detalleReservaDTO.codigoNegocio());
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
 
         List<Reserva> listaReservas =  negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getFecha().equals(detalleReservaDTO.fecha()) && reserva.getHora().equals(detalleReservaDTO.hora())) {
-                throw new Exception("Ya existe una reserva para esa fecha y hora");
+            if (reserva.getCodigoNegocio().equals(detalleReservaDTO.codigoCliente())) {
+                LocalDate fechaActual = LocalDate.now();
+                LocalTime horaActual = LocalTime.now();
+
+                if (horaActual.equals(reserva.getFecha())) {
+                    throw new Exception("Ya existe una reserva con ese fecha");
+                }
             }
         }
 
         List<Reserva> listaReservasNegocio = negocio.getListaReservas();
         for (Reserva reserva : listaReservasNegocio) {
             if (reserva.getCodigoCliente().equals(detalleReservaDTO.codigoCliente()) ){
-                reserva.setFecha(detalleReservaDTO.fecha());
-                reserva.setHora(detalleReservaDTO.hora());
+                reserva.setFecha(LocalDate.now());
+                reserva.setHora(LocalTime.now());
                 reserva.setCantidadPersonas(detalleReservaDTO.cantidadPersonas());
                 reserva.setCodigoCliente(detalleReservaDTO.codigoCliente());
                 reserva.setCodigoNegocio(detalleReservaDTO.codigoNegocio());
                 negocioRepo.save(negocio);
-                return;
             }
         }
     }
@@ -570,14 +592,14 @@ public class NegocioServicioImpl implements NegocioServicio {
     @Override
     public DetalleReservaDTO obtenerReserva(String idNegocio, String idCliente) throws Exception {
 
-        Cliente cliente = clienteServicio.buscarCliente(idCliente);
         Negocio negocio = buscarNegocio(idNegocio);
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
 
         List<Reserva> listaReservas = negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
             if (reserva.getCodigoCliente().equals(idCliente)) {
-                return new DetalleReservaDTO(reserva.getFecha(), reserva.getHora(), reserva.getCantidadPersonas(), reserva.getCodigoCliente(), reserva.getCodigoNegocio()) ;
+                return new DetalleReservaDTO(reserva.getCodigoCliente(), reserva.getCodigoNegocio(), reserva.getCantidadPersonas()) ;
 
             }
 
@@ -609,11 +631,12 @@ public class NegocioServicioImpl implements NegocioServicio {
     public List<DetalleReservaDTO> listarReservas(String idNegocio) throws Exception{
         List<DetalleReservaDTO> respuesta = new ArrayList<>();
         Negocio negocio = buscarNegocio(idNegocio);
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
 
         List<Reserva> listaReservas = negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            respuesta.add(new DetalleReservaDTO(reserva.getFecha(), reserva.getHora(), reserva.getCantidadPersonas(), reserva.getCodigoCliente(), reserva.getCodigoNegocio()));
+            respuesta.add(new DetalleReservaDTO(reserva.getCodigoCliente(), reserva.getCodigoNegocio(), reserva.getCantidadPersonas()));
         }
         return respuesta;
     }
@@ -651,6 +674,7 @@ public class NegocioServicioImpl implements NegocioServicio {
         revision.setCodigoNegocio(revisionesModeradorDTO.codigoNegocio());
         revision.setEstado(EstadoNegocioModerador.RECHAZADO);
 
+        historialRepo.save( revision );
 
         negocio.setEstado(EstadoNegocio.INACTIVO);
         negocio.getHistorialRevisiones().add(revision);
@@ -686,6 +710,8 @@ public class NegocioServicioImpl implements NegocioServicio {
         revision.setCodigoModerador(revisionesModeradorDTO.codigoModerador());
         revision.setCodigoNegocio(revisionesModeradorDTO.codigoNegocio());
         revision.setEstado(EstadoNegocioModerador.APROBADO);
+
+        historialRepo.save( revision );
 
         negocio.setEstado(EstadoNegocio.ACTIVO);
         negocio.getHistorialRevisiones().add(revision);
