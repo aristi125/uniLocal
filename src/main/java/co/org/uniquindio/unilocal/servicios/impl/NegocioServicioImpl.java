@@ -566,11 +566,11 @@ public class NegocioServicioImpl implements NegocioServicio {
         List<Reserva> listaReservas =  negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getCodigoNegocio().equals(detalleReservaDTO.codigoCliente())) {
+            if (reserva.getCodigoNegocio().equals(detalleReservaDTO.codigoNegocio())) {
                 LocalDate fechaActual = LocalDate.now();
                 LocalTime horaActual = LocalTime.now();
 
-                if (horaActual.equals(reserva.getFecha())) {
+                if (fechaActual.equals(reserva.getFecha())&& horaActual.equals(reserva.getHora())) {
                     throw new Exception("Ya existe una reserva con ese fecha");
                 }
             }

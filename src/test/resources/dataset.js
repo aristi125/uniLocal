@@ -70,6 +70,38 @@ db.moderadores.insertMany([
         password: 'mipassword',
         estado: 'ACTIVO',
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador2',
+        email: 'moderador2@email.com',
+        nombre: 'moderador2',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador3',
+        email: 'moderador3@gmail.com',
+        nombre: 'moderador3',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador4',
+        email: 'moderador4@email.com',
+        nombre: 'moderador4',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador5',
+        email: 'moderador5@email.com',
+        nombre: 'moderador5',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
     }
 ]);
 
@@ -372,51 +404,6 @@ db.comentarios.insertMany([
         respuesta: "",
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     }
-]);
-
-db.cuenta.insertMany([
-    {
-        _id: 'Cuenta1',
-        email: 'juan@email.com',
-        nombre: 'Juan',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },
-    {
-        _id: 'Cuenta2',
-        email: 'maria@email.com',
-        nombre: 'maria',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },
-    {
-        _id: 'Cuenta3',
-        email: 'pedro@email.com',
-        nombre: 'Pedro',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },{
-        _id: 'Cuenta4',
-        email: 'aleja@gmail.com',
-        nombre: 'Aleja',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },{
-        _id: 'Cuenta5',
-        email: 'ana@gmail.com',
-        nombre: 'Ana',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    }
-]);
-
-db.moderadores.insertMany([
-    {  }
 ]);
 
 db.productos.insertMany([
