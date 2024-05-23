@@ -10,11 +10,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 public record DetalleReservaDTO (
-        @NotNull LocalDate fecha,
-        @NotNull LocalTime hora,
-        @NotNull int cantidadPersonas,
         @NotBlank String codigoCliente,
-        @NotBlank String codigoNegocio
-) {
+        @NotBlank String codigoNegocio,
+        @NotNull int cantidadPersonas
+        ) {
 
 }

@@ -7,9 +7,9 @@ import java.time.LocalDateTime;
 
 public record ReporteDTO(
 
+        @NotBlank String codigoPropietario,
         @NotBlank String codigoNegocio,
         @NotBlank String nombreNegocio,
-        @NotNull LocalDateTime fecha,
         @NotNull int numReservas
 ) {
 }

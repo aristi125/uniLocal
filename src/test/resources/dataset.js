@@ -1,4 +1,4 @@
-db = connect( 'mongodb://root:example@localhost:27017/Unilocal?authSource=admin' );
+db = connect( 'mongodb://root:example@localhost:27017/UniLocal?authSource=admin' );
 db.clientes.insertMany([
     {
         _id: 'Cliente1',
@@ -9,6 +9,7 @@ db.clientes.insertMany([
         password: 'mipassword',
         nombre: 'Juan',
         estado: 'ACTIVO',
+        agregarFavoritos: ['Negocio3', 'Negocio4'],
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
     },
     {
@@ -20,6 +21,7 @@ db.clientes.insertMany([
         password: 'mipassword',
         nombre: 'Maria',
         estado: 'ACTIVO',
+        agregarFavoritos: ['Negocio3', 'Negocio4'],
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
     },
     {
@@ -31,6 +33,7 @@ db.clientes.insertMany([
         password: 'mipassword',
         nombre: 'Pedro',
         estado: 'ACTIVO',
+        agregarFavoritos: ['Negocio3', 'Negocio4'],
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
     },
     {
@@ -42,6 +45,7 @@ db.clientes.insertMany([
         password: 'mipassword',
         nombre: 'Aleja',
         estado: 'ACTIVO',
+        agregarFavoritos: ['Negocio3', 'Negocio4'],
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
     },
     {
@@ -53,9 +57,54 @@ db.clientes.insertMany([
         password: 'mipassword',
         nombre: 'Ana',
         estado: 'ACTIVO',
+        agregarFavoritos: ['Negocio3', 'Negocio4'],
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cliente'
     }
 ]);
+
+db.moderadores.insertMany([
+    {
+        _id: 'Moderador1',
+        email: 'moderador@email.com',
+        nombre: 'moderador',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador2',
+        email: 'moderador2@email.com',
+        nombre: 'moderador2',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador3',
+        email: 'moderador3@gmail.com',
+        nombre: 'moderador3',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador4',
+        email: 'moderador4@email.com',
+        nombre: 'moderador4',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    },
+    {
+        _id: 'Moderador5',
+        email: 'moderador5@email.com',
+        nombre: 'moderador5',
+        password: 'mipassword',
+        estado: 'ACTIVO',
+        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Moderador'
+    }
+]);
+
 db.negocios.insertMany([
     {
         _id: 'Negocio1',
@@ -70,8 +119,8 @@ db.negocios.insertMany([
         horarios: [
             {
                 dia: 'LUNES',
-                horaInicio: '08:00',
-                horaFin: '20:00'
+                horaInicio: new Date(2024, 3, 18, 15, 30, 45),
+                horaFin: new Date(2024, 3, 18, 15, 30, 45),
             }
         ],
         telefonos: ['1234567', '7654321'],
@@ -101,10 +150,10 @@ db.negocios.insertMany([
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio1'
         }],
-        agenda: [{
+        agenda: {
             tematica: 'Mexicana',
             descripcion: 'Fiesta mexicana',
-        }],
+        },
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },
     {
@@ -120,8 +169,8 @@ db.negocios.insertMany([
         horarios: [
             {
                 dia: 'LUNES',
-                horaInicio: '08:00',
-                horaFin: '20:00'
+                horaInicio: new Date(2024, 3, 18, 15, 30, 45),
+                horaFin: new Date(2024, 3, 18, 15, 30, 45)
             }
         ],
         telefonos: ['1234567', '7654321'],
@@ -151,10 +200,10 @@ db.negocios.insertMany([
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio1'
         }],
-        agenda: [{
+        agenda: {
             tematica: 'Descanso',
             descripcion: 'Relajación',
-        }],
+        },
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },{
         _id: 'Negocio3',
@@ -169,8 +218,8 @@ db.negocios.insertMany([
         horarios: [
             {
                 dia: 'LUNES',
-                horaInicio: '08:00',
-                horaFin: '20:00'
+                horaInicio: new Date(2024, 3, 18, 15, 30, 45),
+                horaFin: new Date(2024, 3, 18, 15, 30, 45)
             }
         ],
         telefonos: ['1234567', '7654321'],
@@ -200,10 +249,10 @@ db.negocios.insertMany([
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio3'
         }],
-        agenda: [{
+        agenda: {
             tematica: 'Cafeteria',
             descripcion: 'Cafeteria',
-        }],
+        },
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },{
         _id: 'Negocio4',
@@ -218,8 +267,8 @@ db.negocios.insertMany([
         horarios: [
             {
                 dia: 'LUNES',
-                horaInicio: '08:00',
-                horaFin: '20:00'
+                horaInicio: new Date(2024, 3, 18, 15, 30, 45),
+                horaFin: new Date(2024, 3, 18, 15, 30, 45)
             }
         ],
         telefonos: ['1234567', '7654321'],
@@ -249,10 +298,10 @@ db.negocios.insertMany([
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio4'
         }],
-        agenda: [{
+        agenda: {
             tematica: 'Arte',
             descripcion: 'Arte',
-        }],
+        },
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     },{
         _id: 'Negocio5',
@@ -267,8 +316,8 @@ db.negocios.insertMany([
         horarios: [
             {
                 dia: 'LUNES',
-                horaInicio: '08:00',
-                horaFin: '20:00'
+                horaInicio: new Date(2024, 3, 18, 15, 30, 45),
+                horaFin: new Date(2024, 3, 18, 15, 30, 45)
             }
         ],
         telefonos: ['1234567', '7654321'],
@@ -298,10 +347,10 @@ db.negocios.insertMany([
             codigoCliente: 'Cliente1',
             codigoNegocio: 'Negocio5'
         }],
-        agenda: [{
+        agenda: {
             tematica: 'Comida Rapida',
             descripcion: 'Comida Rapida',
-        }],
+        },
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Negocio'
     }
 
@@ -355,51 +404,6 @@ db.comentarios.insertMany([
         respuesta: "",
         _class: 'co.org.uniquindio.unilocal.modelo.documentos.Comentario'
     }
-]);
-
-db.cuenta.insertMany([
-    {
-        _id: 'Cuenta1',
-        email: 'juan@email.com',
-        nombre: 'Juan',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },
-    {
-        _id: 'Cuenta2',
-        email: 'maria@email.com',
-        nombre: 'maria',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },
-    {
-        _id: 'Cuenta3',
-        email: 'pedro@email.com',
-        nombre: 'Pedro',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },{
-        _id: 'Cuenta4',
-        email: 'aleja@gmail.com',
-        nombre: 'Aleja',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    },{
-        _id: 'Cuenta5',
-        email: 'ana@gmail.com',
-        nombre: 'Ana',
-        password: 'mipassword',
-        estado: 'ACTIVO',
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Cuenta'
-    }
-]);
-
-db.moderadores.insertMany([
-    {  }
 ]);
 
 db.productos.insertMany([

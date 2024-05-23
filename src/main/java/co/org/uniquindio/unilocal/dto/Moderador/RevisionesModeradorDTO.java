@@ -11,8 +11,8 @@ public record RevisionesModeradorDTO(
         @NotBlank String codigoNegocio,
         @NotBlank String descripcion,
         @NotBlank String codigoModerador,
-        @NotBlank String respuesta,
-        @NotNull LocalDateTime fecha
+        @NotBlank String respuesta
+
 
 
 ) {

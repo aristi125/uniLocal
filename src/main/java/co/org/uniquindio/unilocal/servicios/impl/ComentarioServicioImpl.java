@@ -2,22 +2,24 @@ package co.org.uniquindio.unilocal.servicios.impl;
 
 
 import co.org.uniquindio.unilocal.dto.EmailDTO;
+import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Comentario;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.repositorios.ComentarioRepo;
-import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
+import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 
 @Service
@@ -25,99 +27,67 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ComentarioServicioImpl implements ComentarioServicio {
 
-    private final ClienteRepo clienteRepo; // Validar que el cliente exista
-    private final NegocioRepo negocioRepo;
-    private final ComentarioRepo comentarioRepo;
+    private final NegocioServicio negocioServicio;
+    private final ComentarioRepo comentarioRepo; // Repositorio de la propia clase
     private final EmailServicio emailServicio;
+    private final ClienteServicio clienteServicio;
 
     @Override
-    public void crearComentario(RegistroComentarioDTO comentario) throws Exception {
+    public void crearComentario(RegistroComentarioDTO registroComentarioDTO) throws Exception {
+        Cliente propietario = clienteServicio.buscarCliente(registroComentarioDTO.codigoCliente());
+        Negocio negocio = negocioServicio.buscarNegocio(registroComentarioDTO.codigoNegocio());
 
-        Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
-        if (negocioOptional.isEmpty()) {
-            throw new RuntimeException("No existe negocio");
+        if(registroComentarioDTO.calificacion()<0 || registroComentarioDTO.calificacion()>5){
+            throw new Exception("Calificacion excede el rango");
         }
+        Comentario comentario = new Comentario();
+        comentario.setFecha(LocalDateTime.now());
+        comentario.setCalificacion(registroComentarioDTO.calificacion());
+        comentario.setCodigoCliente(registroComentarioDTO.codigoCliente());
+        comentario.setCodigoNegocio(registroComentarioDTO.codigoNegocio()); //Este código relaciona todos los comentarios con un negocio
+        comentario.setMensaje(registroComentarioDTO.mensaje());
 
-        Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoCliente());
-        if (clienteOptional.isEmpty()) {
-            throw new RuntimeException("No existe cliente");
-        }
-
-        List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(comentario.codigoNegocio());
-        Comentario comentarioComentario = new Comentario();
-        comentarioComentario.setFecha(comentario.fecha());
-        comentarioComentario.setCalificacion(comentario.calificacion());
-        comentarioComentario.setCodigoCliente(comentario.codigoCliente());
-        comentarioComentario.setCodigoNegocio(comentario.codigoNegocio());
-        comentarioComentario.setMensaje(comentario.mensaje());
-        comentarioComentario.setRespuesta("");
-
-        listaComentarios.add(comentarioComentario);
-        Negocio negocio = negocioOptional.get();
-        negocio.setComentarios(listaComentarios);
-        negocioRepo.save(negocio);
-        comentarioRepo.save(comentarioComentario);
-
-        String codigoPropietario = negocio.getCodigoCliente();
-        Optional<Cliente> propietarioOptional = clienteRepo.findById(codigoPropietario);
-        if (propietarioOptional.isEmpty()) {
-            throw new RuntimeException("No existe propietario");
-        }
-        Cliente propietario = propietarioOptional.get();
-        String email = propietario.getEmail();
+        comentarioRepo.save(comentario);
 
         // Enviar correo al propietario
         EmailDTO emailDTO = new EmailDTO(
                 "Nuevo comentario",
                 "Hola " + propietario.getNombre() + "! \n\n" +
                         "Tu negocio " + negocio.getNombre() + " ha recibido un nuevo comentario. \n\n" +
-                        comentario.mensaje() + "\n\n" +
+                        registroComentarioDTO.mensaje() + "\n\n" +
                         "Ingresa a la plataforma para responderlo. \n\n" +
                         "Gracias por confiar en nosotros!",
-                email
+                propietario.getEmail()
         );
-
         emailServicio.enviarCorreo(emailDTO);
-
-
-
+        calcularPromedioCalificaciones(registroComentarioDTO.codigoNegocio());
     }
 
     @Override
-    public void responderComentario(RespuestaComentarioDTO comentario) throws Exception{
-        Optional<Cliente> clienteOptional = clienteRepo.findById(comentario.codigoClienteReceptor());
-        if (clienteOptional.isEmpty()) {
-            throw new RuntimeException("No existe cliente receptor");
-        }
-        Optional<Negocio> negocioOptional = negocioRepo.findById(comentario.codigoNegocio());
-        if (negocioOptional.isEmpty()) {
-            throw new RuntimeException("No existe negocio");
-        }
+    public void responderComentario(RespuestaComentarioDTO respuestaComentarioDTO) throws Exception{
 
-        Negocio negocio = negocioOptional.get();
+        Cliente cliente = clienteServicio.buscarCliente(respuestaComentarioDTO.codigoClienteReceptor());
+        Negocio negocio = negocioServicio.buscarNegocio(respuestaComentarioDTO.codigoNegocio());
+
         List<Comentario> listaComentarios = negocio.getComentarios();
         for (Comentario c : listaComentarios) {
-            if (c.getCodigoComentario().equals(comentario.codigoComentario())) {
-                c.setRespuesta(comentario.respuesta());
+            if (c.getCodigoComentario().equals(respuestaComentarioDTO.codigoComentario())) {
+                c.setRespuesta(respuestaComentarioDTO.respuesta());
                 break;
             }
         }
 
-        Comentario aux = comentarioRepo.findByCodigoComentario(comentario.codigoComentario());
-        aux.setRespuesta(comentario.respuesta());
+        Comentario aux = comentarioRepo.findByCodigoComentario(respuestaComentarioDTO.codigoComentario());
+        aux.setRespuesta(respuestaComentarioDTO.respuesta());
         comentarioRepo.save(aux);
-
-        Cliente cliente = clienteOptional.get();
-        String email = cliente.getEmail();
-        // Enviar correo al cliente
 
         EmailDTO emailDTO = new EmailDTO(
                 "Respuesta a tu comentario",
                 "Hola " + cliente.getNombre() + "! \n\n" +
                         "Tu comentario ha sido respondido. \n\n" +
-                        comentario.respuesta() + "\n\n" +
+                        respuestaComentarioDTO.respuesta() + "\n\n" +
                         "Gracias por confiar en nosotros!",
-                email
+                cliente.getEmail()
         );
 
         emailServicio.enviarCorreo(emailDTO);
@@ -127,10 +97,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     @Override
     public List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception {
 
-        Optional<Negocio> negocio = negocioRepo.findById(codigoNegocio);
-        if (negocio.isEmpty()) {
-            throw new Exception("No existe negocio");
-        }
+        Negocio negocio = negocioServicio.buscarNegocio(codigoNegocio);
+        clienteServicio.buscarCliente(negocio.getCodigoCliente());
         List<Comentario> historialComentario = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (historialComentario.isEmpty()) {
             throw new Exception("No hay comentarios");
@@ -147,24 +115,40 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         return respuesta;
     }
 
-    @Override
+
     public int calcularPromedioCalificaciones (String codigoNegocio) throws Exception {
-
-        Optional<Negocio> negocio = negocioRepo.findById(codigoNegocio);
-        if (negocio.isEmpty()) {
-            throw new Exception("No existe negocio");
-        }
-
+        negocioServicio.buscarNegocio(codigoNegocio);
         List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (listaComentarios.isEmpty()) {
             throw new Exception("No hay comentarios");
         }
-
         int suma = 0;
         for (Comentario c : listaComentarios) {
             suma += c.getCalificacion();
         }
         return suma / listaComentarios.size();
+    }
 
+    @Override
+    public List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoria) throws Exception {
+
+            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoria);
+            if (listaNegocios.isEmpty()) {
+                throw new Exception("No hay negocios con esta categoria");
+            }
+
+            List<ItemListaComentariosDTO> listaComentarios = new ArrayList<>();
+            for (ItemListaLugaresCreadosDTO negocio : listaNegocios) {
+                List<Comentario> comentarios = comentarioRepo.findAllByCodigoNegocio(negocio.idNegocio());
+                for (Comentario c : comentarios) {
+                    listaComentarios.add(new ItemListaComentariosDTO(
+                            c.getCodigoComentario(),
+                            c.getFecha(),
+                            c.getMensaje()
+                    ));
+                }
+
+            }
+            return listaComentarios;
     }
 }

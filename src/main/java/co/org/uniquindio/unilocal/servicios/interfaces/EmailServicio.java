@@ -1,5 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
+import co.org.uniquindio.unilocal.dto.EmailArchivoDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 
 public interface EmailServicio {
@@ -10,4 +11,6 @@ public interface EmailServicio {
      * @throws Exception
      */
     void enviarCorreo(EmailDTO emailDTO) throws Exception;
+
+    void enviarCorreoArchivo(EmailArchivoDTO emailDTO) throws Exception;
 }

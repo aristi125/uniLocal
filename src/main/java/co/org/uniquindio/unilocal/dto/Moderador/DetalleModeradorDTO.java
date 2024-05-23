@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto.cliente;
+package co.org.uniquindio.unilocal.dto.Moderador;
 
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import jakarta.validation.constraints.Email;
@@ -7,9 +7,7 @@ import jakarta.validation.constraints.NotNull;
 import org.hibernate.validator.constraints.Length;
 
 
-//NOTA: Esta clase es para obtener el cliente con todos sus atributos
-//es para hacer procesos
-public record DetalleClienteDTO(
+public record DetalleModeradorDTO(
         @NotBlank String id,
         @NotBlank @Length(max = 30) String nombre,
         @NotBlank String fotoPerfil,
