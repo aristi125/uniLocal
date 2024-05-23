@@ -68,13 +68,13 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.mostrarFavoritos(idCliente)));
     }
 
-    @DeleteMapping("eliminar-favoritos")
+    @DeleteMapping("/eliminar-favoritos")
     public ResponseEntity<MensajeDTO<String>> removerFavoritos(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
         clienteServicio.removerFavoritos(idNegocio, idCliente);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado de favoritos"));
     }
 
-    @GetMapping("lugares-creados-cliente")
+    @GetMapping("/lugares-creados-cliente")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> listaLugaresCreados(@PathVariable String idCliente, @PathVariable String idNegocio) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listaLugaresCreados(idCliente, idNegocio)));
     }
