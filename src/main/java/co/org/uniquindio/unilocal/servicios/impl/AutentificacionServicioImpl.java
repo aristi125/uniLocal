@@ -16,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Optional;
 
 @Service
@@ -27,6 +28,23 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
     private final ModeradorRepo moderadorRepo;
     private final JWTUtils jwtUtils;
 
+    @Override
+    public TokenDTO iniciarSesion(SesionDTO sesionDTO) throws Exception {
+
+        Optional<Cliente> clienteoptional = clienteRepo.findByEmail(sesionDTO.email());
+
+        if(clienteoptional.isPresent()) {
+            return iniciarSesionCliente(sesionDTO);
+        }
+
+        Optional<Moderador> moderadoroptional = moderadorRepo.findByEmail(sesionDTO.email());
+
+        if(moderadoroptional.isPresent()) {
+            return iniciarSesionModerador(sesionDTO);
+        }
+
+        return null;
+    }
     // Metodo para iniciar sesion como cliente
     @Override
     public TokenDTO iniciarSesionCliente(SesionDTO sesionDTO) throws Exception {
@@ -60,9 +78,9 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
         }
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         Moderador moderador = moderadorOptional.get();
-        /*if (!passwordEncoder.matches(sesionDTO.password(), moderador.getPassword())) {
+        if (!passwordEncoder.matches(sesionDTO.password(), moderador.getPassword())) {
             throw new Exception("La contraseña es incorrecta, inténtelo de nuevo");
-        }*/
+        }
         Map<String, Object> map = new HashMap<>();
         map.put("rol", "MODERADOR");
         map.put("nombre", moderador.getNombre());

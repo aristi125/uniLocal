@@ -8,4 +8,6 @@ public interface AutentificacionServicio {
 
     TokenDTO iniciarSesionModerador(SesionDTO sesionDTO) throws Exception;
 
+    TokenDTO iniciarSesion(SesionDTO sesionDTO) throws Exception;
+
 }

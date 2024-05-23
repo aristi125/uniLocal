@@ -8,6 +8,7 @@ import co.org.uniquindio.unilocal.servicios.interfaces.AutentificacionServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.apache.el.parser.Token;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -38,5 +39,11 @@ public class AutentificacionController {
     public ResponseEntity<MensajeDTO<String>> registrarCliente(@Valid @RequestBody RegistroClienteDTO registroClienteDTO) throws Exception {
         clienteServicio.registrarCliente(registroClienteDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "El cliente se ha registrado satisfactoriamente"));
+    }
+
+    @PostMapping("/login")
+    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesion(@Valid @RequestBody SesionDTO sesionDTO) throws Exception {
+        TokenDTO tokenDTO = autentificacionServicio.iniciarSesion((sesionDTO));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, tokenDTO));
     }
 }

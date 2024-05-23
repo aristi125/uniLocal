@@ -12,7 +12,7 @@ public record ItemNegociosRevisionDTO(
         @NotBlank @Length(max = 30) String nombre,
         @NotBlank String descripcion,
         @NotNull List<String> telefonos,
-        @NotNull Ubicacion direccion,
+        @NotNull Ubicacion ubicacion,
         @NotNull List<Horario>horarios,
         @NotNull CategoriaNegocio tipoNegocio,
         @NotNull List<String>listaImagenes
