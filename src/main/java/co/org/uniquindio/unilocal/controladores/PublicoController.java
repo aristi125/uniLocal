@@ -10,6 +10,7 @@ import co.org.uniquindio.unilocal.dto.negocio.DetalleNegocioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
+import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.ComentarioServicio;
@@ -23,7 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/cuenta")
+@RequestMapping("/api/publico")
 @RequiredArgsConstructor
 public class PublicoController {
 
@@ -31,6 +32,16 @@ public class PublicoController {
     private final ComentarioServicio comentarioServicio;
     private final NegocioServicio negocioServicio;
     private final ModeradorServicio moderadorServicio;
+
+    @GetMapping("/listar-ciudades")
+    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCiudades() throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
+    }
+
+    @GetMapping("/listar-categoria-negocio")
+    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCategoriaNegocio() throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
+    }
 
     @GetMapping("/enviar-link-recuperacion-password-cliente")
     public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionCliente(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {

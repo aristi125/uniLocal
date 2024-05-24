@@ -15,6 +15,7 @@ import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
+import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import jakarta.validation.Valid;
@@ -49,20 +50,20 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Cliente eliminado satisfactoriamente"));
     }
 
-    @PostMapping("/sitios-favoritos")
+    @PostMapping("/agregar-favoritos")
     public ResponseEntity<MensajeDTO<String>> agregarFavoritos(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
-        negocioServicio.agregarFavoritos(idClienteYNegocioDTO);
+        clienteServicio.agregarFavoritos(idClienteYNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Sitio agregado a favoritos"));
     }
 
-    @GetMapping("/obtener-favoritos-cliente/{idCliente}") // concatener el idCliente
+    @GetMapping("/mostrar-favoritos/{idCliente}") // concatener el idCliente
     public ResponseEntity<MensajeDTO<List<FavoritoDTO>>> mostrarFavoritos(@PathVariable String idCliente) throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.mostrarFavoritos(idCliente)));
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.mostrarFavoritos(idCliente)));
     }
 
-    @DeleteMapping("/eliminar-favoritos/{idNegocio}/{idCliente}")
-    public ResponseEntity<MensajeDTO<String>> removerFavoritos(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
-        negocioServicio.removerFavoritos(idNegocio, idCliente);
+    @DeleteMapping("/eliminar-favoritos")
+    public ResponseEntity<MensajeDTO<String>> eliminarFavoritos(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        clienteServicio.eliminarFavoritos(idClienteYNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Negocio eliminado de favoritos"));
     }
 
@@ -202,6 +203,16 @@ public class ClienteController {
     @GetMapping("/listar-negocio-propietario/{codigoPropietario}")
     public ResponseEntity<MensajeDTO<List<Negocio>>> listarNegociosPropietario(@PathVariable String codigoPropietario) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.listarNegociosPropietario(codigoPropietario)));
+    }
+
+    @GetMapping("/listar-ciudades")
+    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCiudades() throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
+    }
+
+    @GetMapping("/listar-categoria-negocio")
+    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCategoriaNegocio() throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
     }
 
 }

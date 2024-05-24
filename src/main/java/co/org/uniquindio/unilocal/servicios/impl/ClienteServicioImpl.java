@@ -4,11 +4,16 @@ import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.LinkRecuperacionDTO;
+import co.org.uniquindio.unilocal.dto.negocio.IDClienteYNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
+import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.*;
 import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
+import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
+import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,6 +30,7 @@ import java.util.Optional;
 public class ClienteServicioImpl implements ClienteServicio {
 
     private final ClienteRepo clienteRepo;
+    private final NegocioRepo negocioRepo;
     private final EmailServicio emailServicio;
     private final JWTUtils jwtUtils;
 
@@ -134,6 +140,11 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
+    public List<CategoriaNegocio> listarCategoriaNegocio() throws Exception {
+        return Arrays.asList(CategoriaNegocio.values());
+    }
+
+    @Override
     public void enviarLinkRecuperacionCliente(LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
         Cliente cliente = buscarCliente(linkRecuperacionDTO.idCuenta());
         String token = jwtUtils.generarToken(linkRecuperacionDTO.email(), null);
@@ -189,6 +200,83 @@ public class ClienteServicioImpl implements ClienteServicio {
                 cliente.getEmail()
         );
         emailServicio.enviarCorreo(emailDTO);
+        clienteRepo.save(cliente);
+    }
+
+    @Override
+    public void agregarFavoritos(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception{
+        Cliente cliente = buscarCliente(idClienteYNegocioDTO.idCliente());
+
+        List<Negocio> favoritosCliente = cliente.getAgregarFavoritos();
+
+        for(Negocio negociofav: favoritosCliente){
+            if (negociofav.getCodigo().equals(idClienteYNegocioDTO.idNegocio())) {
+                throw new Exception("El negocio ya se encuentra en los favoritos del cliente");
+            }
+        }
+        Optional<Negocio> optionalNegocio = Optional.ofNullable(negocioRepo.findByCodigo(idClienteYNegocioDTO.idNegocio()));
+        if (optionalNegocio.isEmpty()) {
+            throw new Exception("No se encontró el negocio");
+        }
+        Negocio negocio = optionalNegocio.get();
+        if (!negocio.getEstado().equals(EstadoNegocio.ACTIVO)) {
+            throw new Exception("El negocio no está activo y no se puede agregar a favoritos");
+        }
+
+        favoritosCliente.add(optionalNegocio.get());
+        clienteRepo.save(cliente);
+    }
+
+    @Override
+    public List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception {
+        Cliente cliente = buscarCliente(idCliente);
+        List<Negocio> favoritoCliente = cliente.getAgregarFavoritos();
+        List<FavoritoDTO> favoritos = new ArrayList<>();
+
+        for (Negocio negocio : favoritoCliente) {
+            if (negocio.getEstado() == EstadoNegocio.ACTIVO) {
+                FavoritoDTO favoritoDTO = new FavoritoDTO(
+                        negocio.getCodigo(),
+                        negocio.getImagenes().isEmpty() ? null : negocio.getImagenes().get(0),
+                        negocio.getNombre(),
+                        negocio.getUbicacion()
+                );
+                favoritos.add(favoritoDTO);
+            }
+        }
+        return favoritos;
+    }
+
+    @Override
+    public void eliminarFavoritos(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        // Buscar al cliente por su ID
+        Cliente cliente = buscarCliente(idClienteYNegocioDTO.idCliente());
+
+        // Obtener la lista de negocios favoritos del cliente
+        List<Negocio> favoritosCliente = cliente.getAgregarFavoritos();
+
+        // Buscar el negocio por su código
+        Optional<Negocio> optionalNegocio = Optional.ofNullable(negocioRepo.findByCodigo(idClienteYNegocioDTO.idNegocio()));
+
+        // Verificar si se encontró el negocio
+        if (optionalNegocio.isEmpty()) {
+            throw new Exception("No se encontró el negocio");
+        }
+
+        // Obtener el negocio del Optional
+        Negocio negocio = optionalNegocio.get();
+
+        // Verificar si el negocio está activo
+        if (!negocio.getEstado().equals(EstadoNegocio.ACTIVO)) {
+            throw new Exception("El negocio no está activo y no se puede eliminar de favoritos");
+        }
+
+        // Eliminar el negocio de la lista de favoritos del cliente
+        if (!favoritosCliente.remove(negocio)) {
+            throw new Exception("El negocio no se encuentra en los favoritos del cliente");
+        }
+
+        // Guardar los cambios en el cliente
         clienteRepo.save(cliente);
     }
 

@@ -15,6 +15,8 @@ import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
+import jakarta.validation.Valid;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -53,12 +55,6 @@ public interface NegocioServicio {
     void eliminarAgenda(AgendaDTO agendaDTO) throws Exception;
 
     DetalleAgendaDTO obtenerAgenda(String codigoNegocio) throws Exception;
-
-    void agregarFavoritos(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
-
-    List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception;
-
-    void removerFavoritos(String idNegocio, String idCliente) throws Exception;
 
     void registrarReserva(DetalleReservaDTO registroReservaDTO) throws Exception;
 

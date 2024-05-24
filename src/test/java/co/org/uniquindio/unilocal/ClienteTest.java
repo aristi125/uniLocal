@@ -490,7 +490,7 @@ public class ClienteTest {
     //@Test
     public void eliminarAgendaTest() throws Exception {
         //Eliminamos la agenda
-        negocioServicio.eliminarAgenda(new AgendaDTO("123", "123", EstadoAgenda.ACTIVA));
+        negocioServicio.eliminarAgenda(new AgendaDTO("123", "123",EstadoAgenda.ACTIVA));
     }
 
     /**
@@ -514,7 +514,7 @@ public class ClienteTest {
     //@Test
     public void agregarFavoritosTest() throws Exception {
         //Agregamos un negocio a favoritos
-        negocioServicio.agregarFavoritos(new IDClienteYNegocioDTO("negocio1", "cliente1"));
+        clienteServicio.agregarFavoritos(new IDClienteYNegocioDTO("Negocio1", "Cliente1"));
     }
 
     /**
@@ -533,7 +533,7 @@ public class ClienteTest {
     //@Test
     public void mostrarFavoritosTest() throws Exception {
         //Obtenemos la lista de favoritos de un cliente
-        List<FavoritoDTO> favoritos = negocioServicio.mostrarFavoritos("Cliente1");
+        List<FavoritoDTO> favoritos = clienteServicio.mostrarFavoritos("Cliente1");
         //Imprimimos los favoritos
         favoritos.forEach(System.out::println);
         //Verificamos que solo exista un favorito

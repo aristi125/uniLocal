@@ -7,6 +7,7 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 @Document("clientes")
@@ -26,5 +27,5 @@ public class Cliente extends Cuenta implements Serializable {
     private String fotoPerfil;
 
     //AGREGAR A FAVORITOS
-    private List<Negocio> agregarFavoritos;
+    private List<Negocio> agregarFavoritos = new ArrayList<>();
 }

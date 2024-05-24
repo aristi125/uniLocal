@@ -30,13 +30,7 @@ public class ModeradorController {
     private final ClienteServicio clienteServicio;
     private final ModeradorServicio moderadorServicio;
     private final NegocioServicio negocioServicio;
-    private final ComentarioServicio comentarioServicio;
 
-
-    @GetMapping("/listar-ciudades")
-    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCiudades() throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
-    }
 
     @GetMapping("/listar-clientes")
     public ResponseEntity<MensajeDTO<List<ItemDetalleClienteDTO>>> listarClientes() throws Exception {

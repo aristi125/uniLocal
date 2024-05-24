@@ -8,6 +8,7 @@ import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
+import co.org.uniquindio.unilocal.dto.cliente.ItemDetalleClienteDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
@@ -23,6 +24,7 @@ import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -30,6 +32,7 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -109,6 +112,10 @@ public class NegocioServicioImpl implements NegocioServicio {
         Negocio negocio = buscarNegocio(eliminacionNegocioDTO.idNegocio());
         negocio.setEstado(EstadoNegocio.INACTIVO);
         negocioRepo.save(negocio);
+    }
+
+    public ItemNegocioDTO verDetalleNegocio(String codigoNegocio) throws Exception{
+        return null;
     }
 
     @Override
@@ -458,46 +465,6 @@ public class NegocioServicioImpl implements NegocioServicio {
         return new DetalleAgendaDTO(
                 agenda.getTematica(),
                 agenda.getDescripcion());
-    }
-
-    @Override
-    public void agregarFavoritos(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception{
-
-        Negocio negocio = buscarNegocio(idClienteYNegocioDTO.idNegocio());
-        Cliente cliente = clienteServicio.buscarCliente(idClienteYNegocioDTO.idCliente());
-
-        if (cliente.getAgregarFavoritos() == null) {
-            cliente.setAgregarFavoritos(new ArrayList<>());
-        }
-
-        cliente.getAgregarFavoritos().add(negocio);
-    }
-
-    @Override
-    public List<FavoritoDTO> mostrarFavoritos(String idCliente) throws Exception{
-
-        Cliente cliente = clienteServicio.buscarCliente(idCliente);
-
-        List<Negocio> favoritoCliente = cliente.getAgregarFavoritos();
-        List<FavoritoDTO> favoritos = new ArrayList<>();
-        Negocio negocio = null;
-        FavoritoDTO favoritoDTO = null;
-        for (Negocio favorito : favoritoCliente) {
-            negocio = buscarNegocio(favorito.getCodigo());
-            favoritoDTO = new FavoritoDTO(
-                    negocio.getCodigo(),
-                    negocio.getImagenes().get(0),
-                    negocio.getNombre(),
-                    negocio.getUbicacion()
-            );
-            favoritos.add(favoritoDTO);
-        }
-        return favoritos;
-    }
-
-    @Override
-    public void removerFavoritos(String idNegocio, String idCliente) throws Exception{
-        Cliente cliente = clienteServicio.buscarCliente(idCliente);
     }
 
     @Override
