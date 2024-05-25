@@ -22,17 +22,6 @@ public class AutentificacionController {
     private final AutentificacionServicio autentificacionServicio;
     private final ClienteServicio clienteServicio;
 
-    @PostMapping("/login-cliente")
-    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesionCliente(@Valid @RequestBody SesionDTO sesionDTO) throws Exception {
-        TokenDTO tokenDTO = autentificacionServicio.iniciarSesionCliente((sesionDTO));
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, tokenDTO));
-    }
-
-    @PostMapping("/login-moderador")
-    public ResponseEntity<MensajeDTO<TokenDTO>> iniciarSesionModerador(@Valid @RequestBody SesionDTO sesionDTO) throws Exception {
-        TokenDTO tokenDTO = autentificacionServicio.iniciarSesionModerador((sesionDTO));
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, tokenDTO));
-    }
 
     // Consultar al profesor sobre esta modificacion
     @PostMapping("/registrar-cliente")

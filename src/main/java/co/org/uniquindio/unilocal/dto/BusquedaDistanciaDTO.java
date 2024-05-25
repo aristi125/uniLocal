@@ -5,6 +5,6 @@ import jakarta.validation.constraints.NotNull;
 
 public record BusquedaDistanciaDTO(
         @NotNull Ubicacion ubicacion,
-        @NotNull double distancia
+        @NotNull float distancia
         ) {
 }

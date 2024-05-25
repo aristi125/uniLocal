@@ -1,4 +1,4 @@
-package co.org.uniquindio.unilocal.dto.negocio;
+package co.org.uniquindio.unilocal.dto;
 
 import jakarta.validation.constraints.NotBlank;
 

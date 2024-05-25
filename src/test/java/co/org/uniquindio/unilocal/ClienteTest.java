@@ -1,7 +1,7 @@
 package co.org.uniquindio.unilocal;
 
 import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
-import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
+import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.*;
@@ -16,7 +16,6 @@ import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoAgenda;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
@@ -25,8 +24,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.List;
 
@@ -423,7 +420,7 @@ public class ClienteTest {
     //@Test
     public void obtenerReservaTest() throws Exception {
         //Obtenemos la reserva
-        DetalleReservaDTO reserva = negocioServicio.obtenerReserva("Negocio1", "Cliente1");
+        DetalleReservaDTO reserva = negocioServicio.obtenerReserva(new IDClienteYNegocioDTO("Negocio1", "Cliente1"));
         //Imprimimos la reserva
         System.out.println(reserva);
         //Verificamos que la reserva no sea nula
@@ -436,7 +433,7 @@ public class ClienteTest {
     //@Test
     public void eliminarReservaTest() throws Exception {
         //Eliminamos la reserva
-        negocioServicio.eliminarReserva("Negocio1", "Cliente1");
+        negocioServicio.eliminarReserva(new IDClienteYNegocioDTO("Negocio1", "cliente1"));
     }
 
     /**
@@ -490,7 +487,7 @@ public class ClienteTest {
     //@Test
     public void eliminarAgendaTest() throws Exception {
         //Eliminamos la agenda
-        negocioServicio.eliminarAgenda(new AgendaDTO("123", "123",EstadoAgenda.ACTIVA));
+        negocioServicio.eliminarAgenda(new IDClienteYNegocioDTO("Negocio1", "cliente1"));
     }
 
     /**

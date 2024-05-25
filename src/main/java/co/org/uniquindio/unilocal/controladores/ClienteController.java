@@ -2,8 +2,8 @@ package co.org.uniquindio.unilocal.controladores;
 
 
 import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
+import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
 import co.org.uniquindio.unilocal.dto.MensajeDTO;
-import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
@@ -56,7 +56,7 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Sitio agregado a favoritos"));
     }
 
-    @GetMapping("/mostrar-favoritos/{idCliente}") // concatener el idCliente
+    @GetMapping("/mostrar-favoritos/{idCliente}")
     public ResponseEntity<MensajeDTO<List<FavoritoDTO>>> mostrarFavoritos(@PathVariable String idCliente) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.mostrarFavoritos(idCliente)));
     }
@@ -110,8 +110,8 @@ public class ClienteController {
     }
 
     @DeleteMapping("/eliminar-agenda")
-    public ResponseEntity<MensajeDTO<String>> eliminarAgenda(@Valid @RequestBody AgendaDTO agendaDTO) throws Exception {
-        negocioServicio.eliminarAgenda(agendaDTO);
+    public ResponseEntity<MensajeDTO<String>> eliminarAgenda(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        negocioServicio.eliminarAgenda(idClienteYNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Agenda eliminada satisfactoriamente"));
     }
 
@@ -184,14 +184,14 @@ public class ClienteController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Reserva actualizada con éxito"));
     }
 
-    @GetMapping("/obtener-reserva/{idNegocio}/{idCliente}")
-    public ResponseEntity<MensajeDTO<DetalleReservaDTO>> obtenerReserva(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO(false, negocioServicio.obtenerReserva(idNegocio, idCliente)));
+    @GetMapping("/obtener-reserva")
+    public ResponseEntity<MensajeDTO<DetalleReservaDTO>> obtenerReserva(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO(false, negocioServicio.obtenerReserva(idClienteYNegocioDTO)));
     }
 
-    @DeleteMapping("/eliminar-reserva/{idNegocio}/{idCliente}")
-    public ResponseEntity<MensajeDTO<String>> eliminarReserva(@PathVariable String idNegocio, @PathVariable String idCliente) throws Exception {
-        negocioServicio.eliminarReserva(idNegocio, idCliente);
+    @DeleteMapping("/eliminar-reserva")
+    public ResponseEntity<MensajeDTO<String>> eliminarReserva(@Valid @RequestBody IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        negocioServicio.eliminarReserva(idClienteYNegocioDTO);
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Reserva eliminada correctamente"));
     }
 
@@ -215,5 +215,9 @@ public class ClienteController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
     }
 
+    @GetMapping("/ver-detalle-negocio/{codigoNegocio}")
+    public ResponseEntity<MensajeDTO<ItemNegocioDTO>> verDetalleNegocio(@PathVariable String codigoNegocio) throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.verDetalleNegocio(codigoNegocio)));
+    }
 }
 

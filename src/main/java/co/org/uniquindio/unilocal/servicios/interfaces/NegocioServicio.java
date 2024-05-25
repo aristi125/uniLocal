@@ -1,22 +1,18 @@
 package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
+import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
-import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
-import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.HistorialRevision;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
-import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
-import jakarta.validation.Valid;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
 
@@ -52,7 +48,7 @@ public interface NegocioServicio {
 
     void actualizarAgenda(RegistroAgendaDTO registroAgendaDTO) throws Exception;
 
-    void eliminarAgenda(AgendaDTO agendaDTO) throws Exception;
+    void eliminarAgenda(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
     DetalleAgendaDTO obtenerAgenda(String codigoNegocio) throws Exception;
 
@@ -60,9 +56,9 @@ public interface NegocioServicio {
 
     void actualizarReserva(DetalleReservaDTO actualizarReservaDTO) throws Exception;
 
-    DetalleReservaDTO obtenerReserva(String idNegocio, String idCliente) throws Exception;
+    DetalleReservaDTO obtenerReserva(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
-    void eliminarReserva(String idNegocio, String idCliente) throws Exception;
+    void eliminarReserva(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
     List<DetalleReservaDTO> listarReservas(String idNegocio) throws Exception;
 
@@ -73,4 +69,6 @@ public interface NegocioServicio {
     void aprobarNegocio(RevisionesModeradorDTO revisionesModeradorDTO) throws Exception;
 
     Cliente obtenerClienteNegocio (String idNegocio) throws Exception;
+
+    ItemNegocioDTO verDetalleNegocio(String codigoNegocio) throws Exception;
 }

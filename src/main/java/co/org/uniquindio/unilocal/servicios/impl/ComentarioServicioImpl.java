@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -108,15 +109,14 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         for (Comentario c : historialComentario) {
             respuesta.add(new ItemListaComentariosDTO(
                     c.getCodigoComentario(),
-                    c.getFecha(),
                     c.getMensaje()
             ));
         }
         return respuesta;
     }
 
-
-    public int calcularPromedioCalificaciones (String codigoNegocio) throws Exception {
+    @Override
+    public void calcularPromedioCalificaciones (String codigoNegocio) throws Exception {
         negocioServicio.buscarNegocio(codigoNegocio);
         List<Comentario> listaComentarios = comentarioRepo.findAllByCodigoNegocio(codigoNegocio);
         if (listaComentarios.isEmpty()) {
@@ -126,7 +126,6 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         for (Comentario c : listaComentarios) {
             suma += c.getCalificacion();
         }
-        return suma / listaComentarios.size();
     }
 
     @Override
@@ -143,7 +142,6 @@ public class ComentarioServicioImpl implements ComentarioServicio {
                 for (Comentario c : comentarios) {
                     listaComentarios.add(new ItemListaComentariosDTO(
                             c.getCodigoComentario(),
-                            c.getFecha(),
                             c.getMensaje()
                     ));
                 }

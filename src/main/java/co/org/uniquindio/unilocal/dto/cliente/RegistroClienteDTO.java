@@ -7,8 +7,6 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 import org.hibernate.validator.constraints.Length;
 
-//Esta clase es para registrar un cliente, sin id por que el id lo genera
-//la base de datos automaticamente
 public record RegistroClienteDTO (
         @NotBlank @Length(max = 30) String nombre,
         @NotBlank String fotoPerfil,

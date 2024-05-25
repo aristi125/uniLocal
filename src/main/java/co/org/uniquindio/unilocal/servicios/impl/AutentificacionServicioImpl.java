@@ -46,7 +46,7 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
         return null;
     }
     // Metodo para iniciar sesion como cliente
-    @Override
+
     public TokenDTO iniciarSesionCliente(SesionDTO sesionDTO) throws Exception {
 
         Optional<Cliente> clienteOptional = clienteRepo.findByEmail(sesionDTO.email());
@@ -68,7 +68,7 @@ public class AutentificacionServicioImpl implements AutentificacionServicio {
         return new TokenDTO(jwtUtils.generarToken(cliente.getEmail(), map));
     }
 
-    @Override
+
     public TokenDTO iniciarSesionModerador(SesionDTO sesionDTO) throws Exception {
 
         Optional<Moderador> moderadorOptional = moderadorRepo.findByEmail(sesionDTO.email());

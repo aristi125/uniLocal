@@ -1,14 +1,12 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
+import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
 import co.org.uniquindio.unilocal.dto.EmailArchivoDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
-import co.org.uniquindio.unilocal.dto.agenda.AgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
-import co.org.uniquindio.unilocal.dto.cliente.FavoritoDTO;
-import co.org.uniquindio.unilocal.dto.cliente.ItemDetalleClienteDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
@@ -24,7 +22,6 @@ import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
@@ -32,7 +29,6 @@ import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestBody;
 
 import java.io.File;
 import java.io.IOException;
@@ -114,8 +110,18 @@ public class NegocioServicioImpl implements NegocioServicio {
         negocioRepo.save(negocio);
     }
 
+    @Override
     public ItemNegocioDTO verDetalleNegocio(String codigoNegocio) throws Exception{
-        return null;
+        Negocio negocio = buscarNegocio(codigoNegocio);
+        return new ItemNegocioDTO(
+                negocio.getCodigo(),
+                negocio.getNombre(),
+                negocio.getImagenes().get(0),
+                negocio.getCategoriaNegocio(),
+                negocio.getUbicacion(),
+                (long) negocio.getCalificaciones(), // acomodar para que se haga con el promedio
+                negocio.getEstado()
+        );
     }
 
     @Override
@@ -449,9 +455,9 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void eliminarAgenda(AgendaDTO agendaDTO) throws Exception {
-        clienteServicio.buscarCliente(agendaDTO.codigoCliente());
-        Negocio negocio = buscarNegocio(agendaDTO.codigoNegocio());
+    public void eliminarAgenda(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
+        clienteServicio.buscarCliente(idClienteYNegocioDTO.idCliente());
+        Negocio negocio = buscarNegocio(idClienteYNegocioDTO.idNegocio());
         Agenda agenda = negocio.getAgenda();
         agenda.setEstadoAgenda(EstadoAgenda.INACTIVA);
         negocioRepo.save(negocio);
@@ -525,15 +531,15 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public DetalleReservaDTO obtenerReserva(String idNegocio, String idCliente) throws Exception {
+    public DetalleReservaDTO obtenerReserva(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
 
-        Negocio negocio = buscarNegocio(idNegocio);
-        clienteServicio.buscarCliente(negocio.getCodigoCliente());
+        Negocio negocio = buscarNegocio(idClienteYNegocioDTO.idNegocio());
+        clienteServicio.buscarCliente(idClienteYNegocioDTO.idCliente());
 
         List<Reserva> listaReservas = negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getCodigoCliente().equals(idCliente)) {
+            if (reserva.getCodigoCliente().equals(idClienteYNegocioDTO.idCliente())) {
                 return new DetalleReservaDTO(reserva.getCodigoCliente(), reserva.getCodigoNegocio(), reserva.getCantidadPersonas()) ;
 
             }
@@ -544,15 +550,15 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public void eliminarReserva(String idNegocio, String idCliente) throws Exception {
+    public void eliminarReserva(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception {
 
-        Cliente cliente = clienteServicio.buscarCliente(idCliente);
-        Negocio negocio = buscarNegocio(idNegocio);
+        Cliente cliente = clienteServicio.buscarCliente(idClienteYNegocioDTO.idCliente());
+        Negocio negocio = buscarNegocio(idClienteYNegocioDTO.idNegocio());
 
         List<Reserva> listaReservas = negocio.getListaReservas();
 
         for (Reserva reserva : listaReservas) {
-            if (reserva.getCodigoCliente().equals(idCliente)) {
+            if (reserva.getCodigoCliente().equals(idClienteYNegocioDTO.idCliente())) {
                 negocio.getListaReservas().remove(reserva);
             }
         }
@@ -671,5 +677,16 @@ public class NegocioServicioImpl implements NegocioServicio {
     public Cliente obtenerClienteNegocio (String idNegocio) throws Exception {
         Negocio negocio = buscarNegocio(idNegocio);
         return clienteServicio.buscarCliente(negocio.getCodigoCliente());
+    }
+
+    public static double calcularPromedio(List<Integer> calificaciones) {
+        if (calificaciones == null || calificaciones.isEmpty()) {
+            return 0;
+        }
+        int suma = 0;
+        for (int calificacion : calificaciones) {
+            suma += calificacion;
+        }
+        return (double) suma / calificaciones.size();
     }
 }

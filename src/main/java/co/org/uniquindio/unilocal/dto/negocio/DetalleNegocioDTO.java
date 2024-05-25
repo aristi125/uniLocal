@@ -6,6 +6,9 @@ import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
+import jakarta.validation.constraints.PositiveOrZero;
+
 import java.util.List;
 
 public record DetalleNegocioDTO(
@@ -14,10 +17,10 @@ public record DetalleNegocioDTO(
         @NotNull List<String> telefonos,
         @NotNull Ubicacion ubicacion,
         @NotNull List<Horario>horarios,
-        @NotNull CategoriaNegocio tipoNegocio,
+        @NotNull CategoriaNegocio categoriaNegocio,
         @NotNull List<String>listaImagenes,
         @NotNull Agenda agenda,
-        int calificaciones
+        @PositiveOrZero int calificaciones
 
 
 ) {
