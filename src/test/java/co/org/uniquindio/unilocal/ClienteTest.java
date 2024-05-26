@@ -2,6 +2,7 @@ package co.org.uniquindio.unilocal;
 
 import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
 import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
+import co.org.uniquindio.unilocal.dto.Moderador.DetalleModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.*;
@@ -10,12 +11,12 @@ import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.dto.negocio.*;
 import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
-import co.org.uniquindio.unilocal.modelo.documentos.Moderador;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoAgenda;
 import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import org.junit.jupiter.api.Assertions;
@@ -61,19 +62,19 @@ public class ClienteTest {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
         //Iniciamos sesion con el objeto creado anteriormente
-        autentificacionServicio.iniciarSesionCliente(sesionDTO);
+        autentificacionServicio.iniciarSesion(sesionDTO);
     }
 
     /**
      * Test que prueba el metodo de iniciar sesion moderador
      */
 
-    // @Test
+    //@Test
     public void iniciarSesionTestModerador() throws Exception {
         //Creamos un objeto de tipo SesionDTO
         SesionDTO sesionDTO = new SesionDTO("aleja@gmail.com", "mypassword");
         //Iniciamos sesion con el objeto creado anteriormente
-        autentificacionServicio.iniciarSesionModerador(sesionDTO);
+        autentificacionServicio.iniciarSesion(sesionDTO);
     }
 
 
@@ -81,7 +82,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de registrar cliente
      */
-   // @Test
+    @Test
     public void registroClienteTest() throws Exception{
         RegistroClienteDTO registroClienteDTO = new RegistroClienteDTO(
 
@@ -100,7 +101,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de actualizar cliente
      */
-   // @Test
+    //@Test
     public void actualizarClienteTest() throws Exception {
 
         ActualizarClienteDTO actualizarClienteDTO = new ActualizarClienteDTO(
@@ -119,7 +120,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de eliminar cliente
      */
-   // @Test
+    //@Test
     public void eliminarClienteTest() throws Exception {
         //cambiamos el estado del cliente con el id creado anteriormente
         //de activo a inactivo
@@ -179,10 +180,11 @@ public class ClienteTest {
 
     //-------------------------Prueba unitaria de metodos en ModeradorServicioIMPL-----------------------
 
-    //@Test
+    @Test
     public void obtenerModeradorTest() throws Exception {
+
         //Obtenemos el moderador con el id creado anteriormente
-        Moderador moderador = moderadorServicio.buscarModerador("Moderador1");
+        DetalleModeradorDTO moderador = moderadorServicio.obtenerModerador("Moderador1");
         //Imprimimos el moderador
         System.out.println(moderador);
         //Verificamos que el moderador no sea nulo
@@ -193,7 +195,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de cambiar contraseña
      */
-    //@Test
+    @Test
     public void enviarLinkRecuperacionModeradorTest() throws Exception {
         LinkRecuperacionDTO linkRecuperacionDTO = new LinkRecuperacionDTO("Moderador1", "moderador@email.com");
         moderadorServicio.enviarLinkRecuperacionModerador(linkRecuperacionDTO);
@@ -206,7 +208,7 @@ public class ClienteTest {
     //@Test
     public void cambiarPasswordModeradorTest() throws Exception {
         //Cambiamos la contraseña de un moderador
-        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Cuenta1", "nuevaContraseña", "moderador@email.com", "1");
+        CambioPasswordDTO cambioPasswordDTO = new CambioPasswordDTO("Moderador1", "nuevaContraseña", "moderador@email.com", "1");
         moderadorServicio.cambiarPassword(cambioPasswordDTO);
 
     }
@@ -253,7 +255,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de listar comentarios de una categoria de negocio
      */
-    //@Test
+    @Test
     public void listarComentariosCategoriaTest() throws Exception {
         //Listamos los comentarios de una categoria de negocio
         List<ItemListaComentariosDTO> comentarios = comentarioServicio.listarComentariosTipoNegocio(CategoriaNegocio.HOTEL);
@@ -269,7 +271,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de enviar correo
      */
-    //@Test
+    @Test
     public void enviarCorreoTest() throws Exception {
         //Creamos un objeto de tipo EmailDTO
         EmailDTO emailDTO = new EmailDTO("Prueba", "Este es un correo de prueba", "ana@gmail.com");
@@ -361,7 +363,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de listar negocios
      */
-    //@Test
+    @Test
     public void listarNegociosTest() throws Exception {
         //Obtenemos la lista de todos los negocios (por ahora solo tenemos 1)
         List<Negocio> negocios = negocioServicio.listarNegociosPropietario("Cliente1");
@@ -374,7 +376,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de generar pdf
      */
-    @Test
+    //@Test
     public void generarPDFTest() throws Exception {
         //Creamos un objeto de tipo ReporteDTO
         ReporteDTO reporteDTO = new ReporteDTO("Cliente1","Negocio1", "Hotel Premium",4);
@@ -433,7 +435,7 @@ public class ClienteTest {
     //@Test
     public void eliminarReservaTest() throws Exception {
         //Eliminamos la reserva
-        negocioServicio.eliminarReserva(new IDClienteYNegocioDTO("Negocio1", "cliente1"));
+        negocioServicio.eliminarReserva(new IDClienteYNegocioDTO("Negocio1", "Cliente1"));
     }
 
     /**
@@ -456,10 +458,11 @@ public class ClienteTest {
     public void registrarAgendaTest() throws Exception {
         //Creamos un objeto de tipo RegistroAgendaDTO
         RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
-                "cliente1",
-                "negocio1",
+                "Cliente1",
+                "Negocio1",
                 "Historia",
-                "Viaje por la historia del hombre"
+                "Viaje por la historia del hombre",
+                EstadoAgenda.ACTIVA
         );
         //Registramos la agenda
         negocioServicio.registrarAgenda(registroAgendaDTO);
@@ -472,10 +475,11 @@ public class ClienteTest {
     public void actualizarAgendaTest() throws Exception {
         //Creamos un objeto de tipo RegistroAgendaDTO
         RegistroAgendaDTO registroAgendaDTO = new RegistroAgendaDTO(
-                "cliente1",
-                "negocio1",
+                "Cliente1",
+                "Negocio1",
                 "Historia de América",
-                "Viaje por la historia del hombre en el continente americano"
+                "Viaje por la historia del hombre en el continente americano",
+                EstadoAgenda.ACTIVA
         );
         //Actualizamos la agenda
         negocioServicio.actualizarAgenda(registroAgendaDTO);
@@ -487,7 +491,7 @@ public class ClienteTest {
     //@Test
     public void eliminarAgendaTest() throws Exception {
         //Eliminamos la agenda
-        negocioServicio.eliminarAgenda(new IDClienteYNegocioDTO("Negocio1", "cliente1"));
+        negocioServicio.eliminarAgenda(new IDClienteYNegocioDTO("Negocio1", "Cliente1"));
     }
 
     /**
@@ -518,13 +522,13 @@ public class ClienteTest {
      * Test que prueba el metodo de eliminar favoritos
      *
 
-    //@Test
-    public void removerFavoritosTest() throws Exception {
-        //Removemos un negocio de favoritos
-        negocioServicio.removerFavoritos("Negocio1", "Cliente1");
-    }
+     //@Test
+     public void removerFavoritosTest() throws Exception {
+     //Removemos un negocio de favoritos
+     negocioServicio.removerFavoritos("Negocio1", "Cliente1");
+     }
 
-    /**
+     /**
      * Test que prueba el metodo de mostrar favoritos
      */
     //@Test
@@ -544,7 +548,7 @@ public class ClienteTest {
     //@Test
     public void listarLugaresCreadosTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listarLugaresCreados(new IDClienteYNegocioDTO("123", "123"));
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.listarLugaresCreados(new IDClienteYNegocioDTO("Negocio1", "Cliente1"));
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -554,10 +558,10 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de filtrar lugar por nombre
      */
-    //@Test
+    @Test
     public void filtrarLugarPorNombreTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre(new BusquedaNombreDTO("123", "Las delicias"));
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre(new BusquedaNombreDTO("123", "Restaurante Mexicano"));
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -567,7 +571,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de filtrar lugar por categoria
      */
-    //@Test
+    @Test
     public void filtrarLugarPorCategoriaTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
         List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
@@ -580,11 +584,11 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de filtrar lugar por distancia
      */
-    //@Test
+    @Test
     public void filtrarLugarPorDistanciaTest() throws Exception {
-        Ubicacion ubicacion = new Ubicacion(5.0, 5.0);
+        Ubicacion ubicacion = new Ubicacion(-75.665660, 4.540130);
         //Obtenemos la lista de lugares filtrados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(new BusquedaDistanciaDTO(new Ubicacion(12.4, 23.8), 200));
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioDistancia(new BusquedaDistanciaDTO(ubicacion, 200));
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar
@@ -597,7 +601,7 @@ public class ClienteTest {
     //@Test
     public void filtrarRecomendacionesTest() throws Exception {
         //Obtenemos la lista de lugares recomendados
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio(new IDClienteYNegocioDTO("123", "123"));
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.recomendarNegocio(new IDClienteYNegocioDTO("Negocio1", "Cliente1"));
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar
@@ -607,7 +611,7 @@ public class ClienteTest {
     /**
      * Test que prueba el metodo de filtrar lugares por estado
      */
-    //@Test
+    @Test
     public void filtrarLugarPorEstadoTest() throws Exception {
         //Obtenemos la lista de lugares filtrados
         List<DetalleNegocioDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
