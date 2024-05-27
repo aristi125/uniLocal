@@ -1,11 +1,9 @@
 package co.org.uniquindio.unilocal.controladores;
 
-import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
-import co.org.uniquindio.unilocal.dto.MensajeDTO;
+import co.org.uniquindio.unilocal.dto.*;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.LinkRecuperacionDTO;
-import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
 import co.org.uniquindio.unilocal.dto.negocio.DetalleNegocioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
@@ -60,8 +58,8 @@ public class PublicoController {
     }
 
     @GetMapping("/buscar-negocio-categoria/{categoria}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoria) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocioDTO categoriaNegocioDTO) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO)));
     }
 
     @GetMapping("/buscar-negocio-distancia")
@@ -75,8 +73,8 @@ public class PublicoController {
     }
 
     @GetMapping("/filtar-estado")
-    public ResponseEntity<MensajeDTO<List<DetalleNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocio estadoNegocio)throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocio)));
+    public ResponseEntity<MensajeDTO<List<DetalleNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocioDTO estadoNegocioDTO)throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocioDTO)));
     }
 
     @GetMapping("/buscar-negocio/{codigoNegocio}")

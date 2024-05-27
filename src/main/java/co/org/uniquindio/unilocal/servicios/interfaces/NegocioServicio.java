@@ -2,6 +2,8 @@ package co.org.uniquindio.unilocal.servicios.interfaces;
 
 import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
 import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
+import co.org.uniquindio.unilocal.dto.CategoriaNegocioDTO;
+import co.org.uniquindio.unilocal.dto.EstadoNegocioDTO;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
@@ -34,9 +36,9 @@ public interface NegocioServicio {
 
     List<ItemListaLugaresCreadosDTO> listarLugaresCreados(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
-    List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception;
+    List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocioDTO estadoNegocioDTO)throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception;
+    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocioDTO categoriaNegocioDTO) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception;
 

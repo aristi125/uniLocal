@@ -1,12 +1,10 @@
 package co.org.uniquindio.unilocal;
 
-import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
-import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
+import co.org.uniquindio.unilocal.dto.*;
 import co.org.uniquindio.unilocal.dto.Moderador.DetalleModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.*;
-import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.comentario.*;
 import co.org.uniquindio.unilocal.dto.negocio.*;
@@ -561,7 +559,7 @@ public class ClienteTest {
     @Test
     public void filtrarLugarPorNombreTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre(new BusquedaNombreDTO("123", "Restaurante Mexicano"));
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre(new BusquedaNombreDTO( "Restaurante Mexicano"));
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -573,8 +571,9 @@ public class ClienteTest {
      */
     @Test
     public void filtrarLugarPorCategoriaTest() throws Exception {
+        CategoriaNegocioDTO categoriaNegocioDTO = new CategoriaNegocioDTO(CategoriaNegocio.HOTEL);
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO);
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -613,8 +612,9 @@ public class ClienteTest {
      */
     @Test
     public void filtrarLugarPorEstadoTest() throws Exception {
+        EstadoNegocioDTO estadoNegocioDTO = new EstadoNegocioDTO(EstadoNegocio.ACTIVO);
         //Obtenemos la lista de lugares filtrados
-        List<DetalleNegocioDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
+        List<DetalleNegocioDTO> lugares = negocioServicio.filtrarPorEstado(estadoNegocioDTO);
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar

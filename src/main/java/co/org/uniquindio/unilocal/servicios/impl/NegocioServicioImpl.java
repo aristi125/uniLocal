@@ -1,9 +1,6 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
-import co.org.uniquindio.unilocal.dto.BusquedaDistanciaDTO;
-import co.org.uniquindio.unilocal.dto.BusquedaNombreDTO;
-import co.org.uniquindio.unilocal.dto.EmailArchivoDTO;
-import co.org.uniquindio.unilocal.dto.EmailDTO;
+import co.org.uniquindio.unilocal.dto.*;
 import co.org.uniquindio.unilocal.dto.Moderador.RevisionesModeradorDTO;
 import co.org.uniquindio.unilocal.dto.agenda.DetalleAgendaDTO;
 import co.org.uniquindio.unilocal.dto.agenda.RegistroAgendaDTO;
@@ -289,7 +286,6 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(BusquedaNombreDTO busquedaNombreDTO) throws Exception {
-        buscarNegocio(busquedaNombreDTO.codigoNegocio());
         List<Negocio> negocios = negocioRepo.findAllByNombre(busquedaNombreDTO.nombre());
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
@@ -330,8 +326,8 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-        public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
-        List<Negocio> negocios = negocioRepo.findAllByCategoriaNegocio(categoria);
+        public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocioDTO categoria) throws Exception {
+        List<Negocio> negocios = negocioRepo.findAllByCategoriaNegocio(categoria.categoria());
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con la categoria " + categoria);
@@ -398,8 +394,8 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocio estadoNegocio)throws Exception {
-        List<Negocio> negocios =negocioRepo.findByEstado(EstadoNegocio.ACTIVO);
+    public List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocioDTO estadoNegocioDTO)throws Exception {
+        List<Negocio> negocios =negocioRepo.findByEstado(estadoNegocioDTO.estadoNegocio());
         if(negocios.isEmpty()){
             throw  new Exception("No existen negocios con ese estado");
         }
