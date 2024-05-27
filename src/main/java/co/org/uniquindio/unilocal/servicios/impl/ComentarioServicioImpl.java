@@ -1,6 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 
+import co.org.uniquindio.unilocal.dto.CategoriaNegocioDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.*;
@@ -131,7 +132,8 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     @Override
     public List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoria) throws Exception {
 
-            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoria);
+        CategoriaNegocioDTO categoriaNegocioDTO = new CategoriaNegocioDTO(categoria);
+            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO);
             if (listaNegocios.isEmpty()) {
                 throw new Exception("No hay negocios con esta categoria");
             }
