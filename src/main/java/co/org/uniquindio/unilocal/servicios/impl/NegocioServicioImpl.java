@@ -355,8 +355,8 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-        public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocioDTO categoria) throws Exception {
-        List<Negocio> negocios = negocioRepo.findAllByCategoriaNegocio(categoria.categoria());
+        public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
+        List<Negocio> negocios = negocioRepo.findAllByCategoriaNegocio(categoria);
         List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con la categoria " + categoria);

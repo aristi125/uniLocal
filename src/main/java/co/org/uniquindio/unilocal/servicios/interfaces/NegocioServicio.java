@@ -38,7 +38,7 @@ public interface NegocioServicio {
 
     List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocioDTO estadoNegocioDTO)throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocioDTO categoriaNegocioDTO) throws Exception;
+    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoriaNegocioDTO) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception;
 

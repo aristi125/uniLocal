@@ -571,9 +571,8 @@ public class ClienteTest {
      */
     @Test
     public void filtrarLugarPorCategoriaTest() throws Exception {
-        CategoriaNegocioDTO categoriaNegocioDTO = new CategoriaNegocioDTO(CategoriaNegocio.HOTEL);
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO);
+        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado

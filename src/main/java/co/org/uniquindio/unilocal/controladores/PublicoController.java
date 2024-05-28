@@ -55,17 +55,17 @@ public class PublicoController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo"));
     }
 
-   @GetMapping("/enviar-link-recuperacion-password-cliente")
-    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionCliente(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
-        clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
-    }
-
-    @GetMapping("/enviar-link-recuperacion-password-moderador")
-    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionModerador(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
-        moderadorServicio.enviarLinkRecuperacionModerador(linkRecuperacionDTO);
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
-    }
+//   @GetMapping("/enviar-link-recuperacion-password-cliente")
+//    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionCliente(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
+//        clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
+//        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
+//    }
+//
+//    @GetMapping("/enviar-link-recuperacion-password-moderador")
+//    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionModerador(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
+//        moderadorServicio.enviarLinkRecuperacionModerador(linkRecuperacionDTO);
+//        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
+//    }
 
     @GetMapping("/buscar-negocio-nombre")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@Valid @RequestBody BusquedaNombreDTO busquedaNombreDTO) throws Exception {
@@ -77,11 +77,11 @@ public class PublicoController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.listarNegocios()));
     }
 
-    @GetMapping("/buscar-negocio-categoria/{categoria}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocioDTO categoria) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoria)));
+    @GetMapping("/buscar-negocio-categoria/{categoriaNegocioDTO}")
+    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoriaNegocioDTO) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO)));
     }
-    
+
     @GetMapping("/buscar-negocio-distancia")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioDistancia(@Valid @RequestBody BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioDistancia(busquedaDistanciaDTO)));

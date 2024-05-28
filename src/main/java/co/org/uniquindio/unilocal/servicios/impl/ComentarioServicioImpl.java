@@ -133,7 +133,7 @@ public class ComentarioServicioImpl implements ComentarioServicio {
     public List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoria) throws Exception {
 
         CategoriaNegocioDTO categoriaNegocioDTO = new CategoriaNegocioDTO(categoria);
-            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO);
+            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoria);
             if (listaNegocios.isEmpty()) {
                 throw new Exception("No hay negocios con esta categoria");
             }
