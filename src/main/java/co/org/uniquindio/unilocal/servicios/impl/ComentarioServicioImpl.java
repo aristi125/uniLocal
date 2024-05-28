@@ -1,6 +1,7 @@
 package co.org.uniquindio.unilocal.servicios.impl;
 
 
+import co.org.uniquindio.unilocal.dto.CategoriaNegocioDTO;
 import co.org.uniquindio.unilocal.dto.EmailDTO;
 import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.*;
@@ -128,25 +129,26 @@ public class ComentarioServicioImpl implements ComentarioServicio {
         }
     }
 
- //   @Override
-//    public List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoria) throws Exception {
-//
-//            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoria);
-//            if (listaNegocios.isEmpty()) {
-//                throw new Exception("No hay negocios con esta categoria");
-//            }
-//
-//            List<ItemListaComentariosDTO> listaComentarios = new ArrayList<>();
-//            for (ItemListaLugaresCreadosDTO negocio : listaNegocios) {
-//                List<Comentario> comentarios = comentarioRepo.findAllByCodigoNegocio(negocio.idNegocio());
-//                for (Comentario c : comentarios) {
-//                    listaComentarios.add(new ItemListaComentariosDTO(
-//                            c.getCodigoComentario(),
-//                            c.getMensaje()
-//                    ));
-//                }
-//
-//            }
-//            return listaComentarios;
-//    }
+    @Override
+    public List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoria) throws Exception {
+
+        CategoriaNegocioDTO categoriaNegocioDTO = new CategoriaNegocioDTO(categoria);
+            List<ItemListaLugaresCreadosDTO> listaNegocios = negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO);
+            if (listaNegocios.isEmpty()) {
+                throw new Exception("No hay negocios con esta categoria");
+            }
+
+            List<ItemListaComentariosDTO> listaComentarios = new ArrayList<>();
+            for (ItemListaLugaresCreadosDTO negocio : listaNegocios) {
+                List<Comentario> comentarios = comentarioRepo.findAllByCodigoNegocio(negocio.idNegocio());
+                for (Comentario c : comentarios) {
+                    listaComentarios.add(new ItemListaComentariosDTO(
+                            c.getCodigoComentario(),
+                            c.getMensaje()
+                    ));
+                }
+
+            }
+            return listaComentarios;
+    }
 }
