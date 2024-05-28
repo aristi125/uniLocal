@@ -5,7 +5,6 @@ import co.org.uniquindio.unilocal.dto.cliente.*;
 import co.org.uniquindio.unilocal.dto.cuenta.CambioPasswordDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.LinkRecuperacionDTO;
 import co.org.uniquindio.unilocal.dto.negocio.IDClienteYNegocioDTO;
-import co.org.uniquindio.unilocal.dto.negocio.RegistroNegocioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Cliente;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.*;
@@ -13,7 +12,6 @@ import co.org.uniquindio.unilocal.repositorios.ClienteRepo;
 import co.org.uniquindio.unilocal.repositorios.NegocioRepo;
 import co.org.uniquindio.unilocal.servicios.interfaces.ClienteServicio;
 import co.org.uniquindio.unilocal.servicios.interfaces.EmailServicio;
-import co.org.uniquindio.unilocal.servicios.interfaces.NegocioServicio;
 import co.org.uniquindio.unilocal.utils.JWTUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -275,7 +273,7 @@ public class ClienteServicioImpl implements ClienteServicio {
         if (!favoritosCliente.remove(negocio)) {
             throw new Exception("El negocio no se encuentra en los favoritos del cliente");
         }
-
+        cliente.getAgregarFavoritos().remove(negocio);
         // Guardar los cambios en el cliente
         clienteRepo.save(cliente);
     }

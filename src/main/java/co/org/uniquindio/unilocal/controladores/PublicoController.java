@@ -41,7 +41,21 @@ public class PublicoController {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
     }
 
-    @GetMapping("/enviar-link-recuperacion-password-cliente")
+    @PostMapping("/enviar-link-recuperacion-password")
+    public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacion(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
+        try {
+            clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
+        } catch (Exception e) {
+            try {
+                moderadorServicio.enviarLinkRecuperacionModerador(linkRecuperacionDTO);
+            } catch (Exception ex) {
+                return ResponseEntity.badRequest().body(new MensajeDTO<>(true, "No se pudo enviar el link de recuperación ni como cliente ni como moderador"));
+            }
+        }
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo"));
+    }
+
+   @GetMapping("/enviar-link-recuperacion-password-cliente")
     public ResponseEntity<MensajeDTO<String>> enviarLinkRecuperacionCliente(@Valid @RequestBody LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
         clienteServicio.enviarLinkRecuperacionCliente(linkRecuperacionDTO);
         return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
