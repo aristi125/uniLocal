@@ -73,4 +73,6 @@ public interface NegocioServicio {
     Cliente obtenerClienteNegocio (String idNegocio) throws Exception;
 
     ItemNegocioDTO verDetalleNegocio(String codigoNegocio) throws Exception;
+
+    List<ItemNegocioDTO> listarNegocios();
 }

@@ -122,6 +122,35 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
+    public List<ItemNegocioDTO> listarNegocios() {
+
+        List<Negocio> negocios = negocioRepo.findAll();
+        List<Negocio> negociosaux = negocioRepo.findAll();
+        List<ItemNegocioDTO> lugares = new ArrayList<>();
+
+        for(Negocio n: negocios){
+            if (n.getEstado()==EstadoNegocio.ACTIVO){
+                negociosaux.add(n);
+            }
+        }
+
+        for (Negocio n : negociosaux) {
+
+                lugares.add(new ItemNegocioDTO(
+                                n.getCodigo(),
+                                n.getNombre(),
+                                n.getImagenes().get(0),
+                                n.getCategoriaNegocio(),
+                                n.getUbicacion(), 0,
+                                n.getEstado()
+                        )
+                );
+        }
+        return lugares;
+
+    }
+
+    @Override
     public DetalleNegocioDTO obtenerNegocio(String codigoNegocio) throws Exception {
 
         Negocio negocio = buscarNegocio(codigoNegocio);

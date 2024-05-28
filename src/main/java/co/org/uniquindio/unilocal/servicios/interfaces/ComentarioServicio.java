@@ -15,5 +15,5 @@ public interface ComentarioServicio {
 
     List<ItemListaComentariosDTO> listarComentariosNegocio(String codigoNegocio) throws Exception;
 
-    List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoriaNegocio) throws Exception;
+    //List<ItemListaComentariosDTO> listarComentariosTipoNegocio(CategoriaNegocio categoriaNegocio) throws Exception;
 }

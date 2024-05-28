@@ -5,6 +5,7 @@ import co.org.uniquindio.unilocal.dto.cliente.ItemListaLugaresCreadosDTO;
 import co.org.uniquindio.unilocal.dto.comentario.ItemListaComentariosDTO;
 import co.org.uniquindio.unilocal.dto.cuenta.LinkRecuperacionDTO;
 import co.org.uniquindio.unilocal.dto.negocio.DetalleNegocioDTO;
+import co.org.uniquindio.unilocal.dto.negocio.ItemNegocioDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
@@ -55,6 +56,11 @@ public class PublicoController {
     @GetMapping("/buscar-negocio-nombre")
     public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@Valid @RequestBody BusquedaNombreDTO busquedaNombreDTO) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(busquedaNombreDTO)));
+    }
+
+    @GetMapping("/listar-negocios")
+    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> listarNegocios() throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.listarNegocios()));
     }
 
     @GetMapping("/buscar-negocio-categoria/{categoria}")

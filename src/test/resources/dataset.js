@@ -406,36 +406,3 @@ db.comentarios.insertMany([
     }
 ]);
 
-db.productos.insertMany([
-    {
-        _id: 'Producto1',
-        nombre: 'moccachino',
-        tipoProducto: 'CAFE_DESCAFEINADO',
-        precio: 2.000,
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Producto'
-    }, {
-        _id: 'Producto2',
-        nombre: 'super pizza',
-        tipoProducto: 'PIZZAS',
-        precio: 5.000,
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Producto'
-    }, {
-        _id: 'Producto3',
-        nombre: 'Habitacion',
-        tipoProducto: 'HOSPEDAJE',
-        precio: 50.000,
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Producto'
-    }, {
-        _id: 'Producto4',
-        nombre: 'almuerzo ejecutivo',
-        tipoProducto: 'ALMUERZO_EJECUTIVO',
-        precio: 10.000,
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Producto'
-    }, {
-        _id: 'Producto5',
-        nombre: 'Torta',
-        tipoProducto: 'POSTRES',
-        precio: 5.000,
-        _class: 'co.org.uniquindio.unilocal.modelo.documentos.Producto'
-    }
-]);
