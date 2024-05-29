@@ -209,8 +209,8 @@ public class ClienteController {
     }
 
     @GetMapping("/listar-categoria-negocio")
-    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCategoriaNegocio() throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
+    public ResponseEntity<MensajeDTO<List<CategoriaNegocio>>> listarCategoriaNegocio() throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listarCategoriaNegocio()));
     }
 
     @GetMapping("/ver-detalle-negocio/{codigoNegocio}")
