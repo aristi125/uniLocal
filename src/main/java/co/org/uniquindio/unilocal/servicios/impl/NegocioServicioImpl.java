@@ -718,4 +718,9 @@ public class NegocioServicioImpl implements NegocioServicio {
         }
         return (double) suma / calificaciones.size();
     }
+
+    @Override
+    public List<CategoriaNegocio> listarCategoriaNegocio() throws Exception {
+        return Arrays.asList(CategoriaNegocio.values());
+    }
 }

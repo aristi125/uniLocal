@@ -1,7 +1,6 @@
 package co.org.uniquindio.unilocal.modelo.documentos;
 
 
-import co.org.uniquindio.unilocal.modelo.entidades.Horario;
 import co.org.uniquindio.unilocal.modelo.entidades.Ubicacion;
 import co.org.uniquindio.unilocal.modelo.entidades.*;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
@@ -31,7 +30,7 @@ public class Negocio implements Serializable {
     private CategoriaNegocio categoriaNegocio;
     private Ubicacion ubicacion;
     private List<String> imagenes = new ArrayList<>();
-    private List<Horario> horarios = new ArrayList<>();
+    private List<String> horarios = new ArrayList<>();
     private List<String> telefonos = new ArrayList<>();
     private List<Comentario> comentarios = new ArrayList<>();
     private int calificaciones;

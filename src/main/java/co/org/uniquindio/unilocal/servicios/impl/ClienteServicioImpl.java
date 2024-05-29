@@ -138,18 +138,18 @@ public class ClienteServicioImpl implements ClienteServicio {
     }
 
     @Override
-    public List<CategoriaNegocio> listarCategoriaNegocio() throws Exception {
-        return Arrays.asList(CategoriaNegocio.values());
-    }
-
-    @Override
     public void enviarLinkRecuperacionCliente(LinkRecuperacionDTO linkRecuperacionDTO) throws Exception {
-        Cliente cliente = buscarCliente(linkRecuperacionDTO.idCuenta());
-        String token = jwtUtils.generarToken(linkRecuperacionDTO.email(), null);
+        Optional<Cliente> cliente = clienteRepo.findByEmail(linkRecuperacionDTO.email());
 
+        if(cliente.isEmpty())
+        {
+            throw new Exception("No existe un cliente con ese correo");
+        }
+        String token = jwtUtils.generarToken(linkRecuperacionDTO.email(), null);
+        
         EmailDTO emailDTO = new EmailDTO(
                 "Recuperación de contraseña",
-                "Hola "+cliente.getNombre()+"! \n\n"+
+                "Hola "+cliente.get().getNombre()+"! \n\n"+
                         "Hemos recibido una solicitud para recuperar tu contraseña. \n\n"+
                         "Si no has solicitado este cambio, por favor ignora este mensaje. \n\n"+
                         "Si deseas cambiar tu contraseña, haz clic en el siguiente enlace: \n\n"+

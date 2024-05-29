@@ -14,7 +14,6 @@ import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
-import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -209,8 +208,8 @@ public class ClienteController {
     }
 
     @GetMapping("/listar-categoria-negocio")
-    public ResponseEntity<MensajeDTO<List<Ciudades>>> listarCategoriaNegocio() throws Exception {
-        return ResponseEntity.ok().body(new MensajeDTO<>(false, clienteServicio.listarCiudades()));
+    public ResponseEntity<MensajeDTO<List<CategoriaNegocio>>> listarCategoriaNegocio() throws Exception {
+        return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.listarCategoriaNegocio()));
     }
 
     @GetMapping("/ver-detalle-negocio/{codigoNegocio}")

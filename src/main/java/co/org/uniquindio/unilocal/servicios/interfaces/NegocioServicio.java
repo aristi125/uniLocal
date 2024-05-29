@@ -75,4 +75,7 @@ public interface NegocioServicio {
     ItemNegocioDTO verDetalleNegocio(String codigoNegocio) throws Exception;
 
     List<ItemNegocioDTO> listarNegocios();
+
+    List<CategoriaNegocio> listarCategoriaNegocio() throws Exception;
+
 }

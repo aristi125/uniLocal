@@ -23,8 +23,6 @@ public interface ClienteServicio  {
 
     List<Ciudades> listarCiudades() throws Exception;
 
-    List<CategoriaNegocio> listarCategoriaNegocio() throws Exception;
-
     void enviarLinkRecuperacionCliente(LinkRecuperacionDTO linkRecuperacionDTO)throws Exception;
 
     void cambiarPassword(CambioPasswordDTO cambioPasswordDTO)throws Exception;
