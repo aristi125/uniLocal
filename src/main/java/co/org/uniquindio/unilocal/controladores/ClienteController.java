@@ -71,7 +71,7 @@ public class ClienteController {
     }
 
     @GetMapping("/buscar-negocio-nombre/{nombre}")
-    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> buscarNegocioNombre(@Valid @RequestBody String nombre) throws Exception {
+    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> buscarNegocioNombre(@PathVariable String nombre) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
     }
 
@@ -91,7 +91,7 @@ public class ClienteController {
     }
 
     @GetMapping("/filtrar-estado/{estadoNegocioDTO}")
-    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocio estadoNegocioDTO) throws Exception {
+    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> filtrarPorEstado(@PathVariable EstadoNegocio estadoNegocioDTO) throws Exception {
         return ResponseEntity.ok().body(new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocioDTO)));
     }
 

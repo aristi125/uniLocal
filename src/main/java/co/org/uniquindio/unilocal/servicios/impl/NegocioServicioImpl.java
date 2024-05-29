@@ -315,22 +315,22 @@ public class NegocioServicioImpl implements NegocioServicio {
 
     @Override
     public List<ItemNegocioDTO> buscarNegocioNombre(String nombre) throws Exception {
-        List<Negocio> negocios = negocioRepo.findAllByNombre(nombre);
+        List<Negocio> negocios = negocioRepo.findAllByNombre(nombre.toLowerCase());
         List<ItemNegocioDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con el nombre " + nombre);
         }
 
-        List<Negocio> negociosaux = new ArrayList<>();
-        for(Negocio n: negocios){
+        //List<Negocio> negociosaux = new ArrayList<>();
+        /*for(Negocio n: negocios){
             if (n.getEstado()==EstadoNegocio.ACTIVO){
                 negociosaux.add(n);
             }
         }
         if (negociosaux.isEmpty()) {
             throw new Exception("No se encontraron negocios con el nombre " + nombre +" que se encuentren activos");
-        }
-        for (Negocio n : negociosaux) {
+        }*/
+        for (Negocio n : negocios) {
 
             if (n.getNombre().toLowerCase().contains(nombre.toLowerCase()))
                 lugares.add(new ItemNegocioDTO(
