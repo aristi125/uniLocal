@@ -559,7 +559,7 @@ public class ClienteTest {
     @Test
     public void filtrarLugarPorNombreTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioNombre(new BusquedaNombreDTO( "Restaurante Mexicano"));
+        List<ItemNegocioDTO> lugares = negocioServicio.buscarNegocioNombre( "Restaurante Mexicano");
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -572,7 +572,7 @@ public class ClienteTest {
     @Test
     public void filtrarLugarPorCategoriaTest() throws Exception {
         //Obtenemos la lista de lugares creados por un cliente
-        List<ItemListaLugaresCreadosDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
+        List<ItemNegocioDTO> lugares = negocioServicio.buscarNegocioCategoria(CategoriaNegocio.HOTEL);
         //Imprimimos los lugares creados
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar creado
@@ -611,9 +611,9 @@ public class ClienteTest {
      */
     @Test
     public void filtrarLugarPorEstadoTest() throws Exception {
-        EstadoNegocioDTO estadoNegocioDTO = new EstadoNegocioDTO(EstadoNegocio.ACTIVO);
+
         //Obtenemos la lista de lugares filtrados
-        List<DetalleNegocioDTO> lugares = negocioServicio.filtrarPorEstado(estadoNegocioDTO);
+        List<ItemNegocioDTO> lugares = negocioServicio.filtrarPorEstado(EstadoNegocio.ACTIVO);
         //Imprimimos los lugares
         lugares.forEach(System.out::println);
         //Verificamos que solo exista un lugar

@@ -36,13 +36,13 @@ public interface NegocioServicio {
 
     List<ItemListaLugaresCreadosDTO> listarLugaresCreados(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 
-    List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocioDTO estadoNegocioDTO)throws Exception;
+    List<ItemNegocioDTO> filtrarPorEstado(EstadoNegocio estadoNegocioDTO)throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoriaNegocioDTO) throws Exception;
+    List<ItemNegocioDTO> buscarNegocioCategoria(CategoriaNegocio categoriaNegocioDTO) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> buscarNegocioDistancia(BusquedaDistanciaDTO busquedaDistanciaDTO) throws Exception;
 
-    List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(BusquedaNombreDTO busquedaNombreDTO) throws Exception;
+    List<ItemNegocioDTO> buscarNegocioNombre(String nombre) throws Exception;
 
     List<ItemListaLugaresCreadosDTO> recomendarNegocio(IDClienteYNegocioDTO idClienteYNegocioDTO) throws Exception;
 

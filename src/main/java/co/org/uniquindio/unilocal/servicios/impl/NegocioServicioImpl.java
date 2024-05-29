@@ -314,11 +314,11 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<ItemListaLugaresCreadosDTO> buscarNegocioNombre(BusquedaNombreDTO busquedaNombreDTO) throws Exception {
-        List<Negocio> negocios = negocioRepo.findAllByNombre(busquedaNombreDTO.nombre());
-        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
+    public List<ItemNegocioDTO> buscarNegocioNombre(String nombre) throws Exception {
+        List<Negocio> negocios = negocioRepo.findAllByNombre(nombre);
+        List<ItemNegocioDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
-            throw new Exception("No se encontraron negocios con el nombre " + busquedaNombreDTO.nombre());
+            throw new Exception("No se encontraron negocios con el nombre " + nombre);
         }
 
         List<Negocio> negociosaux = new ArrayList<>();
@@ -328,17 +328,20 @@ public class NegocioServicioImpl implements NegocioServicio {
             }
         }
         if (negociosaux.isEmpty()) {
-            throw new Exception("No se encontraron negocios con el nombre " + busquedaNombreDTO.nombre() +" que se encuentren activos");
+            throw new Exception("No se encontraron negocios con el nombre " + nombre +" que se encuentren activos");
         }
         for (Negocio n : negociosaux) {
 
-            if (n.getNombre().toLowerCase().contains(busquedaNombreDTO.nombre().toLowerCase()))
-                lugares.add(new ItemListaLugaresCreadosDTO(
-                                n.getCodigo(),
+            if (n.getNombre().toLowerCase().contains(nombre.toLowerCase()))
+                lugares.add(new ItemNegocioDTO(
                                 n.getNombre(),
-                                n.getTelefonos(),
+                                n.getDescripcion(),
+                                n.getImagenes().get(0),
                                 n.getCategoriaNegocio(),
-                                n.getImagenes()
+                                n.getUbicacion(),
+                                n.getCalificaciones(),
+                                n.getEstado()
+
                         )
                 );
         }
@@ -355,9 +358,9 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-        public List<ItemListaLugaresCreadosDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
+        public List<ItemNegocioDTO> buscarNegocioCategoria(CategoriaNegocio categoria) throws Exception {
         List<Negocio> negocios = negocioRepo.findAllByCategoriaNegocio(categoria);
-        List<ItemListaLugaresCreadosDTO> lugares = new ArrayList<>();
+        List<ItemNegocioDTO> lugares = new ArrayList<>();
         if (negocios.isEmpty()) {
             throw new Exception("No se encontraron negocios con la categoria " + categoria);
         }
@@ -372,12 +375,14 @@ public class NegocioServicioImpl implements NegocioServicio {
             throw new Exception("No se encontraron negocios con la categoria " +categoria+" que se encuentra activos");
         }
         for (Negocio n : negociosaux) {
-            lugares.add(new ItemListaLugaresCreadosDTO(
+            lugares.add(new ItemNegocioDTO(
                             n.getCodigo(),
                             n.getNombre(),
-                            n.getTelefonos(),
+                            n.getImagenes().get(0),
                             n.getCategoriaNegocio(),
-                            n.getImagenes()
+                            n.getUbicacion(),
+                            n.getCalificaciones(),
+                            n.getEstado()
                     )
             );
         }
@@ -423,25 +428,24 @@ public class NegocioServicioImpl implements NegocioServicio {
     }
 
     @Override
-    public List<DetalleNegocioDTO> filtrarPorEstado(EstadoNegocioDTO estadoNegocioDTO)throws Exception {
-        List<Negocio> negocios =negocioRepo.findByEstado(estadoNegocioDTO.estadoNegocio());
+    public List<ItemNegocioDTO> filtrarPorEstado(EstadoNegocio estadoNegocioDTO)throws Exception {
+        List<Negocio> negocios =negocioRepo.findByEstado(estadoNegocioDTO);
         if(negocios.isEmpty()){
             throw  new Exception("No existen negocios con ese estado");
         }
 
-        List<DetalleNegocioDTO> lugares = new ArrayList<>();
+        List<ItemNegocioDTO> lugares = new ArrayList<>();
 
         for (Negocio n : negocios) {
-            lugares.add(new DetalleNegocioDTO(
+            lugares.add(new ItemNegocioDTO(
                             n.getNombre(),
                             n.getDescripcion(),
-                            n.getTelefonos(),
-                            n.getUbicacion(),
-                            n.getHorarios(),
+                            n.getImagenes().get(0),
                             n.getCategoriaNegocio(),
-                            n.getImagenes(),
-                            n.getAgenda(),
-                            n.getCalificaciones()
+                            n.getUbicacion(),
+                            n.getCalificaciones(),
+                            n.getEstado()
+
                     )
             );
         }

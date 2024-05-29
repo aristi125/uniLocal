@@ -67,9 +67,9 @@ public class PublicoController {
 //        return ResponseEntity.ok().body( new MensajeDTO<>(false, "Se ha enviado un link de recuperación a su correo" ));
 //    }
 
-    @GetMapping("/buscar-negocio-nombre")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioNombre(@Valid @RequestBody BusquedaNombreDTO busquedaNombreDTO) throws Exception {
-        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(busquedaNombreDTO)));
+    @GetMapping("/buscar-negocio-nombre/{nombre}")
+    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> buscarNegocioNombre(@Valid @RequestBody String nombre) throws Exception {
+        return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioNombre(nombre)));
     }
 
     @GetMapping("/listar-negocios")
@@ -78,7 +78,7 @@ public class PublicoController {
     }
 
     @GetMapping("/buscar-negocio-categoria/{categoriaNegocioDTO}")
-    public ResponseEntity<MensajeDTO<List<ItemListaLugaresCreadosDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoriaNegocioDTO) throws Exception {
+    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> buscarNegocioCategoria(@PathVariable CategoriaNegocio categoriaNegocioDTO) throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.buscarNegocioCategoria(categoriaNegocioDTO)));
     }
 
@@ -92,8 +92,8 @@ public class PublicoController {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, comentarioServicio.listarComentariosNegocio(idNegocio)));
     }
 
-    @GetMapping("/filtar-estado")
-    public ResponseEntity<MensajeDTO<List<DetalleNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocioDTO estadoNegocioDTO)throws Exception {
+    @GetMapping("/filtrar-estado/{estadoNegocioDTO}")
+    public ResponseEntity<MensajeDTO<List<ItemNegocioDTO>>> filtrarPorEstado(@Valid @RequestBody EstadoNegocio estadoNegocioDTO)throws Exception {
         return ResponseEntity.ok().body( new MensajeDTO<>(false, negocioServicio.filtrarPorEstado(estadoNegocioDTO)));
     }
 
