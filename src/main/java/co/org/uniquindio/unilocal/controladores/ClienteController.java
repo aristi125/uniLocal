@@ -14,6 +14,7 @@ import co.org.uniquindio.unilocal.dto.reserva.DetalleReservaDTO;
 import co.org.uniquindio.unilocal.modelo.documentos.Negocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.CategoriaNegocio;
 import co.org.uniquindio.unilocal.modelo.enumeracion.Ciudades;
+import co.org.uniquindio.unilocal.modelo.enumeracion.EstadoNegocio;
 import co.org.uniquindio.unilocal.servicios.interfaces.*;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
